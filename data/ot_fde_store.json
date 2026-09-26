@@ -1,0 +1,1331 @@
+{
+  "roster": {
+    "PPD": {
+      "code": "PPD",
+      "cpf": "128584",
+      "name": "PRATIK PURNA DUTTA",
+      "designation": "DY T (FITTING)",
+      "section": "SST",
+      "location": "JORHAT",
+      "basicPay": 38490,
+      "da": 19091,
+      "fdRate": 450,
+      "otRate": 553,
+      "promotionHistory": [],
+      "lastPromotion": {
+        "date": "2026-09-24",
+        "orderNo": "ONGC/TEST/2026",
+        "fromDesignation": "DY T (FITTING)",
+        "toDesignation": "T (FITTING)",
+        "fromBasic": 38490,
+        "toBasic": 39650,
+        "basicIncrement": 1160,
+        "otRateOld": 553,
+        "otRateNew": 564,
+        "remarks": "Annual merit promotion"
+      }
+    },
+    "DJB": {
+      "code": "DJB",
+      "cpf": "128787",
+      "name": "DIPJYOTI BORA",
+      "designation": "EA(M)",
+      "section": "SST",
+      "location": "JORHAT",
+      "basicPay": 43250,
+      "da": 21452,
+      "fdRate": 450,
+      "otRate": 622
+    },
+    "SD": {
+      "code": "SD",
+      "cpf": "128864",
+      "name": "SUBHASISH DAS",
+      "designation": "MVD(WO)",
+      "section": "SST",
+      "location": "JORHAT",
+      "basicPay": 38490,
+      "da": 19091,
+      "fdRate": 450,
+      "otRate": 553
+    },
+    "DB": {
+      "code": "DB",
+      "cpf": "128798",
+      "name": "DEBAJIT BORA",
+      "designation": "DY. T (FITTING)",
+      "section": "SST",
+      "location": "JORHAT",
+      "basicPay": 38490,
+      "da": 19091,
+      "fdRate": 450,
+      "otRate": 553
+    },
+    "HR": {
+      "code": "HR",
+      "cpf": "132598",
+      "name": "HRIDOY RAY",
+      "designation": "Dy. T (FITTING)",
+      "section": "SST",
+      "location": "JORHAT",
+      "basicPay": 37370,
+      "da": 18536,
+      "fdRate": 450,
+      "otRate": 537
+    },
+    "YA": {
+      "code": "YA",
+      "cpf": "137508",
+      "name": "YUSUF ALI",
+      "designation": "JR KHALASHI",
+      "section": "SST",
+      "location": "JORHAT",
+      "basicPay": 29560,
+      "da": 14662,
+      "fdRate": 450,
+      "otRate": 425
+    },
+    "RRK": {
+      "code": "RRK",
+      "cpf": "137500",
+      "name": "RAJEN RAJKONWAR",
+      "designation": "JR KHALASHI",
+      "section": "SST",
+      "location": "JORHAT",
+      "basicPay": 29560,
+      "da": 14662,
+      "fdRate": 450,
+      "otRate": 425
+    },
+    "SR": {
+      "code": "SR",
+      "cpf": "137510",
+      "name": "SAHIDUR ROHMAN",
+      "designation": "JR KHALASHI",
+      "section": "SST",
+      "location": "JORHAT",
+      "basicPay": 29560,
+      "da": 14662,
+      "fdRate": 450,
+      "otRate": 425
+    },
+    "MP": {
+      "code": "MP",
+      "cpf": "128734",
+      "name": "MANABJYOTI PEGU",
+      "designation": "JMVD(W.O.)",
+      "section": "SST",
+      "location": "JORHAT",
+      "basicPay": 36030,
+      "da": 17871,
+      "fdRate": 450,
+      "otRate": 518
+    },
+    "AB": {
+      "code": "AB",
+      "cpf": "129190",
+      "name": "ABHIJIT BORAH",
+      "designation": "EA(P)",
+      "section": "SST",
+      "location": "JORHAT",
+      "basicPay": 41990,
+      "da": 20827,
+      "fdRate": 450,
+      "otRate": 604
+    },
+    "RD": {
+      "code": "RD",
+      "cpf": "138139",
+      "name": "RAJESH DAS",
+      "designation": "JT(FITTING)",
+      "section": "SST",
+      "location": "JORHAT",
+      "basicPay": 30860,
+      "da": 15307,
+      "fdRate": 450,
+      "otRate": 443
+    },
+    "UC": {
+      "code": "UC",
+      "cpf": "140751",
+      "name": "UTJJAL CHETIA",
+      "designation": "JMVD(W.O.)",
+      "section": "SST",
+      "location": "JORHAT",
+      "basicPay": 28230,
+      "da": 14002,
+      "fdRate": 450,
+      "otRate": 406,
+      "promotionHistory": [
+        {
+          "date": "2025-01-01",
+          "orderNo": "ONGC/SST/PROM/2025/140751",
+          "fromDesignation": "JMVD(W.O.)",
+          "toDesignation": "MVD(WO)",
+          "fromBasic": 28230,
+          "toBasic": 29080,
+          "basicIncrement": 850,
+          "otRateOld": 406,
+          "otRateNew": 414,
+          "remarks": "Promoted from JMVD(W.O.) to MVD(WO) with standard increment"
+        }
+      ],
+      "lastPromotion": {
+        "date": "2025-01-01",
+        "orderNo": "ONGC/SST/PROM/2025/140751",
+        "fromDesignation": "JMVD(W.O.)",
+        "toDesignation": "MVD(WO)",
+        "fromBasic": 28230,
+        "toBasic": 29080,
+        "basicIncrement": 850,
+        "otRateOld": 406,
+        "otRateNew": 414,
+        "remarks": "Promoted from JMVD(W.O.) to MVD(WO) with standard increment"
+      }
+    }
+  },
+  "jobs": [
+    {
+      "id": "JOB-20250131-28",
+      "date": "2025-01-31",
+      "depTime": "07:30",
+      "arrTime": "20:00",
+      "location": "KHORAGHAT",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "RESERVOIR STUDY AT KH#19Z",
+      "dutyHours": 12.5,
+      "fdShifts": 1.563,
+      "fdAmount": 703.35,
+      "otHours": 4,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "YA",
+        "MP",
+        "AB",
+        "RD"
+      ]
+    },
+    {
+      "id": "JOB-20250130-25",
+      "date": "2025-01-30",
+      "depTime": "08:00",
+      "arrTime": "19:00",
+      "location": "KASOMARI",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "RESERVOIR STUDY AT KS#07",
+      "dutyHours": 11,
+      "fdShifts": 1.375,
+      "fdAmount": 618.75,
+      "otHours": 2.5,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "HR",
+        "RRK",
+        "MP",
+        "AB"
+      ]
+    },
+    {
+      "id": "JOB-20250129-20",
+      "date": "2025-01-29",
+      "depTime": "07:00",
+      "arrTime": "21:30",
+      "location": "KHORAGHAT",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "RESERVOIR STUDY AT KH#22Z (2nd attempt successful, no data in 1st attempt)",
+      "dutyHours": 14.5,
+      "fdShifts": 1.813,
+      "fdAmount": 815.85,
+      "otHours": 6,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "DJB",
+        "SD",
+        "SR",
+        "AB"
+      ]
+    },
+    {
+      "id": "JOB-20250128-10",
+      "date": "2025-01-28",
+      "depTime": "08:00",
+      "arrTime": "18:00",
+      "location": "KASOMARI",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "RESERVOIR STUDY AT KS#05",
+      "dutyHours": 10,
+      "fdShifts": 1.25,
+      "fdAmount": 562.5,
+      "otHours": 2,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "PPD",
+        "YA",
+        "MP",
+        "RD"
+      ]
+    },
+    {
+      "id": "JOB-20250127-23",
+      "date": "2025-01-27",
+      "depTime": "08:00",
+      "arrTime": "18:00",
+      "location": "KASOMARI",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "Attempted first at KSDC, job not possible due to space constraint. RESERVOIR STUDY AT KS#04Z",
+      "dutyHours": 10,
+      "fdShifts": 1.25,
+      "fdAmount": 562.5,
+      "otHours": 2,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "DB",
+        "RRK",
+        "AB",
+        "UC"
+      ]
+    },
+    {
+      "id": "JOB-20250124-19",
+      "date": "2025-01-24",
+      "depTime": "07:30",
+      "arrTime": "21:30",
+      "location": "KHORAGHAT",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "WINCH SHIFTING AND BHS AT KH#19Z",
+      "dutyHours": 14,
+      "fdShifts": 1.75,
+      "fdAmount": 787.5,
+      "otHours": 5.5,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "DJB",
+        "HR",
+        "SR",
+        "MP"
+      ]
+    },
+    {
+      "id": "JOB-20250123-9",
+      "date": "2025-01-23",
+      "depTime": "08:30",
+      "arrTime": "16:30",
+      "location": "BORHOLLA",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "BHS AT BR#52 AND ECHOMETER STUDY AT BR#44",
+      "dutyHours": 8,
+      "fdShifts": 1,
+      "fdAmount": 450,
+      "otHours": 0,
+      "isWithinDutyHours": true,
+      "crewCodes": [
+        "PPD",
+        "HR",
+        "SR",
+        "RD",
+        "UC"
+      ]
+    },
+    {
+      "id": "JOB-20250122-18",
+      "date": "2025-01-22",
+      "depTime": "08:30",
+      "arrTime": "19:00",
+      "location": "BORHOLLA",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "WINCH 7845 MAINTENANCE AND BHS AT BR#59",
+      "dutyHours": 10.5,
+      "fdShifts": 1.313,
+      "fdAmount": 590.85,
+      "otHours": 2,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "DJB",
+        "YA",
+        "MP",
+        "AB"
+      ]
+    },
+    {
+      "id": "JOB-20250121-8",
+      "date": "2025-01-21",
+      "depTime": "08:30",
+      "arrTime": "19:30",
+      "location": "BORHOLLA",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "Job failure at BR-64 due to high pressure, RESERVOIR STUDY AT BR#70+ECHOMETER STUDY AT BR#44",
+      "dutyHours": 11,
+      "fdShifts": 1.375,
+      "fdAmount": 618.75,
+      "otHours": 2.5,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "PPD",
+        "RRK",
+        "RD",
+        "UC"
+      ]
+    },
+    {
+      "id": "JOB-20250120-7",
+      "date": "2025-01-20",
+      "depTime": "07:00",
+      "arrTime": "23:00",
+      "location": "NAMBAR",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "RESERVOIR STUDY AT KH#38Z AND NR#14Z",
+      "dutyHours": 16,
+      "fdShifts": 2,
+      "fdAmount": 900,
+      "otHours": 7.5,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "PPD",
+        "DB",
+        "YA",
+        "RD",
+        "UC"
+      ]
+    },
+    {
+      "id": "JOB-20250120-17",
+      "date": "2025-01-20",
+      "depTime": "07:00",
+      "arrTime": "22:30",
+      "location": "NAMBAR",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "RESERVOIR STUDY AT WELLS NR#12 AND NR#01",
+      "dutyHours": 15.5,
+      "fdShifts": 1.938,
+      "fdAmount": 872.1,
+      "otHours": 7,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "DJB",
+        "HR",
+        "RRK",
+        "MP",
+        "AB"
+      ]
+    },
+    {
+      "id": "JOB-20250119-16",
+      "date": "2025-01-19",
+      "depTime": "06:00",
+      "arrTime": "19:30",
+      "location": "KHORAGHAT",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "RESERVOIR STUDY AT KH#14 ( Two jobs done SBHP and FBHP after flowing 1hr)",
+      "dutyHours": 13.5,
+      "fdShifts": 1.688,
+      "fdAmount": 759.6,
+      "otHours": 5,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "DJB",
+        "SD",
+        "HR",
+        "SR"
+      ]
+    },
+    {
+      "id": "JOB-20250118-6",
+      "date": "2025-01-18",
+      "depTime": "06:00",
+      "arrTime": "22:30",
+      "location": "KASOMARI",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "RESERVOIR STUDY AT WELLS KS#11 AND KS#08 (obstruction in 1st attempt, job successful after scrapper, party waited at site for nearly 4 hrs for scrapper team)",
+      "dutyHours": 16.5,
+      "fdShifts": 2.063,
+      "fdAmount": 928.35,
+      "otHours": 8,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "PPD",
+        "DB",
+        "YA",
+        "RD",
+        "UC"
+      ]
+    },
+    {
+      "id": "JOB-20250117-5",
+      "date": "2025-01-17",
+      "depTime": "07:30",
+      "arrTime": "23:30",
+      "location": "NAMBAR",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "RESERVOIR STUDY AT WELLS NR#09 AND NR#11Z",
+      "dutyHours": 16,
+      "fdShifts": 2,
+      "fdAmount": 900,
+      "otHours": 7.5,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "PPD",
+        "SD",
+        "DB",
+        "SR",
+        "RD"
+      ]
+    },
+    {
+      "id": "JOB-20250116-4",
+      "date": "2025-01-16",
+      "depTime": "08:30",
+      "arrTime": "17:30",
+      "location": "BORHOLLA",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "RESERVOIR STUDY AT BR#51",
+      "dutyHours": 9,
+      "fdShifts": 1.125,
+      "fdAmount": 506.25,
+      "otHours": 1,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "PPD",
+        "SD",
+        "SR",
+        "RD"
+      ]
+    },
+    {
+      "id": "JOB-20250116-24",
+      "date": "2025-01-16",
+      "depTime": "08:00",
+      "arrTime": "18:30",
+      "location": "KASOMARI",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "RESERVOIR STUDY AT KS#11",
+      "dutyHours": 10.5,
+      "fdShifts": 1.313,
+      "fdAmount": 590.85,
+      "otHours": 2,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "HR",
+        "YA",
+        "AB",
+        "UC"
+      ]
+    },
+    {
+      "id": "JOB-20250115-14",
+      "date": "2025-01-15",
+      "depTime": "07:30",
+      "arrTime": "19:00",
+      "location": "BORHOLLA",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "RESERVOIR STUDY AT WELLS BR#40 AND BR#76",
+      "dutyHours": 11.5,
+      "fdShifts": 1.438,
+      "fdAmount": 647.1,
+      "otHours": 3,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "DJB",
+        "HR",
+        "YA",
+        "MP"
+      ]
+    },
+    {
+      "id": "JOB-20250113-27",
+      "date": "2025-01-13",
+      "depTime": "08:30",
+      "arrTime": "18:30",
+      "location": "DAYALPUR",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "OIL SAMPLE COLLECTED FROM WELLS DPDT AND DP#03",
+      "dutyHours": 10,
+      "fdShifts": 1.25,
+      "fdAmount": 562.5,
+      "otHours": 2,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "YA",
+        "SR"
+      ]
+    },
+    {
+      "id": "JOB-20250110-3",
+      "date": "2025-01-10",
+      "depTime": "08:30",
+      "arrTime": "18:00",
+      "location": "KHORAGHAT",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "L/P LUBRICATOR SHIFTED FROM BASE WINCH TO KHORAGHAT WINCH\nAND KHORAGHAT WINCH TO FABRICATION WORKSHOP JORHAT",
+      "dutyHours": 9.5,
+      "fdShifts": 1.188,
+      "fdAmount": 534.6,
+      "otHours": 1.5,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "PPD",
+        "SR"
+      ]
+    },
+    {
+      "id": "JOB-20250110-13",
+      "date": "2025-01-10",
+      "depTime": "08:30",
+      "arrTime": "16:30",
+      "location": "BORHOLLA",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "RESERVOIR STUDY AT BR#62",
+      "dutyHours": 8,
+      "fdShifts": 1,
+      "fdAmount": 450,
+      "otHours": 0,
+      "isWithinDutyHours": true,
+      "crewCodes": [
+        "DJB",
+        "HR",
+        "RRK",
+        "MP"
+      ]
+    },
+    {
+      "id": "JOB-20250109-22",
+      "date": "2025-01-09",
+      "depTime": "08:00",
+      "arrTime": "22:00",
+      "location": "NAMBAR",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "WINCH 3120 MAINTENANCE AT NR#11 SITE",
+      "dutyHours": 14,
+      "fdShifts": 1.75,
+      "fdAmount": 787.5,
+      "otHours": 5.5,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "SD",
+        "DB",
+        "YA",
+        "RD"
+      ]
+    },
+    {
+      "id": "JOB-20250109-29",
+      "date": "2025-01-09",
+      "depTime": "08:30",
+      "arrTime": "16:30",
+      "location": "BORHOLLA",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "8327 WINCH SHIFTED FROM BASE OFFICE TO BR#62\n AND 7845 SHIFTED TO BR#62 TO BASE OFFICE JORHAT",
+      "dutyHours": 8,
+      "fdShifts": 1,
+      "fdAmount": 450,
+      "otHours": 0,
+      "isWithinDutyHours": true,
+      "crewCodes": [
+        "RRK",
+        "UC"
+      ]
+    },
+    {
+      "id": "JOB-20250108-2",
+      "date": "2025-01-08",
+      "depTime": "08:30",
+      "arrTime": "16:30",
+      "location": "BORHOLLA",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "RESERVOIR STUDY AT BR#62",
+      "dutyHours": 8,
+      "fdShifts": 1,
+      "fdAmount": 450,
+      "otHours": 0,
+      "isWithinDutyHours": true,
+      "crewCodes": [
+        "PPD",
+        "SR",
+        "RD",
+        "UC"
+      ]
+    },
+    {
+      "id": "JOB-20250108-12",
+      "date": "2025-01-08",
+      "depTime": "07:30",
+      "arrTime": "22:00",
+      "location": "KHORAGHAT",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "Winch Shifted from KH GGS to KH-40, RESERVOIR STUDY AT KH#40",
+      "dutyHours": 14.5,
+      "fdShifts": 1.813,
+      "fdAmount": 815.85,
+      "otHours": 6,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "DJB",
+        "HR",
+        "RRK",
+        "MP"
+      ]
+    },
+    {
+      "id": "JOB-20250108-21",
+      "date": "2025-01-08",
+      "depTime": "09:30",
+      "arrTime": "16:30",
+      "location": "DHAPKATA",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "WINCH SHIFTING AN MAINTENANCE",
+      "dutyHours": 7,
+      "fdShifts": 0.875,
+      "fdAmount": 393.75,
+      "otHours": 0,
+      "isWithinDutyHours": true,
+      "crewCodes": [
+        "SD",
+        "YA"
+      ]
+    },
+    {
+      "id": "JOB-20250106-1",
+      "date": "2025-01-06",
+      "depTime": "07:30",
+      "arrTime": "23:00",
+      "location": "KHORAGHAT",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "Job started late due to clearance of site from WOR, RESERVOIR STUDY AT KH#26",
+      "dutyHours": 15.5,
+      "fdShifts": 1.938,
+      "fdAmount": 872.1,
+      "otHours": 7,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "PPD",
+        "SD",
+        "DB",
+        "SR"
+      ]
+    },
+    {
+      "id": "JOB-20250103-26",
+      "date": "2025-01-03",
+      "depTime": "08:30",
+      "arrTime": "17:30",
+      "location": "BORHOLLA",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "RESERVOIR STUDY AT BR#55",
+      "dutyHours": 9,
+      "fdShifts": 1.125,
+      "fdAmount": 506.25,
+      "otHours": 1,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "YA",
+        "AB",
+        "RD",
+        "UC"
+      ]
+    },
+    {
+      "id": "JOB-20250102-11",
+      "date": "2025-01-02",
+      "depTime": "08:30",
+      "arrTime": "17:30",
+      "location": "BORHOLLA",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "RESERVOIR STUDY AT BR#62",
+      "dutyHours": 9,
+      "fdShifts": 1.125,
+      "fdAmount": 506.25,
+      "otHours": 1,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "DJB",
+        "SD",
+        "HR",
+        "RRK"
+      ]
+    },
+    {
+      "id": "JOB-20240430-37",
+      "date": "2024-04-30",
+      "depTime": "08:30",
+      "arrTime": "18:30",
+      "location": "MRDB",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "INFLUX STUDY CONTINUE AT MRDB",
+      "dutyHours": 10,
+      "fdShifts": 1.25,
+      "fdAmount": 562.5,
+      "otHours": 2,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "PPD",
+        "YA"
+      ]
+    },
+    {
+      "id": "JOB-20240430-46",
+      "date": "2024-04-30",
+      "depTime": "00:00",
+      "arrTime": "16:30",
+      "location": "MRDB",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "INFLUX STUDY CONTINUE AT MRDB",
+      "dutyHours": 16.5,
+      "fdShifts": 2.063,
+      "fdAmount": 928.35,
+      "otHours": 7.5,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "HR",
+        "UC"
+      ]
+    },
+    {
+      "id": "JOB-20240430-59",
+      "date": "2024-04-30",
+      "depTime": "08:30",
+      "arrTime": "00:00",
+      "location": "MRDB",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "INFLUX STUDY CONTINUE AT MRDB",
+      "dutyHours": 15.5,
+      "fdShifts": 1.938,
+      "fdAmount": 872.1,
+      "otHours": 7,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "MP",
+        "AB"
+      ]
+    },
+    {
+      "id": "JOB-20240429-45",
+      "date": "2024-04-29",
+      "depTime": "08:30",
+      "arrTime": "00:00",
+      "location": "MRDB",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "1.WINCH SHIFTED FROM BR#47Y TO MRDB\n2.LUBRICATOR SHIFTED FROM SU#01Z\n3.24 HRS INFLUX STUDY AT MRDB",
+      "dutyHours": 15.5,
+      "fdShifts": 1.938,
+      "fdAmount": 872.1,
+      "otHours": 7,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "HR",
+        "UC"
+      ]
+    },
+    {
+      "id": "JOB-20240429-54",
+      "date": "2024-04-29",
+      "depTime": "07:30",
+      "arrTime": "17:00",
+      "location": "MRDB",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "1.WINCH SHIFTED FROM BR#47Y TO MRDB\n2.LUBRICATOR SHIFTED FROM SU#01Z\n3.24 HRS INFLUX STUDY AT MRDB",
+      "dutyHours": 9.5,
+      "fdShifts": 1.188,
+      "fdAmount": 534.6,
+      "otHours": 1.5,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "RRK",
+        "RD"
+      ]
+    },
+    {
+      "id": "JOB-20240426-36",
+      "date": "2024-04-26",
+      "depTime": "08:30",
+      "arrTime": "18:30",
+      "location": "BORHOLLA",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "FBHP AT SU#01Z",
+      "dutyHours": 10,
+      "fdShifts": 1.25,
+      "fdAmount": 562.5,
+      "otHours": 2,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "PPD",
+        "SR",
+        "RD",
+        "UC"
+      ]
+    },
+    {
+      "id": "JOB-20240425-41",
+      "date": "2024-04-25",
+      "depTime": "07:30",
+      "arrTime": "20:00",
+      "location": "KHORAGHAT",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "FBHP AT KH#43",
+      "dutyHours": 12.5,
+      "fdShifts": 1.563,
+      "fdAmount": 703.35,
+      "otHours": 4,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "DJB",
+        "YA",
+        "AB",
+        "UC"
+      ]
+    },
+    {
+      "id": "JOB-20240424-43",
+      "date": "2024-04-24",
+      "depTime": "07:30",
+      "arrTime": "22:00",
+      "location": "KHORAGHAT",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "1.WINCH SHIFTED FROM KH#18A TO KH#26\n2.FBHP+CYCLE STUDY AT KH#26\n(CYCLE TIME 60 MINUTES,RECORDED 3 GI AND SKIPPED 1 GI)",
+      "dutyHours": 14.5,
+      "fdShifts": 1.813,
+      "fdAmount": 815.85,
+      "otHours": 6,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "SD",
+        "HR",
+        "RRK",
+        "RD"
+      ]
+    },
+    {
+      "id": "JOB-20240423-35",
+      "date": "2024-04-23",
+      "depTime": "08:00",
+      "arrTime": "20:00",
+      "location": "BORHOLLA",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "1.WINCH SHIFTED FROM BASE OFFICE TO SU#01Z\n2.FBHP AT SU#01Z",
+      "dutyHours": 12,
+      "fdShifts": 1.5,
+      "fdAmount": 675,
+      "otHours": 3.5,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "PPD",
+        "DJB",
+        "SR",
+        "MP"
+      ]
+    },
+    {
+      "id": "JOB-20240423-52",
+      "date": "2024-04-23",
+      "depTime": "08:30",
+      "arrTime": "17:30",
+      "location": "BORHOLLA",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "X-MASS TREE RECEIVED AND TRANSFERRED TO RIG-24 AND RIG-9",
+      "dutyHours": 9,
+      "fdShifts": 1.125,
+      "fdAmount": 506.25,
+      "otHours": 1,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "YA"
+      ]
+    },
+    {
+      "id": "JOB-20240422-58",
+      "date": "2024-04-22",
+      "depTime": "08:30",
+      "arrTime": "18:00",
+      "location": "BORHOLLA",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "FBHP+CYCLE STUDY AT BR#47Y\n(CYCLE TIME 27 MINUTES,RECORDED 3 GI AND SKIPPED 2 GI)",
+      "dutyHours": 9.5,
+      "fdShifts": 1.188,
+      "fdAmount": 534.6,
+      "otHours": 1.5,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "SR",
+        "AB",
+        "RD",
+        "UC"
+      ]
+    },
+    {
+      "id": "JOB-20240418-51",
+      "date": "2024-04-18",
+      "depTime": "08:30",
+      "arrTime": "17:30",
+      "location": "BORHOLLA",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "CASING PIPE LOADING AT JRT-1",
+      "dutyHours": 9,
+      "fdShifts": 1.125,
+      "fdAmount": 506.25,
+      "otHours": 1,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "YA"
+      ]
+    },
+    {
+      "id": "JOB-20240417-50",
+      "date": "2024-04-17",
+      "depTime": "08:30",
+      "arrTime": "20:30",
+      "location": "BORHOLLA",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "F/C AND C/S DESPATCHED TO RIG-9,RIG-10 AND RIG-24",
+      "dutyHours": 12,
+      "fdShifts": 1.5,
+      "fdAmount": 675,
+      "otHours": 3.5,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "YA"
+      ]
+    },
+    {
+      "id": "JOB-20240417-57",
+      "date": "2024-04-17",
+      "depTime": "08:30",
+      "arrTime": "17:30",
+      "location": "BORHOLLA",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "CASING PIPE LOADING AT JRT-1",
+      "dutyHours": 9,
+      "fdShifts": 1.125,
+      "fdAmount": 506.25,
+      "otHours": 1,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "SR"
+      ]
+    },
+    {
+      "id": "JOB-20240416-56",
+      "date": "2024-04-16",
+      "depTime": "08:30",
+      "arrTime": "17:30",
+      "location": "BORHOLLA",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "CASING PIPE LOADING AT JRT-1",
+      "dutyHours": 9,
+      "fdShifts": 1.125,
+      "fdAmount": 506.25,
+      "otHours": 1,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "SR"
+      ]
+    },
+    {
+      "id": "JOB-20240411-34",
+      "date": "2024-04-11",
+      "depTime": "08:30",
+      "arrTime": "17:30",
+      "location": "BORHOLLA",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "FBHP+CYCLE STUDY AT BR#60\n(CYCLE TIME 27 MINUTES, RECORDED 4 GI AND SKIPPED 2 GI)",
+      "dutyHours": 9,
+      "fdShifts": 1.125,
+      "fdAmount": 506.25,
+      "otHours": 1,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "PPD",
+        "HR",
+        "MP",
+        "AB"
+      ]
+    },
+    {
+      "id": "JOB-20240410-33",
+      "date": "2024-04-10",
+      "depTime": "08:30",
+      "arrTime": "18:00",
+      "location": "MRDB",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "1.ECHOMETER STUDY AT MRDB\n2.OIL SAMPLE COLLECTED FROM BORHOLLA WELLS",
+      "dutyHours": 9.5,
+      "fdShifts": 1.188,
+      "fdAmount": 534.6,
+      "otHours": 1.5,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "PPD",
+        "RRK",
+        "AB"
+      ]
+    },
+    {
+      "id": "JOB-20240410-42",
+      "date": "2024-04-10",
+      "depTime": "08:30",
+      "arrTime": "18:30",
+      "location": "BORHOLLA",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "7845 WINCH MAINTENANCE",
+      "dutyHours": 10,
+      "fdShifts": 1.25,
+      "fdAmount": 562.5,
+      "otHours": 2,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "SD",
+        "HR",
+        "MP",
+        "UC"
+      ]
+    },
+    {
+      "id": "JOB-20240409-55",
+      "date": "2024-04-09",
+      "depTime": "08:30",
+      "arrTime": "17:30",
+      "location": "BORHOLLA",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "CASING PIPE LOADING AT JRT-1",
+      "dutyHours": 9,
+      "fdShifts": 1.125,
+      "fdAmount": 506.25,
+      "otHours": 1,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "SR"
+      ]
+    },
+    {
+      "id": "JOB-20240408-44",
+      "date": "2024-04-08",
+      "depTime": "08:30",
+      "arrTime": "18:30",
+      "location": "BORHOLLA",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "1.WINCH SHIFTED FROM KP#02Z TO BR#68\n2.FBHP+CYCLE STUDY AT BR#68\n(CYCLE TIME 54 MINUTES,RECORDED 2 GI AND SKIPPED 1 GI)",
+      "dutyHours": 10,
+      "fdShifts": 1.25,
+      "fdAmount": 562.5,
+      "otHours": 2,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "HR",
+        "SR",
+        "AB",
+        "UC"
+      ]
+    },
+    {
+      "id": "JOB-20240405-31",
+      "date": "2024-04-05",
+      "depTime": "08:30",
+      "arrTime": "17:30",
+      "location": "BORHOLLA",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "FBHP+CYCLE STUDY AT BR#46\n(CYCLE TIME 54 MINUTES,RECORDED 2 GI AND SKIPPED 1 GI)",
+      "dutyHours": 9,
+      "fdShifts": 1.125,
+      "fdAmount": 506.25,
+      "otHours": 1,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "PPD",
+        "RRK",
+        "RD",
+        "UC"
+      ]
+    },
+    {
+      "id": "JOB-20240404-40",
+      "date": "2024-04-04",
+      "depTime": "07:30",
+      "arrTime": "21:00",
+      "location": "KHORAGHAT",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "1.WINCH SHIFTED FROM KH#23Z TO KH#43\n2.SBHP AT KH#23Z",
+      "dutyHours": 13.5,
+      "fdShifts": 1.688,
+      "fdAmount": 759.6,
+      "otHours": 5,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "DJB",
+        "HR",
+        "RRK",
+        "MP"
+      ]
+    },
+    {
+      "id": "JOB-20240404-49",
+      "date": "2024-04-04",
+      "depTime": "08:30",
+      "arrTime": "18:00",
+      "location": "BORHOLLA",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "FBHP+CYCLE STUDY AT BR#46",
+      "dutyHours": 9.5,
+      "fdShifts": 1.188,
+      "fdAmount": 534.6,
+      "otHours": 1.5,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "YA",
+        "AB",
+        "RD",
+        "UC"
+      ]
+    },
+    {
+      "id": "JOB-20240403-48",
+      "date": "2024-04-03",
+      "depTime": "08:30",
+      "arrTime": "17:30",
+      "location": "BORHOLLA",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "13 3/8'' CASING PIPE LOADING AND DESPATCHED TO RIG-24",
+      "dutyHours": 9,
+      "fdShifts": 1.125,
+      "fdAmount": 506.25,
+      "otHours": 1,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "YA"
+      ]
+    },
+    {
+      "id": "JOB-20240402-30",
+      "date": "2024-04-02",
+      "depTime": "08:30",
+      "arrTime": "19:00",
+      "location": "BORHOLLA",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "FBHP+CYCLE STUDY AT BR#62\n(CYCLE TIME 27.00 MINUTES,RECORDED 5 GI AND SKIPPED 5 GI)",
+      "dutyHours": 10.5,
+      "fdShifts": 1.313,
+      "fdAmount": 590.85,
+      "otHours": 2.5,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "PPD",
+        "HR",
+        "YA",
+        "UC"
+      ]
+    },
+    {
+      "id": "JOB-20240402-39",
+      "date": "2024-04-02",
+      "depTime": "07:30",
+      "arrTime": "19:30",
+      "location": "KHORAGHAT",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "1.WINCH SHIFTED FROM KH GGS 2 TO KH#23Z\n2.OBSTRUCTION FOUND AT 971 AT KH#23Z",
+      "dutyHours": 12,
+      "fdShifts": 1.5,
+      "fdAmount": 675,
+      "otHours": 3.5,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "DJB",
+        "SR",
+        "MP",
+        "RD"
+      ]
+    },
+    {
+      "id": "JOB-20240402-53",
+      "date": "2024-04-02",
+      "depTime": "08:30",
+      "arrTime": "18:00",
+      "location": "BORHOLLA",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "F/C AND C/S LOADING AT C/S AND CASING PIPE LOADING AT JRT-1",
+      "dutyHours": 9.5,
+      "fdShifts": 1.188,
+      "fdAmount": 534.6,
+      "otHours": 1.5,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "RRK"
+      ]
+    },
+    {
+      "id": "JOB-20240401-38",
+      "date": "2024-04-01",
+      "depTime": "08:30",
+      "arrTime": "19:00",
+      "location": "BORHOLLA",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "FBHP+CYCLE STUDY AT BREC\n(CYCLE TIME 13:30 MINUTES,RECORDED 7 GI AND SKIPPED 4 GI)",
+      "dutyHours": 10.5,
+      "fdShifts": 1.313,
+      "fdAmount": 590.85,
+      "otHours": 2.5,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "DJB",
+        "SD",
+        "RRK",
+        "RD"
+      ]
+    },
+    {
+      "id": "JOB-20240401-47",
+      "date": "2024-04-01",
+      "depTime": "08:30",
+      "arrTime": "18:00",
+      "location": "BORHOLLA",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "WINCH 7845 SHIFTED FROM DP#01 TO BR#51",
+      "dutyHours": 9.5,
+      "fdShifts": 1.188,
+      "fdAmount": 534.6,
+      "otHours": 1.5,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "YA",
+        "UC"
+      ]
+    },
+    {
+      "id": "JOB-20240117-15",
+      "date": "2024-01-17",
+      "depTime": "07:30",
+      "arrTime": "23:59",
+      "location": "NAMBAR",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "RESERVOIR STUDY AT WELLS KH#14 (2nd attempt successful, no data in 1st attempt) AND NR#07",
+      "dutyHours": 16.48,
+      "fdShifts": 2.06,
+      "fdAmount": 927,
+      "otHours": 8,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "DJB",
+        "HR",
+        "RRK",
+        "MP",
+        "AB"
+      ]
+    },
+    {
+      "id": "JOB-06.04.2024\n(SATURDAY)-32",
+      "date": "06.04.2024\n(SATURDAY)",
+      "depTime": "12:00",
+      "arrTime": "21:00",
+      "location": "BORHOLLA",
+      "vehicle": "AS-04AC-7845",
+      "remarks": "1.WINCH SHIFTED FROM BR#46 TO KP#02Z\n2.FBHP AT KP#02Z",
+      "dutyHours": 9,
+      "fdShifts": 1.125,
+      "fdAmount": 506.25,
+      "otHours": 8,
+      "isWithinDutyHours": false,
+      "crewCodes": [
+        "PPD",
+        "SD",
+        "YA",
+        "AB"
+      ]
+    }
+  ],
+  "lastUpdated": "2026-09-24T15:23:53.076Z"
+}

@@ -1,0 +1,2012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ONGC Admin Control Center | SST Logistics & Crew Operations</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-base: #070d19;
+      --bg-surface: #0e1726;
+      --bg-card: #152238;
+      --bg-card-hover: #1b2c47;
+      --border-subtle: #1e3252;
+      --border-accent: #2563eb;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --ongc-orange: #f97316;
+      --ongc-orange-hover: #ea580c;
+      --ongc-gold: #f59e0b;
+      --success: #10b981;
+      --danger: #ef4444;
+      --danger-hover: #dc2626;
+      --warning: #f59e0b;
+      --info: #0ea5e9;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --font-mono: 'JetBrains Mono', monospace;
+      --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Top Navigation Bar */
+    .admin-nav {
+      background: rgba(14, 23, 38, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand-section {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .brand-badge {
+      background: linear-gradient(135deg, #c2410c, var(--ongc-orange));
+      color: #fff;
+      font-weight: 800;
+      font-size: 0.9rem;
+      padding: 0.35rem 0.7rem;
+      border-radius: var(--radius-sm);
+      letter-spacing: 0.05em;
+      box-shadow: 0 0 15px rgba(249, 115, 22, 0.4);
+    }
+
+    .brand-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .brand-title span.sub {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--ongc-gold);
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      padding: 0.15rem 0.5rem;
+      border-radius: 9999px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .admin-profile-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      padding: 0.4rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+    }
+
+    .admin-avatar {
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, #2563eb, #38bdf8);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.75rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn {
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s ease;
+      border: none;
+      text-decoration: none;
+    }
+
+    .btn-portal {
+      background: rgba(37, 99, 235, 0.15);
+      border: 1px solid rgba(37, 99, 235, 0.4);
+      color: #93c5fd;
+    }
+    .btn-portal:hover {
+      background: rgba(37, 99, 235, 0.3);
+      color: #fff;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-orange {
+      background: var(--ongc-orange);
+      color: #fff;
+    }
+    .btn-orange:hover {
+      background: var(--ongc-orange-hover);
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: #fff;
+    }
+    .btn-success:hover {
+      background: #059669;
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: #fff;
+    }
+    .btn-danger:hover {
+      background: var(--danger-hover);
+    }
+
+    .btn-secondary {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+    }
+    .btn-secondary:hover {
+      background: var(--bg-card-hover);
+    }
+
+    .btn-sm {
+      padding: 0.35rem 0.65rem;
+      font-size: 0.75rem;
+    }
+
+    /* Layout Container */
+    .admin-container {
+      display: flex;
+      flex: 1;
+      height: calc(100vh - 65px);
+    }
+
+    /* Sidebar Navigation */
+    .admin-sidebar {
+      width: 260px;
+      background: var(--bg-surface);
+      border-right: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      padding: 1.25rem 0.75rem;
+      gap: 0.5rem;
+      flex-shrink: 0;
+    }
+
+    .sidebar-section-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0.5rem 0.75rem 0.25rem;
+    }
+
+    .nav-tab-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.65rem 0.85rem;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-align: left;
+      width: 100%;
+    }
+
+    .nav-tab-btn .tab-label {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .nav-tab-btn:hover {
+      background: var(--bg-card);
+      color: var(--text-main);
+    }
+
+    .nav-tab-btn.active {
+      background: rgba(37, 99, 235, 0.18);
+      border-color: rgba(37, 99, 235, 0.5);
+      color: #93c5fd;
+      font-weight: 600;
+    }
+
+    .nav-badge {
+      font-size: 0.7rem;
+      padding: 0.15rem 0.45rem;
+      border-radius: 9999px;
+      font-weight: 700;
+    }
+    .nav-badge.alert {
+      background: var(--danger);
+      color: #fff;
+      animation: pulse-badge 2s infinite;
+    }
+    .nav-badge.neutral {
+      background: var(--bg-card);
+      color: var(--text-muted);
+      border: 1px solid var(--border-subtle);
+    }
+
+    @keyframes pulse-badge {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.1); opacity: 0.85; }
+    }
+
+    /* Main Content Area */
+    .admin-main {
+      flex: 1;
+      padding: 1.5rem 2rem;
+      overflow-y: auto;
+      background: radial-gradient(circle at top right, rgba(37, 99, 235, 0.05), transparent 400px);
+    }
+
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.25s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .page-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .page-subtitle {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }
+
+    /* KPI Stat Cards Grid */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .kpi-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .kpi-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+    }
+
+    .kpi-card.highlight {
+      border-color: rgba(249, 115, 22, 0.5);
+      background: linear-gradient(135deg, var(--bg-card), rgba(249, 115, 22, 0.08));
+    }
+
+    .kpi-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .kpi-value {
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: #fff;
+      font-family: var(--font-mono);
+    }
+
+    .kpi-desc {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      margin-top: 0.35rem;
+    }
+
+    /* Table Styles */
+    .data-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+
+    .data-card-header {
+      padding: 1rem 1.25rem;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .data-card-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .data-card-tools {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .search-input {
+      background: var(--bg-base);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 0.4rem 0.75rem;
+      color: #fff;
+      font-size: 0.85rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .search-input:focus {
+      border-color: var(--primary);
+    }
+
+    .filter-select {
+      background: var(--bg-base);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 0.4rem 0.75rem;
+      color: #fff;
+      font-size: 0.85rem;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: left;
+    }
+
+    th {
+      background: rgba(14, 23, 38, 0.8);
+      color: var(--text-muted);
+      font-weight: 600;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border-subtle);
+      white-space: nowrap;
+      text-transform: uppercase;
+      font-size: 0.7rem;
+      letter-spacing: 0.05em;
+    }
+
+    td {
+      padding: 0.8rem 1rem;
+      border-bottom: 1px solid rgba(30, 50, 82, 0.4);
+      color: var(--text-main);
+      vertical-align: middle;
+    }
+
+    tbody tr:hover {
+      background: rgba(21, 34, 56, 0.6);
+    }
+
+    /* Badges & Tags */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .status-badge.active, .status-badge.approved {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .status-badge.pending {
+      background: rgba(245, 158, 11, 0.18);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.4);
+    }
+    .status-badge.rejected, .status-badge.suspended, .status-badge.inactive {
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .type-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+    .type-badge.add {
+      background: rgba(16, 185, 129, 0.2);
+      color: #6ee7b7;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+    }
+    .type-badge.promote {
+      background: rgba(249, 115, 22, 0.2);
+      color: #fdba74;
+      border: 1px solid rgba(249, 115, 22, 0.4);
+    }
+    .type-badge.delete {
+      background: rgba(239, 68, 68, 0.2);
+      color: #fca5a5;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+    }
+
+    .code-tag {
+      font-family: var(--font-mono);
+      background: rgba(30, 50, 82, 0.6);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      color: #93c5fd;
+    }
+
+    /* Request Details Accordion / Sub-card */
+    .request-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+      transition: border-color 0.2s;
+    }
+    .request-card.pending {
+      border-left: 4px solid var(--ongc-gold);
+    }
+    .request-card.approved {
+      border-left: 4px solid var(--success);
+    }
+    .request-card.rejected {
+      border-left: 4px solid var(--danger);
+    }
+
+    .req-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+    }
+
+    .req-diff {
+      background: var(--bg-base);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 0.75rem 1rem;
+      margin: 0.75rem 0;
+      font-size: 0.82rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .diff-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+    .diff-label {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .diff-val {
+      font-weight: 600;
+      color: #fff;
+    }
+    .diff-val.highlight {
+      color: var(--ongc-gold);
+    }
+
+    /* Modal Overlay */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 1rem;
+    }
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 540px;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      animation: modalSlide 0.25s ease-out;
+    }
+
+    @keyframes modalSlide {
+      from { opacity: 0; transform: scale(0.95) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .modal-header {
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+      max-height: 75vh;
+      overflow-y: auto;
+    }
+
+    .modal-footer {
+      background: var(--bg-card);
+      border-top: 1px solid var(--border-subtle);
+      padding: 0.85rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.75rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    .form-label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 0.35rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      background: var(--bg-base);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 0.55rem 0.8rem;
+      color: #fff;
+      font-size: 0.85rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+    }
+    .form-textarea {
+      resize: vertical;
+      min-height: 70px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    /* Auth Gate Overlay for Admin Login */
+    #adminAuthGate {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, #0f1c33 0%, #070d19 100%);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .auth-card {
+      background: var(--bg-surface);
+      border: 1px solid rgba(37, 99, 235, 0.4);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 420px;
+      padding: 2rem;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+      text-align: center;
+    }
+
+    .auth-logo-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #c2410c, var(--ongc-orange));
+      color: #fff;
+      font-weight: 800;
+      font-size: 1.1rem;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-sm);
+      letter-spacing: 0.08em;
+      margin-bottom: 1rem;
+      box-shadow: 0 0 20px rgba(249, 115, 22, 0.4);
+    }
+
+    /* Toast Notification */
+    #adminToast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      color: #fff;
+      padding: 0.85rem 1.25rem;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      font-size: 0.85rem;
+      font-weight: 500;
+      z-index: 2000;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      max-width: 380px;
+    }
+    #adminToast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    #adminToast.success { border-color: var(--success); }
+    #adminToast.error { border-color: var(--danger); }
+    #adminToast.info { border-color: var(--info); }
+  </style>
+</head>
+<body>
+
+  <!-- ADMIN AUTH GATE OVERLAY (Displayed if not logged in as Admin) -->
+  <div id="adminAuthGate" style="display: none;">
+    <div class="auth-card">
+      <div class="auth-logo-badge">ONGC SST</div>
+      <h2 style="font-size: 1.35rem; font-weight: 700; color: #fff; margin-bottom: 0.35rem;">Admin Control Center</h2>
+      <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1.5rem;">Secure authentication required to access executive controls.</p>
+
+      <form id="adminLoginForm" onsubmit="handleAdminLogin(event)">
+        <div class="form-group" style="text-align: left;">
+          <label class="form-label">Admin User ID / CPF</label>
+          <input type="text" id="gateUserId" class="form-input" placeholder="e.g. CPF-140751 or admin" required autocomplete="username">
+        </div>
+        <div class="form-group" style="text-align: left;">
+          <label class="form-label">Password</label>
+          <input type="password" id="gatePassword" class="form-input" placeholder="••••••••" required autocomplete="current-password">
+        </div>
+        <div id="gateError" style="display: none; color: #f87171; font-size: 0.8rem; margin-bottom: 1rem; text-align: left; background: rgba(239, 68, 68, 0.15); padding: 0.5rem; border-radius: var(--radius-sm); border: 1px solid rgba(239, 68, 68, 0.3);"></div>
+        <button type="submit" class="btn btn-orange" style="width: 100%; justify-content: center; padding: 0.7rem; font-size: 0.9rem;">
+          Authenticate as Administrator
+        </button>
+      </form>
+      <div style="margin-top: 1.25rem;">
+        <a href="/index.html" style="color: var(--text-muted); font-size: 0.8rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.3rem;">
+          ← Return to Operations Portal
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOP HEADER NAV -->
+  <header class="admin-nav">
+    <div class="brand-section">
+      <div class="brand-badge">ONGC</div>
+      <div class="brand-title">
+        Operations Admin Control Center
+        <span class="sub">ASSAM ASSET • SST JORHAT</span>
+      </div>
+    </div>
+    <div class="nav-actions">
+      <a href="/index.html" class="btn btn-portal btn-sm">
+        📊 Operations Portal
+      </a>
+      <div class="admin-profile-badge">
+        <div class="admin-avatar" id="adminAvatar">UC</div>
+        <div style="display: flex; flex-direction: column;">
+          <span style="font-weight: 600; color: #fff; font-size: 0.8rem;" id="adminName">UTJJAL CHETIA</span>
+          <span style="font-size: 0.68rem; color: var(--ongc-gold);">Logistics Operations Admin</span>
+        </div>
+      </div>
+      <button class="btn btn-secondary btn-sm" onclick="adminLogout()" title="Logout from Admin">
+        🚪 Exit
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN ADMIN LAYOUT -->
+  <div class="admin-container">
+
+    <!-- SIDEBAR TABS -->
+    <aside class="admin-sidebar">
+      <div class="sidebar-section-title">ADMINISTRATION</div>
+
+      <button class="nav-tab-btn active" onclick="switchAdminTab('overview')">
+        <span class="tab-label">📊 Dashboard Overview</span>
+      </button>
+
+      <button class="nav-tab-btn" onclick="switchAdminTab('approvals')">
+        <span class="tab-label">⚡ Crew Approvals</span>
+        <span class="nav-badge alert" id="badgePendingCount" style="display: none;">0</span>
+      </button>
+
+      <button class="nav-tab-btn" onclick="switchAdminTab('crew')">
+        <span class="tab-label">👥 Crew Roster Master</span>
+        <span class="nav-badge neutral" id="badgeCrewCount">0</span>
+      </button>
+
+      <button class="nav-tab-btn" onclick="switchAdminTab('users')">
+        <span class="tab-label">👤 User Accounts & Log</span>
+        <span class="nav-badge neutral" id="badgeUsersCount">0</span>
+      </button>
+
+      <div class="sidebar-section-title" style="margin-top: 1rem;">GOVERNANCE & AUDIT</div>
+
+      <button class="nav-tab-btn" onclick="switchAdminTab('audit')">
+        <span class="tab-label">📜 System Audit Trail</span>
+      </button>
+
+      <div style="margin-top: auto; padding: 0.75rem; background: var(--bg-card); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); font-size: 0.72rem; color: var(--text-dim);">
+        <div style="font-weight: 600; color: var(--text-muted); margin-bottom: 0.2rem;">Connected Store:</div>
+        <div>Active: ot_fde_store.json</div>
+        <div>Users: users_db.json</div>
+        <div style="color: var(--success); margin-top: 0.3rem;">● Server Online :3000</div>
+      </div>
+    </aside>
+
+    <!-- MAIN PANELS -->
+    <main class="admin-main">
+
+      <!-- ======================================================== -->
+      <!-- TAB 1: DASHBOARD OVERVIEW -->
+      <!-- ======================================================== -->
+      <section id="panel-overview" class="tab-content active">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Administrator Dashboard</h1>
+            <p class="page-subtitle">Real-time status of ONGC crew approvals, user logins, and operational governance.</p>
+          </div>
+          <div>
+            <button class="btn btn-secondary btn-sm" onclick="refreshAllData()">
+              🔄 Refresh Status
+            </button>
+          </div>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card highlight" onclick="switchAdminTab('approvals')" style="cursor: pointer;">
+            <div class="kpi-title">
+              <span>Pending Crew Approvals</span>
+              <span>⚡</span>
+            </div>
+            <div class="kpi-value" id="kpiPendingApprovals" style="color: var(--ongc-orange);">0</div>
+            <div class="kpi-desc">Additions, deletions & promotions awaiting action</div>
+          </div>
+
+          <div class="kpi-card" onclick="switchAdminTab('crew')" style="cursor: pointer;">
+            <div class="kpi-title">
+              <span>Authorized Crew Roster</span>
+              <span>👥</span>
+            </div>
+            <div class="kpi-value" id="kpiTotalCrew">0</div>
+            <div class="kpi-desc">Officers & technicians listed in SST Roster</div>
+          </div>
+
+          <div class="kpi-card" onclick="switchAdminTab('users')" style="cursor: pointer;">
+            <div class="kpi-title">
+              <span>Registered Accounts</span>
+              <span>👤</span>
+            </div>
+            <div class="kpi-value" id="kpiTotalUsers">0</div>
+            <div class="kpi-desc">Gated by verified ONGC CPF number</div>
+          </div>
+
+          <div class="kpi-card" onclick="switchAdminTab('audit')" style="cursor: pointer;">
+            <div class="kpi-title">
+              <span>Security Audit Logs</span>
+              <span>📜</span>
+            </div>
+            <div class="kpi-value" id="kpiTotalAudit">0</div>
+            <div class="kpi-desc">Total tracked security & operational events</div>
+          </div>
+        </div>
+
+        <!-- Pending Approval Spotlight -->
+        <div class="data-card">
+          <div class="data-card-header">
+            <div class="data-card-title">
+              ⚡ Action Required: Pending Crew Operations
+            </div>
+            <button class="btn btn-orange btn-sm" onclick="switchAdminTab('approvals')">
+              View All Requests →
+            </button>
+          </div>
+          <div style="padding: 1.25rem;" id="overviewPendingPreview">
+            <p style="color: var(--text-dim); font-size: 0.85rem;">No pending crew operations requiring approval at this moment.</p>
+          </div>
+        </div>
+
+        <!-- Recent Audit Activity -->
+        <div class="data-card">
+          <div class="data-card-header">
+            <div class="data-card-title">
+              🕒 Recent System & Security Events
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="switchAdminTab('audit')">
+              Full Audit Trail →
+            </button>
+          </div>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Action</th>
+                  <th>User / Initiator</th>
+                  <th>Event Details</th>
+                </tr>
+              </thead>
+              <tbody id="overviewRecentAuditTbody">
+                <tr><td colspan="4" style="text-align: center; color: var(--text-dim);">Loading events...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- TAB 2: CREW APPROVALS QUEUE -->
+      <!-- ======================================================== -->
+      <section id="panel-approvals" class="tab-content">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Crew Approval Queue</h1>
+            <p class="page-subtitle">Review, approve, or reject crew addition, deletion, and promotion requests.</p>
+          </div>
+          <div style="display: flex; gap: 0.5rem;">
+            <select class="filter-select" id="approvalFilterStatus" onchange="filterApprovalRequests()">
+              <option value="pending">Show: Pending Only</option>
+              <option value="all">Show: All (History)</option>
+              <option value="approved">Show: Approved</option>
+              <option value="rejected">Show: Rejected</option>
+            </select>
+            <button class="btn btn-secondary btn-sm" onclick="loadApprovalRequests()">
+              🔄 Refresh Queue
+            </button>
+          </div>
+        </div>
+
+        <div id="approvalRequestsContainer">
+          <!-- Dynamically populated request cards -->
+          <div style="text-align: center; padding: 2rem; color: var(--text-dim);">
+            Loading approval requests...
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- TAB 3: CREW ROSTER MASTER -->
+      <!-- ======================================================== -->
+      <section id="panel-crew" class="tab-content">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Crew Roster Master</h1>
+            <p class="page-subtitle">Authorized ONGC crew directory. Only CPFs listed here can register for system access.</p>
+          </div>
+          <div>
+            <button class="btn btn-orange" onclick="openDirectAddCrewModal()">
+              + Add New Crew Member
+            </button>
+          </div>
+        </div>
+
+        <div class="data-card">
+          <div class="data-card-header">
+            <div class="data-card-title">
+              Authorized Crew Members (<span id="crewTableCount">0</span>)
+            </div>
+            <div class="data-card-tools">
+              <input type="text" class="search-input" id="searchCrewInput" placeholder="Search by name, CPF, code..." oninput="filterCrewTable()">
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>Code</th>
+                  <th>CPF No.</th>
+                  <th>Full Name</th>
+                  <th>Official Designation</th>
+                  <th>Section</th>
+                  <th>Basic Pay</th>
+                  <th>OT Rate (Mines Act)</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="crewTableBody">
+                <tr><td colspan="9" style="text-align: center; color: var(--text-dim);">Loading crew roster...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- TAB 4: USERS MANAGEMENT & LOG -->
+      <!-- ======================================================== -->
+      <section id="panel-users" class="tab-content">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">User Accounts & Access Log</h1>
+            <p class="page-subtitle">All registered users verified via official ONGC CPF number (One-time registration).</p>
+          </div>
+          <div>
+            <button class="btn btn-secondary btn-sm" onclick="loadUsersTable()">
+              🔄 Refresh Users
+            </button>
+          </div>
+        </div>
+
+        <div class="data-card">
+          <div class="data-card-header">
+            <div class="data-card-title">
+              Registered System Users (<span id="usersTableCount">0</span>)
+            </div>
+            <div class="data-card-tools">
+              <input type="text" class="search-input" id="searchUsersInput" placeholder="Search user ID, name, CPF..." oninput="filterUsersTable()">
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>User ID</th>
+                  <th>Official Name</th>
+                  <th>CPF No.</th>
+                  <th>Role / Designation</th>
+                  <th>Department</th>
+                  <th>Access Level</th>
+                  <th>Status</th>
+                  <th>Registered At</th>
+                  <th>Last Login</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="usersTableBody">
+                <tr><td colspan="10" style="text-align: center; color: var(--text-dim);">Loading user accounts...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- TAB 5: SYSTEM AUDIT TRAIL -->
+      <!-- ======================================================== -->
+      <section id="panel-audit" class="tab-content">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">System Audit Trail</h1>
+            <p class="page-subtitle">Immutable log of logins, account creation, crew approvals, and pay updates.</p>
+          </div>
+          <div style="display: flex; gap: 0.5rem;">
+            <select class="filter-select" id="auditActionFilter" onchange="loadAuditTable()">
+              <option value="ALL">All Actions</option>
+              <option value="LOGIN_SUCCESS">LOGIN_SUCCESS</option>
+              <option value="LOGIN_FAILED">LOGIN_FAILED</option>
+              <option value="USER_REGISTERED">USER_REGISTERED</option>
+              <option value="CREW_REQUEST_SUBMITTED">CREW_REQUEST_SUBMITTED</option>
+              <option value="CREW_REQUEST_APPROVED">CREW_REQUEST_APPROVED</option>
+              <option value="CREW_REQUEST_REJECTED">CREW_REQUEST_REJECTED</option>
+              <option value="ADMIN_CREW_ADD">ADMIN_CREW_ADD</option>
+              <option value="ADMIN_CREW_PROMOTE">ADMIN_CREW_PROMOTE</option>
+              <option value="ADMIN_CREW_DELETE">ADMIN_CREW_DELETE</option>
+              <option value="USER_STATUS_CHANGED">USER_STATUS_CHANGED</option>
+              <option value="USER_DELETED">USER_DELETED</option>
+            </select>
+            <button class="btn btn-secondary btn-sm" onclick="exportAuditJson()">
+              📥 Export JSON
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="loadAuditTable()">
+              🔄 Refresh
+            </button>
+          </div>
+        </div>
+
+        <div class="data-card">
+          <div class="data-card-header">
+            <div class="data-card-title">
+              Audit Events Log (<span id="auditTableCount">0</span> records)
+            </div>
+            <div class="data-card-tools">
+              <input type="text" class="search-input" id="searchAuditInput" placeholder="Search user ID or details..." oninput="filterAuditTable()">
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Action Type</th>
+                  <th>User / Actor</th>
+                  <th>IP / Origin</th>
+                  <th>Event Metadata & Parameters</th>
+                </tr>
+              </thead>
+              <tbody id="auditTableBody">
+                <tr><td colspan="5" style="text-align: center; color: var(--text-dim);">Loading audit logs...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: DIRECT ADD CREW MEMBER -->
+  <!-- ======================================================== -->
+  <div class="modal-overlay" id="modalDirectAddCrew">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">➕ Add New Crew to Roster (Admin)</h3>
+        <button class="btn btn-secondary btn-sm" onclick="closeModal('modalDirectAddCrew')">✕</button>
+      </div>
+      <form id="formDirectAddCrew" onsubmit="handleDirectAddCrew(event)">
+        <div class="modal-body">
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem;">
+            Adding an employee directly authorizes their CPF number for one-time user self-registration.
+          </p>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Employee Code (2-4 letters) *</label>
+              <input type="text" id="addCrewCode" class="form-input" placeholder="e.g. RK" required maxlength="5" style="text-transform: uppercase;">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Official ONGC CPF No. *</label>
+              <input type="text" id="addCrewCpf" class="form-input" placeholder="e.g. 140889" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Full Name *</label>
+            <input type="text" id="addCrewName" class="form-input" placeholder="e.g. RAJESH KUMAR" required style="text-transform: uppercase;">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Official Designation *</label>
+            <input type="text" id="addCrewDesignation" class="form-input" placeholder="e.g. DY T (FITTING)" required style="text-transform: uppercase;">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Section</label>
+              <input type="text" id="addCrewSection" class="form-input" value="SST" required style="text-transform: uppercase;">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Base Location</label>
+              <input type="text" id="addCrewLocation" class="form-input" value="JORHAT" required style="text-transform: uppercase;">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Basic Pay (₹)</label>
+              <input type="number" id="addCrewBasic" class="form-input" value="38490" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Dearness Allowance (₹)</label>
+              <input type="number" id="addCrewDa" class="form-input" value="19091" required>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modalDirectAddCrew')">Cancel</button>
+          <button type="submit" class="btn btn-orange">Directly Add to Roster</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: DIRECT PROMOTE CREW MEMBER -->
+  <!-- ======================================================== -->
+  <div class="modal-overlay" id="modalDirectPromoteCrew">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">⭐ Promote Crew Member (Admin)</h3>
+        <button class="btn btn-secondary btn-sm" onclick="closeModal('modalDirectPromoteCrew')">✕</button>
+      </div>
+      <form id="formDirectPromoteCrew" onsubmit="handleDirectPromoteCrew(event)">
+        <input type="hidden" id="promoteCrewCode">
+        <div class="modal-body">
+          <div style="background: var(--bg-card); padding: 0.85rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); margin-bottom: 1rem;">
+            <div style="font-weight: 700; color: #fff; font-size: 0.95rem;" id="promoteEmpDisplay">EMP NAME (CODE)</div>
+            <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.2rem;" id="promoteEmpCurrentDetails">
+              Current: JMVD(W.O.) • Basic Pay: ₹28,230 • OT Rate: ₹406/hr
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">New Official Designation *</label>
+            <input type="text" id="promoteNewDesignation" class="form-input" required placeholder="e.g. MVD(WO)" style="text-transform: uppercase;">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">New Basic Pay (₹)</label>
+              <input type="number" id="promoteNewBasic" class="form-input" placeholder="Leave empty for auto 3%">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Promotional Increment %</label>
+              <input type="number" id="promoteIncrementPct" class="form-input" value="3.0" step="0.5">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Promotion Office Order No.</label>
+            <input type="text" id="promoteOrderNo" class="form-input" placeholder="e.g. ONGC/SST/PROM/2026/01">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Remarks / Justification</label>
+            <input type="text" id="promoteRemarks" class="form-input" placeholder="e.g. Merit Promotion under ONGC Policy">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modalDirectPromoteCrew')">Cancel</button>
+          <button type="submit" class="btn btn-orange">Execute Promotion Now</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="adminToast"></div>
+
+  <!-- ADMIN CLIENT SCRIPT -->
+  <script>
+    // State Store
+    let currentUser = null;
+    let crewRoster = {};
+    let usersList = [];
+    let approvalRequests = [];
+    let auditLogs = [];
+
+    // Initialize on page load
+    window.addEventListener('DOMContentLoaded', async () => {
+      checkAdminAuth();
+    });
+
+    function checkAdminAuth() {
+      try {
+        const stored = localStorage.getItem('ongc_current_user');
+        if (stored) {
+          const user = JSON.parse(stored);
+          if (user && user.isAdmin) {
+            currentUser = user;
+            document.getElementById('adminAuthGate').style.display = 'none';
+            document.getElementById('adminName').textContent = user.name || 'Admin';
+            document.getElementById('adminAvatar').textContent = user.initials || 'AD';
+            refreshAllData();
+            return;
+          }
+        }
+      } catch (e) {
+        console.error('Auth parse error:', e);
+      }
+      // Show login gate if not authenticated as admin
+      document.getElementById('adminAuthGate').style.display = 'flex';
+    }
+
+    async function handleAdminLogin(e) {
+      e.preventDefault();
+      const userId = document.getElementById('gateUserId').value.trim();
+      const password = document.getElementById('gatePassword').value.trim();
+      const errBox = document.getElementById('gateError');
+      errBox.style.display = 'none';
+
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId, password })
+        });
+        const data = await res.json();
+        if (!data.success) {
+          errBox.textContent = data.error || 'Authentication failed.';
+          errBox.style.display = 'block';
+          return;
+        }
+
+        if (!data.user || !data.user.isAdmin) {
+          errBox.textContent = 'Access Denied: Only Administrator accounts can enter this panel.';
+          errBox.style.display = 'block';
+          return;
+        }
+
+        // Store user and proceed
+        currentUser = data.user;
+        localStorage.setItem('ongc_current_user', JSON.stringify(currentUser));
+        document.getElementById('adminAuthGate').style.display = 'none';
+        document.getElementById('adminName').textContent = currentUser.name || 'Admin';
+        document.getElementById('adminAvatar').textContent = currentUser.initials || 'AD';
+        showToast(`Welcome, Administrator ${currentUser.name}!`, 'success');
+        refreshAllData();
+      } catch (err) {
+        errBox.textContent = 'Server connection error: ' + err.message;
+        errBox.style.display = 'block';
+      }
+    }
+
+    function adminLogout() {
+      if (confirm('Exit Administrator Control Center?')) {
+        localStorage.removeItem('ongc_current_user');
+        window.location.href = '/index.html';
+      }
+    }
+
+    // Tab Switching
+    function switchAdminTab(tabId) {
+      // 1. Reset all scroll positions to the top
+      const adminMain = document.querySelector('.admin-main');
+      if (adminMain) adminMain.scrollTop = 0;
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+
+      document.querySelectorAll('.tab-content').forEach(el => {
+        el.classList.remove('active');
+        if (el.scrollTop !== undefined) el.scrollTop = 0;
+      });
+      document.querySelectorAll('.nav-tab-btn').forEach(el => el.classList.remove('active'));
+
+      const target = document.getElementById(`panel-${tabId}`);
+      if (target) {
+        target.classList.add('active');
+        if (target.scrollTop !== undefined) target.scrollTop = 0;
+      }
+
+      const btn = Array.from(document.querySelectorAll('.nav-tab-btn')).find(b =>
+        b.getAttribute('onclick')?.includes(`'${tabId}'`)
+      );
+      if (btn) btn.classList.add('active');
+
+      // Post-switch scroll enforcement
+      requestAnimationFrame(() => {
+        if (adminMain) adminMain.scrollTop = 0;
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      });
+
+      if (tabId === 'approvals') loadApprovalRequests();
+      if (tabId === 'crew') loadCrewTable();
+      if (tabId === 'users') loadUsersTable();
+      if (tabId === 'audit') loadAuditTable();
+    }
+
+    // Refresh all data
+    async function refreshAllData() {
+      await Promise.all([
+        loadApprovalRequests(),
+        loadCrewTable(),
+        loadUsersTable(),
+        loadAuditTable()
+      ]);
+      updateDashboardKPIs();
+    }
+
+    // Update Dashboard KPIs
+    function updateDashboardKPIs() {
+      const pendingCount = approvalRequests.filter(r => r.status === 'pending').length;
+      document.getElementById('kpiPendingApprovals').textContent = pendingCount;
+      document.getElementById('kpiTotalCrew').textContent = Object.keys(crewRoster).length;
+      document.getElementById('kpiTotalUsers').textContent = usersList.length;
+      document.getElementById('kpiTotalAudit').textContent = auditLogs.length;
+
+      const badge = document.getElementById('badgePendingCount');
+      if (pendingCount > 0) {
+        badge.textContent = pendingCount;
+        badge.style.display = 'inline-block';
+      } else {
+        badge.style.display = 'none';
+      }
+
+      document.getElementById('badgeCrewCount').textContent = Object.keys(crewRoster).length;
+      document.getElementById('badgeUsersCount').textContent = usersList.length;
+
+      // Update overview pending preview
+      const previewBox = document.getElementById('overviewPendingPreview');
+      const pendingItems = approvalRequests.filter(r => r.status === 'pending');
+      if (pendingItems.length === 0) {
+        previewBox.innerHTML = '<p style="color: var(--text-dim); font-size: 0.85rem;">✅ No pending crew operations. All requests are cleared!</p>';
+      } else {
+        previewBox.innerHTML = pendingItems.slice(0, 3).map(r => `
+          <div style="background: var(--bg-card); padding: 0.85rem 1rem; border-radius: var(--radius-sm); border-left: 3px solid var(--ongc-orange); margin-bottom: 0.6rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+            <div>
+              <span class="type-badge ${r.type.toLowerCase().replace('crew_', '')}">${r.type}</span>
+              <strong style="color: #fff; margin-left: 0.5rem;">${r.employeeName} (${r.employeeCode})</strong>
+              <span style="color: var(--text-muted); font-size: 0.78rem; margin-left: 0.5rem;">CPF: ${r.cpf || 'N/A'}</span>
+              <div style="font-size: 0.78rem; color: var(--text-dim); margin-top: 0.2rem;">Requested by ${r.requestedBy} • ${new Date(r.requestedAt).toLocaleString()}</div>
+            </div>
+            <div style="display: flex; gap: 0.4rem;">
+              <button class="btn btn-success btn-sm" onclick="approveRequest('${r.id}')">✓ Approve</button>
+              <button class="btn btn-danger btn-sm" onclick="rejectRequest('${r.id}')">✕ Reject</button>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // Update overview recent audit
+      const recentAudit = auditLogs.slice(0, 5);
+      const auditTbody = document.getElementById('overviewRecentAuditTbody');
+      if (recentAudit.length === 0) {
+        auditTbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--text-dim);">No audit logs yet.</td></tr>';
+      } else {
+        auditTbody.innerHTML = recentAudit.map(log => `
+          <tr>
+            <td style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-dim);">${new Date(log.timestamp).toLocaleString()}</td>
+            <td><span class="status-badge ${log.action.includes('SUCCESS') || log.action.includes('APPROVED') ? 'active' : (log.action.includes('FAILED') || log.action.includes('REJECTED') ? 'rejected' : 'pending')}">${log.action}</span></td>
+            <td><strong style="color: #fff;">${log.userId}</strong></td>
+            <td style="font-size: 0.78rem; color: var(--text-muted);">${formatAuditDetails(log.details)}</td>
+          </tr>
+        `).join('');
+      }
+    }
+
+    // ========================================================
+    // APPROVALS MODULE
+    // ========================================================
+    async function loadApprovalRequests() {
+      try {
+        const res = await fetch('/api/admin/requests');
+        const data = await res.json();
+        if (data.success) {
+          approvalRequests = data.requests || [];
+          filterApprovalRequests();
+          updateDashboardKPIs();
+        }
+      } catch (err) {
+        console.error('Failed to load requests:', err);
+      }
+    }
+
+    function filterApprovalRequests() {
+      const filter = document.getElementById('approvalFilterStatus').value;
+      let list = approvalRequests;
+      if (filter !== 'all') {
+        list = list.filter(r => r.status.toLowerCase() === filter);
+      }
+      renderApprovalCards(list);
+    }
+
+    function renderApprovalCards(list) {
+      const container = document.getElementById('approvalRequestsContainer');
+      if (!list || list.length === 0) {
+        container.innerHTML = `
+          <div style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 3rem; text-align: center; color: var(--text-dim);">
+            <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🎉</div>
+            <h3 style="color: #fff; font-size: 1.1rem; margin-bottom: 0.3rem;">Queue is Empty</h3>
+            <p style="font-size: 0.85rem;">No crew requests matching the selected filter.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = list.map(req => {
+        const typeClass = req.type.toLowerCase().replace('crew_', '');
+        const p = req.payload || {};
+        let diffHtml = '';
+
+        if (req.type === 'CREW_PROMOTE') {
+          diffHtml = `
+            <div class="req-diff">
+              <div class="diff-item">
+                <span class="diff-label">New Designation</span>
+                <span class="diff-val highlight">${p.newDesignation || 'N/A'}</span>
+              </div>
+              <div class="diff-item">
+                <span class="diff-label">New Basic Pay</span>
+                <span class="diff-val highlight">₹${p.newBasicPay ? Number(p.newBasicPay).toLocaleString('en-IN') : 'Auto +3%'}</span>
+              </div>
+              <div class="diff-item">
+                <span class="diff-label">Order Reference</span>
+                <span class="diff-val">${p.orderNo || 'N/A'}</span>
+              </div>
+              <div class="diff-item">
+                <span class="diff-label">Justification / Remarks</span>
+                <span class="diff-val">${req.reason || p.remarks || 'Standard Career Progression'}</span>
+              </div>
+            </div>
+          `;
+        } else if (req.type === 'CREW_ADD') {
+          diffHtml = `
+            <div class="req-diff">
+              <div class="diff-item">
+                <span class="diff-label">Designation</span>
+                <span class="diff-val highlight">${p.designation || 'N/A'}</span>
+              </div>
+              <div class="diff-item">
+                <span class="diff-label">Section & Location</span>
+                <span class="diff-val">${p.section || 'SST'} • ${p.location || 'JORHAT'}</span>
+              </div>
+              <div class="diff-item">
+                <span class="diff-label">Basic Pay & DA</span>
+                <span class="diff-val">₹${Number(p.basicPay || 0).toLocaleString('en-IN')} + ₹${Number(p.da || 0).toLocaleString('en-IN')}</span>
+              </div>
+              <div class="diff-item">
+                <span class="diff-label">Reason</span>
+                <span class="diff-val">${req.reason || 'New crew mobilization'}</span>
+              </div>
+            </div>
+          `;
+        } else if (req.type === 'CREW_DELETE') {
+          diffHtml = `
+            <div class="req-diff">
+              <div class="diff-item">
+                <span class="diff-label">Action</span>
+                <span class="diff-val" style="color: var(--danger);">Permanent Removal from Crew Roster</span>
+              </div>
+              <div class="diff-item">
+                <span class="diff-label">Reason / Remarks</span>
+                <span class="diff-val">${req.reason || 'Superannuation / Transfer from SST'}</span>
+              </div>
+            </div>
+          `;
+        }
+
+        return `
+          <div class="request-card ${req.status}">
+            <div class="req-header">
+              <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <span class="type-badge ${typeClass}">${req.type.replace('_', ' ')}</span>
+                <h3 style="color: #fff; font-size: 1rem; font-weight: 700;">
+                  ${req.employeeName} <span class="code-tag">${req.employeeCode}</span>
+                </h3>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">CPF: ${req.cpf || 'N/A'}</span>
+              </div>
+              <div>
+                <span class="status-badge ${req.status}">${req.status}</span>
+              </div>
+            </div>
+
+            ${diffHtml}
+
+            <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.78rem; color: var(--text-dim); margin-top: 0.75rem; pt: 0.5rem; border-top: 1px solid rgba(30, 50, 82, 0.5); flex-wrap: wrap; gap: 0.5rem;">
+              <div>
+                <span>Requested by: <strong style="color: var(--text-muted);">${req.requestedBy}</strong></span>
+                <span style="margin-left: 0.75rem;">${new Date(req.requestedAt).toLocaleString()}</span>
+              </div>
+              ${req.status === 'pending' ? `
+                <div style="display: flex; gap: 0.5rem;">
+                  <button class="btn btn-danger btn-sm" onclick="rejectRequest('${req.id}')">✕ Reject Request</button>
+                  <button class="btn btn-success btn-sm" onclick="approveRequest('${req.id}')">✓ Approve & Apply to Roster</button>
+                </div>
+              ` : `
+                <div style="color: var(--text-muted);">
+                  Reviewed by <strong>${req.reviewedBy || 'Admin'}</strong> on ${req.reviewedAt ? new Date(req.reviewedAt).toLocaleString() : 'N/A'}
+                  ${req.reviewRemarks ? ` • <em>"${req.reviewRemarks}"</em>` : ''}
+                </div>
+              `}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function approveRequest(id) {
+      if (!confirm('Approve this request and immediately update the ONGC Crew Roster?')) return;
+      try {
+        const res = await fetch(`/api/admin/requests/${id}/approve`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            reviewedBy: currentUser ? currentUser.name : 'ADMIN',
+            remarks: 'Approved by Operations Administrator'
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(data.message, 'success');
+          await refreshAllData();
+        } else {
+          showToast('Error: ' + data.error, 'error');
+        }
+      } catch (err) {
+        showToast('Approval failed: ' + err.message, 'error');
+      }
+    }
+
+    async function rejectRequest(id) {
+      const reason = prompt('Please enter rejection remarks / reason:', 'Rejected per operational review');
+      if (reason === null) return;
+
+      try {
+        const res = await fetch(`/api/admin/requests/${id}/reject`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            reviewedBy: currentUser ? currentUser.name : 'ADMIN',
+            remarks: reason
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(data.message, 'info');
+          await refreshAllData();
+        } else {
+          showToast('Error: ' + data.error, 'error');
+        }
+      } catch (err) {
+        showToast('Rejection failed: ' + err.message, 'error');
+      }
+    }
+
+    // ========================================================
+    // CREW ROSTER MASTER MODULE
+    // ========================================================
+    async function loadCrewTable() {
+      try {
+        const res = await fetch('/api/ot-fde/data');
+        const data = await res.json();
+        if (data.success && data.roster) {
+          crewRoster = data.roster;
+          renderCrewTable(Object.values(crewRoster));
+          document.getElementById('crewTableCount').textContent = Object.keys(crewRoster).length;
+          document.getElementById('badgeCrewCount').textContent = Object.keys(crewRoster).length;
+        }
+      } catch (err) {
+        console.error('Failed to load crew roster:', err);
+      }
+    }
+
+    function renderCrewTable(list) {
+      const tbody = document.getElementById('crewTableBody');
+      if (!list || list.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; color: var(--text-dim);">No crew members found.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = list.map(emp => `
+        <tr>
+          <td><span class="code-tag">${emp.code}</span></td>
+          <td><strong style="color: var(--ongc-gold); font-family: var(--font-mono);">${emp.cpf || 'N/A'}</strong></td>
+          <td><strong style="color: #fff;">${emp.name}</strong></td>
+          <td><span style="color: #93c5fd; font-weight: 500;">${emp.designation}</span></td>
+          <td><span style="color: var(--text-muted);">${emp.section || 'SST'} • ${emp.location || 'JORHAT'}</span></td>
+          <td style="font-family: var(--font-mono);">₹${Number(emp.basicPay || 0).toLocaleString('en-IN')}</td>
+          <td style="font-family: var(--font-mono); color: #34d399; font-weight: 700;">₹${emp.otRate || 0}/hr</td>
+          <td><span class="status-badge ${emp.status || 'active'}">${emp.status || 'active'}</span></td>
+          <td>
+            <div style="display: flex; gap: 0.35rem;">
+              <button class="btn btn-secondary btn-sm" onclick="openDirectPromoteCrewModal('${emp.code}')" title="Promote Crew Member">
+                ⭐ Promote
+              </button>
+              <button class="btn btn-danger btn-sm" onclick="directDeleteCrew('${emp.code}', '${emp.name}')" title="Delete Crew Member">
+                ✕ Delete
+              </button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function filterCrewTable() {
+      const query = document.getElementById('searchCrewInput').value.trim().toLowerCase();
+      const filtered = Object.values(crewRoster).filter(emp =>
+        emp.name.toLowerCase().includes(query) ||
+        (emp.cpf && String(emp.cpf).includes(query)) ||
+        emp.code.toLowerCase().includes(query) ||
+        emp.designation.toLowerCase().includes(query)
+      );
+      renderCrewTable(filtered);
+    }
+
+    function openDirectAddCrewModal() {
+      document.getElementById('formDirectAddCrew').reset();
+      openModal('modalDirectAddCrew');
+    }
+
+    async function handleDirectAddCrew(e) {
+      e.preventDefault();
+      const code = document.getElementById('addCrewCode').value.trim().toUpperCase();
+      const cpf = document.getElementById('addCrewCpf').value.trim();
+      const name = document.getElementById('addCrewName').value.trim().toUpperCase();
+      const designation = document.getElementById('addCrewDesignation').value.trim().toUpperCase();
+      const section = document.getElementById('addCrewSection').value.trim().toUpperCase();
+      const location = document.getElementById('addCrewLocation').value.trim().toUpperCase();
+      const basicPay = parseFloat(document.getElementById('addCrewBasic').value);
+      const da = parseFloat(document.getElementById('addCrewDa').value);
+
+      try {
+        const res = await fetch('/api/admin/crew/direct-add', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            code, cpf, name, designation, section, location, basicPay, da,
+            adminUser: currentUser ? currentUser.name : 'ADMIN'
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(data.message, 'success');
+          closeModal('modalDirectAddCrew');
+          await refreshAllData();
+        } else {
+          showToast('Error: ' + data.error, 'error');
+        }
+      } catch (err) {
+        showToast('Failed to add crew: ' + err.message, 'error');
+      }
+    }
+
+    function openDirectPromoteCrewModal(code) {
+      const emp = crewRoster[code];
+      if (!emp) return;
+      document.getElementById('promoteCrewCode').value = code;
+      document.getElementById('promoteEmpDisplay').textContent = `${emp.name} (${code})`;
+      document.getElementById('promoteEmpCurrentDetails').textContent = `Current: ${emp.designation} • Basic Pay: ₹${Number(emp.basicPay).toLocaleString('en-IN')} • OT Rate: ₹${emp.otRate}/hr`;
+      document.getElementById('promoteNewDesignation').value = '';
+      document.getElementById('promoteNewBasic').value = '';
+      document.getElementById('promoteOrderNo').value = `ONGC/SST/PROM/${new Date().getFullYear()}/${code}`;
+      document.getElementById('promoteRemarks').value = 'Promotion approved by Operations Admin';
+      openModal('modalDirectPromoteCrew');
+    }
+
+    async function handleDirectPromoteCrew(e) {
+      e.preventDefault();
+      const code = document.getElementById('promoteCrewCode').value;
+      const newDesignation = document.getElementById('promoteNewDesignation').value.trim().toUpperCase();
+      const newBasicPay = document.getElementById('promoteNewBasic').value.trim();
+      const promotionalIncrementPct = document.getElementById('promoteIncrementPct').value;
+      const orderNo = document.getElementById('promoteOrderNo').value.trim();
+      const remarks = document.getElementById('promoteRemarks').value.trim();
+
+      try {
+        const res = await fetch(`/api/admin/crew/${code}/direct-promote`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            newDesignation,
+            newBasicPay: newBasicPay ? parseFloat(newBasicPay) : undefined,
+            promotionalIncrementPct: promotionalIncrementPct ? parseFloat(promotionalIncrementPct) : 3.0,
+            orderNo,
+            remarks,
+            adminUser: currentUser ? currentUser.name : 'ADMIN'
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(data.message, 'success');
+          closeModal('modalDirectPromoteCrew');
+          await refreshAllData();
+        } else {
+          showToast('Error: ' + data.error, 'error');
+        }
+      } catch (err) {
+        showToast('Promotion failed: ' + err.message, 'error');
+      }
+    }
+
+    async function directDeleteCrew(code, name) {
+      if (!confirm(`Are you sure you want to permanently delete ${name} (${code}) from the ONGC Crew Roster?\n\nThis will revoke their registration authorization.`)) return;
+      try {
+        const res = await fetch(`/api/admin/crew/${code}/direct-delete?adminUser=${encodeURIComponent(currentUser ? currentUser.name : 'ADMIN')}`, {
+          method: 'DELETE'
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(data.message, 'success');
+          await refreshAllData();
+        } else {
+          showToast('Error: ' + data.error, 'error');
+        }
+      } catch (err) {
+        showToast('Delete failed: ' + err.message, 'error');
+      }
+    }
+
+    // ========================================================
+    // USERS MANAGEMENT MODULE
+    // ========================================================
+    async function loadUsersTable() {
+      try {
+        const res = await fetch('/api/auth/users');
+        const data = await res.json();
+        if (data.success) {
+          usersList = data.users || [];
+          renderUsersTable(usersList);
+          document.getElementById('usersTableCount').textContent = usersList.length;
+          document.getElementById('badgeUsersCount').textContent = usersList.length;
+        }
+      } catch (err) {
+        console.error('Failed to load users:', err);
+      }
+    }
+
+    function renderUsersTable(list) {
+      const tbody = document.getElementById('usersTableBody');
+      if (!list || list.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="10" style="text-align: center; color: var(--text-dim);">No registered user accounts found.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = list.map(u => `
+        <tr>
+          <td><strong style="color: #fff; font-family: var(--font-mono);">${u.userId}</strong></td>
+          <td><strong style="color: #fff;">${u.name}</strong></td>
+          <td><span style="font-family: var(--font-mono); color: var(--ongc-gold); font-weight: 600;">${u.cpf || '—'}</span></td>
+          <td><span style="color: var(--text-muted);">${u.role || '—'}</span></td>
+          <td><span style="color: var(--text-dim);">${u.department || 'GENERAL'}</span></td>
+          <td>${u.isAdmin ? '<span class="status-badge approved">👑 ADMIN</span>' : '<span class="status-badge" style="background: rgba(148, 163, 184, 0.15); color: #cbd5e1;">CREW USER</span>'}</td>
+          <td><span class="status-badge ${u.status || 'active'}">${u.status || 'active'}</span></td>
+          <td style="font-size: 0.75rem; color: var(--text-dim);">${u.registeredAt ? new Date(u.registeredAt).toLocaleDateString() : '—'}</td>
+          <td style="font-size: 0.75rem; color: var(--text-dim);">${u.lastLogin ? new Date(u.lastLogin).toLocaleString() : 'Never'}</td>
+          <td>
+            <div style="display: flex; gap: 0.3rem;">
+              ${!u.isAdmin ? `
+                <button class="btn btn-secondary btn-sm" onclick="toggleUserStatus('${u.userId}', '${u.status}')" title="${u.status === 'active' ? 'Suspend Account' : 'Activate Account'}">
+                  ${u.status === 'active' ? '⏸️ Suspend' : '▶️ Activate'}
+                </button>
+                <button class="btn btn-danger btn-sm" onclick="deleteUserAccount('${u.userId}', '${u.name}')" title="Delete User">
+                  🗑️
+                </button>
+              ` : '<span style="color: var(--text-dim); font-size: 0.75rem;">Protected</span>'}
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function filterUsersTable() {
+      const query = document.getElementById('searchUsersInput').value.trim().toLowerCase();
+      const filtered = usersList.filter(u =>
+        u.userId.toLowerCase().includes(query) ||
+        u.name.toLowerCase().includes(query) ||
+        (u.cpf && String(u.cpf).includes(query)) ||
+        u.role.toLowerCase().includes(query)
+      );
+      renderUsersTable(filtered);
+    }
+
+    async function toggleUserStatus(userId, currentStatus) {
+      const newStatus = currentStatus === 'active' ? 'suspended' : 'active';
+      if (!confirm(`Change user ${userId} status to "${newStatus}"?`)) return;
+
+      try {
+        const res = await fetch(`/api/auth/users/${encodeURIComponent(userId)}/status`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: newStatus })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(data.message, 'success');
+          await loadUsersTable();
+        } else {
+          showToast('Error: ' + data.error, 'error');
+        }
+      } catch (err) {
+        showToast('Status update failed: ' + err.message, 'error');
+      }
+    }
+
+    async function deleteUserAccount(userId, name) {
+      if (!confirm(`Permanently delete account for ${name} (${userId})?\n\nThis will allow the crew member to re-register with their CPF if needed.`)) return;
+      try {
+        const res = await fetch(`/api/auth/users/${encodeURIComponent(userId)}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (data.success) {
+          showToast(data.message, 'success');
+          await loadUsersTable();
+        } else {
+          showToast('Error: ' + data.error, 'error');
+        }
+      } catch (err) {
+        showToast('Delete failed: ' + err.message, 'error');
+      }
+    }
+
+    // ========================================================
+    // AUDIT LOG MODULE
+    // ========================================================
+    async function loadAuditTable() {
+      try {
+        const filter = document.getElementById('auditActionFilter')?.value || 'ALL';
+        const url = filter === 'ALL' ? '/api/auth/audit?limit=300' : `/api/auth/audit?limit=300&action=${encodeURIComponent(filter)}`;
+        const res = await fetch(url);
+        const data = await res.json();
+        if (data.success) {
+          auditLogs = data.auditLog || [];
+          renderAuditTable(auditLogs);
+          document.getElementById('auditTableCount').textContent = auditLogs.length;
+        }
+      } catch (err) {
+        console.error('Failed to load audit:', err);
+      }
+    }
+
+    function renderAuditTable(list) {
+      const tbody = document.getElementById('auditTableBody');
+      if (!list || list.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-dim);">No audit events matching criteria.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = list.map(log => {
+        let badgeClass = 'pending';
+        if (log.action.includes('SUCCESS') || log.action.includes('APPROVED') || log.action.includes('REGISTERED')) badgeClass = 'active';
+        if (log.action.includes('FAILED') || log.action.includes('REJECTED') || log.action.includes('BLOCKED') || log.action.includes('DELETE')) badgeClass = 'rejected';
+
+        return `
+          <tr>
+            <td style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-dim); white-space: nowrap;">
+              ${new Date(log.timestamp).toLocaleString()}
+            </td>
+            <td><span class="status-badge ${badgeClass}">${log.action}</span></td>
+            <td><strong style="color: #fff; font-family: var(--font-mono);">${log.userId}</strong></td>
+            <td style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-dim);">${log.details?.ip || 'localhost'}</td>
+            <td style="font-size: 0.78rem; color: var(--text-muted); max-width: 400px; word-break: break-word;">
+              ${formatAuditDetails(log.details)}
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function filterAuditTable() {
+      const query = document.getElementById('searchAuditInput').value.trim().toLowerCase();
+      const filtered = auditLogs.filter(log =>
+        log.userId.toLowerCase().includes(query) ||
+        log.action.toLowerCase().includes(query) ||
+        JSON.stringify(log.details || {}).toLowerCase().includes(query)
+      );
+      renderAuditTable(filtered);
+    }
+
+    function formatAuditDetails(details) {
+      if (!details || Object.keys(details).length === 0) return '—';
+      const clean = { ...details };
+      delete clean.ip;
+      return Object.entries(clean).map(([k, v]) => `<strong>${k}:</strong> ${v}`).join(' • ');
+    }
+
+    function exportAuditJson() {
+      const jsonStr = JSON.stringify(auditLogs, null, 2);
+      const blob = new Blob([jsonStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `ONGC_AUDIT_TRAIL_${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('Audit trail exported as JSON', 'info');
+    }
+
+    // Modal Helpers
+    function openModal(id) {
+      document.getElementById(id).classList.add('active');
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('active');
+    }
+
+    // Toast Helper
+    function showToast(msg, type = 'info') {
+      const toast = document.getElementById('adminToast');
+      toast.className = `show ${type}`;
+      toast.innerHTML = `<span>${type === 'success' ? '✅' : (type === 'error' ? '❌' : 'ℹ️')}</span> <span>${msg}</span>`;
+      setTimeout(() => {
+        toast.className = '';
+      }, 4000);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+{
+  "users": [
+    {
+      "userId": "CPF-140751",
+      "password": "CPF-140751",
+      "altPasswords": [
+        "140751",
+        "ongc@123",
+        "admin123"
+      ],
+      "name": "UTJJAL CHETIA",
+      "role": "Reservoir Winch Logistics Officer (Assam Asset)",
+      "initials": "UC",
+      "cpf": "140751",
+      "department": "SST",
+      "location": "JORHAT",
+      "isAdmin": true,
+      "status": "active",
+      "registeredAt": "2024-01-01T00:00:00.000Z",
+      "registeredBy": "SYSTEM",
+      "lastLogin": "2026-09-24T15:05:51.433Z"
+    },
+    {
+      "userId": "admin",
+      "password": "ongc@123",
+      "altPasswords": [
+        "admin123",
+        "CPF-140751"
+      ],
+      "name": "Operations Admin",
+      "role": "Logistics Operations Administrator",
+      "initials": "OA",
+      "cpf": "ADMIN",
+      "department": "IT",
+      "location": "JORHAT",
+      "isAdmin": true,
+      "status": "active",
+      "registeredAt": "2024-01-01T00:00:00.000Z",
+      "registeredBy": "SYSTEM"
+    }
+  ],
+  "auditLog": [
+    {
+      "id": "audit_1790263433085_822",
+      "timestamp": "2026-09-24T15:23:53.085Z",
+      "action": "USER_DELETED",
+      "userId": "CPF-128584",
+      "details": {
+        "name": "PRATIK PURNA DUTTA",
+        "cpf": "128584",
+        "ip": "::1"
+      }
+    },
+    {
+      "id": "audit_1790263433079_740",
+      "timestamp": "2026-09-24T15:23:53.079Z",
+      "action": "CREW_REQUEST_APPROVED",
+      "userId": "UTJJAL CHETIA",
+      "details": {
+        "requestId": "REQ_1790263433065_716",
+        "type": "CREW_PROMOTE",
+        "employee": "PRATIK PURNA DUTTA",
+        "code": "PPD",
+        "remarks": "Approved per ONGC norms"
+      }
+    },
+    {
+      "id": "audit_1790263433067_33",
+      "timestamp": "2026-09-24T15:23:53.067Z",
+      "action": "CREW_REQUEST_SUBMITTED",
+      "userId": "PPD",
+      "details": {
+        "requestId": "REQ_1790263433065_716",
+        "type": "CREW_PROMOTE",
+        "employee": "PRATIK PURNA DUTTA",
+        "code": "PPD"
+      }
+    },
+    {
+      "id": "audit_1790263433059_63",
+      "timestamp": "2026-09-24T15:23:53.059Z",
+      "action": "LOGIN_SUCCESS",
+      "userId": "CPF-128584",
+      "details": {
+        "name": "PRATIK PURNA DUTTA",
+        "ip": "::1"
+      }
+    },
+    {
+      "id": "audit_1790263433047_68",
+      "timestamp": "2026-09-24T15:23:53.047Z",
+      "action": "USER_REGISTERED",
+      "userId": "CPF-128584",
+      "details": {
+        "name": "PRATIK PURNA DUTTA",
+        "cpf": "128584",
+        "role": "DY T (FITTING)",
+        "crewCode": "PPD",
+        "ip": "::1"
+      }
+    },
+    {
+      "id": "audit_1790262351433_104",
+      "timestamp": "2026-09-24T15:05:51.433Z",
+      "action": "LOGIN_SUCCESS",
+      "userId": "CPF-140751",
+      "details": {
+        "name": "UTJJAL CHETIA",
+        "ip": "::1"
+      }
+    }
+  ]
+}
