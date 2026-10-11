@@ -1,12 +1,13 @@
 import ExcelJS from 'exceljs';
 import fs from 'fs';
+import { writeOperationsStore } from './operationsStore.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { calculateOtRate, calculateDutyAndOt, FD_FIXED_RATE } from './otFdeCalculator.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const DATA_STORE_PATH = path.join(__dirname, '..', 'data', 'ot_fde_store.json');
+const DATA_STORE_PATH = path.join(process.env.ONGC_DATA_DIR || path.join(__dirname, '..', 'data'), 'ot_fde_store.json');
 
 // Default initial 12 employee team roster for ONGC Reservoir Winch (SST, Jorhat)
 export const DEFAULT_ROSTER = {
@@ -348,12 +349,12 @@ export async function initOtFdeDatabase() {
     try {
       const raw = fs.readFileSync(DATA_STORE_PATH, 'utf-8');
       const parsed = JSON.parse(raw);
-      if (parsed.roster && parsed.jobs && parsed.jobs.length > 0) {
+      if (parsed.roster && Array.isArray(parsed.jobs)) {
         console.log(`Loaded ${parsed.jobs.length} OT/FDE jobs from persistent store.`);
         return parsed;
       }
     } catch (e) {
-      console.warn('Failed to read ot_fde_store.json, parsing fresh:', e);
+      throw new Error(`Cannot read existing OT/FDE database: ${e.message}`);
     }
   }
 
@@ -393,8 +394,8 @@ export async function initOtFdeDatabase() {
  */
 export function saveOtFdeDatabase(database) {
   try {
-    fs.writeFileSync(DATA_STORE_PATH, JSON.stringify(database, null, 2), 'utf-8');
+    writeOperationsStore(DATA_STORE_PATH, database);
   } catch (e) {
-    console.error('Error saving ot_fde_store.json:', e);
+    throw new Error(`Could not save OT/FDE database: ${e.message}`);
   }
 }

@@ -768,6 +768,7 @@
     #adminToast.error { border-color: var(--danger); }
     #adminToast.info { border-color: var(--info); }
   </style>
+  <link rel="stylesheet" href="css/admin-responsive.css">
 </head>
 <body>
 
@@ -1288,31 +1289,26 @@
       checkAdminAuth();
     });
 
-    function checkAdminAuth() {
+    async function checkAdminAuth() {
       try {
-        const stored = localStorage.getItem('ongc_current_user');
-        if (stored) {
-          const user = JSON.parse(stored);
-          if (user && user.isAdmin) {
-            currentUser = user;
-            document.getElementById('adminAuthGate').style.display = 'none';
-            document.getElementById('adminName').textContent = user.name || 'Admin';
-            document.getElementById('adminAvatar').textContent = user.initials || 'AD';
-            refreshAllData();
-            return;
-          }
+        const response = await fetch('/api/auth/me');
+        const data = await response.json();
+        if (response.ok && data.user?.isAdmin) {
+          currentUser = data.user;
+          document.getElementById('adminAuthGate').style.display = 'none';
+          document.getElementById('adminName').textContent = currentUser.name || 'Admin';
+          document.getElementById('adminAvatar').textContent = currentUser.initials || 'AD';
+          await refreshAllData();
+          return;
         }
-      } catch (e) {
-        console.error('Auth parse error:', e);
-      }
-      // Show login gate if not authenticated as admin
+      } catch (error) { console.warn('Session check failed:', error.message); }
       document.getElementById('adminAuthGate').style.display = 'flex';
     }
 
     async function handleAdminLogin(e) {
       e.preventDefault();
       const userId = document.getElementById('gateUserId').value.trim();
-      const password = document.getElementById('gatePassword').value.trim();
+      const password = document.getElementById('gatePassword').value;
       const errBox = document.getElementById('gateError');
       errBox.style.display = 'none';
 
@@ -1349,8 +1345,12 @@
       }
     }
 
-    function adminLogout() {
+    async function adminLogout() {
       if (confirm('Exit Administrator Control Center?')) {
+        try {
+          const response = await fetch('/api/auth/logout', { method: 'POST' });
+          if (!response.ok && response.status !== 401) throw new Error('Sign out failed.');
+        } catch (error) { showToast(error.message, 'error'); return; }
         localStorage.removeItem('ongc_current_user');
         window.location.href = '/index.html';
       }

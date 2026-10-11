@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark-blue">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ONGC Well Sites &amp; Cluster Analytics | Assam Asset</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body {
+      background: var(--bg-main, #233f5b);
+      background-image: var(--bg-gradient);
+      min-height: 100vh;
+      color: var(--text-main, #ffffff);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .public-header {
+      background: var(--sap-shell-bg, #182c40);
+      border-bottom: 1px solid var(--border-color, rgba(255,255,255,0.12));
+      padding: 0.75rem 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+    }
+    .public-header-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+    }
+    .brand-logo-wrap {
+      background: #ffffff;
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      height: 42px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    }
+    .brand-logo-wrap img {
+      height: 34px;
+      width: auto;
+      object-fit: contain;
+    }
+    .brand-titles h1 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0;
+      letter-spacing: -0.01em;
+    }
+    .brand-titles p {
+      font-size: 0.74rem;
+      color: var(--text-muted, #a0c2df);
+      margin: 0.15rem 0 0 0;
+      font-weight: 500;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+    .nav-link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 0.45rem 0.9rem;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    .nav-link-primary {
+      background: var(--primary, #0070f2);
+      color: #ffffff;
+      border: 1px solid var(--primary, #0070f2);
+    }
+    .nav-link-primary:hover {
+      background: var(--primary-hover, #0058c4);
+      transform: translateY(-1px);
+    }
+    .nav-link-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      color: #ffffff;
+      border: 1px solid var(--border-color, rgba(255,255,255,0.15));
+    }
+    .nav-link-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+    .nav-link-ot {
+      background: rgba(126, 34, 206, 0.2);
+      color: #d8b4fe;
+      border: 1px solid rgba(126, 34, 206, 0.45);
+    }
+    .nav-link-ot:hover {
+      background: rgba(126, 34, 206, 0.35);
+      color: #ffffff;
+    }
+
+    .main-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 3rem 1.25rem;
+    }
+
+    .hero-banner {
+      background: linear-gradient(135deg, rgba(13, 92, 117, 0.25) 0%, rgba(2, 132, 199, 0.15) 100%);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-radius: 12px;
+      padding: 1.25rem 1.6rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .hero-badge-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0.25rem 0.65rem;
+      border-radius: 9999px;
+      background: rgba(56, 189, 248, 0.2);
+      color: #38bdf8;
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      margin-bottom: 0.4rem;
+    }
+    .hero-title {
+      font-size: 1.45rem;
+      font-weight: 800;
+      margin: 0;
+      color: #ffffff;
+      letter-spacing: -0.01em;
+    }
+    .hero-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted, #a0c2df);
+      margin: 0.3rem 0 0 0;
+    }
+
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    .chart-box-card {
+      background: var(--bg-card, rgba(30, 48, 68, 0.88));
+      border: 1px solid var(--border-color, rgba(255,255,255,0.12));
+      border-radius: 12px;
+      padding: 1.25rem;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+    }
+    .chart-box-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+    .chart-box-header h3 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin: 0;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+    .chart-canvas-wrap {
+      position: relative;
+      height: 270px;
+      width: 100%;
+    }
+
+    .filter-panel {
+      background: var(--bg-card, rgba(30, 48, 68, 0.88));
+      border: 1px solid var(--border-color, rgba(255,255,255,0.12));
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+      margin-bottom: 1.5rem;
+    }
+    .filter-controls-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .search-box-wrap {
+      position: relative;
+      width: 100%;
+      max-width: 440px;
+    }
+    .search-box-wrap input {
+      width: 100%;
+      background: var(--bg-card-subtle, rgba(22, 36, 52, 0.9));
+      border: 1px solid var(--border-color, rgba(255,255,255,0.18));
+      color: #ffffff;
+      font-size: 0.9rem;
+      padding: 0.65rem 2.4rem 0.65rem 2.5rem;
+      border-radius: 8px;
+      outline: none;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+    .search-box-wrap input:focus {
+      border-color: var(--primary, #0070f2);
+      box-shadow: 0 0 0 3px rgba(0, 112, 242, 0.25);
+    }
+    .search-icon-svg {
+      position: absolute;
+      left: 0.85rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted, #a0c2df);
+      pointer-events: none;
+    }
+    .btn-clear-search {
+      position: absolute;
+      right: 0.65rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 1.1rem;
+      display: none;
+      padding: 0.2rem 0.4rem;
+    }
+
+    .count-stat-text {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #38bdf8;
+      background: rgba(2, 132, 199, 0.15);
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      border: 1px solid rgba(2, 132, 199, 0.3);
+    }
+
+    .field-pills-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      padding-top: 0.25rem;
+    }
+    .field-pill-item {
+      background: var(--bg-card-subtle, rgba(22, 36, 52, 0.9));
+      border: 1px solid var(--border-color, rgba(255,255,255,0.14));
+      color: var(--text-muted, #a0c2df);
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.4rem 0.85rem;
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      user-select: none;
+    }
+    .field-pill-item:hover {
+      background: rgba(0, 112, 242, 0.2);
+      border-color: var(--primary, #0070f2);
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+    .field-pill-item.active {
+      background: var(--primary, #0070f2);
+      border-color: var(--primary, #0070f2);
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(0, 112, 242, 0.4);
+    }
+
+    .clusters-grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.15rem;
+    }
+    .cluster-card {
+      background: var(--bg-card, rgba(30, 48, 68, 0.88));
+      border: 1px solid var(--border-color, rgba(255,255,255,0.12));
+      border-radius: 10px;
+      padding: 1.1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    .cluster-card:hover {
+      border-color: var(--primary, #0070f2);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.35);
+    }
+    .cluster-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+    .cluster-field-badge {
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+      background: rgba(2, 132, 199, 0.18);
+      color: #38bdf8;
+      border: 1px solid rgba(2, 132, 199, 0.35);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .cluster-wells-count {
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: #10b981;
+      background: rgba(16, 185, 129, 0.15);
+      padding: 0.15rem 0.5rem;
+      border-radius: 9999px;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .cluster-name-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .well-chips-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-top: 0.25rem;
+    }
+    .well-chip {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #e2e8f0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.76rem;
+      font-weight: 700;
+      padding: 0.25rem 0.55rem;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+    .well-chip:hover {
+      background: #0070f2;
+      color: #ffffff;
+      border-color: #0070f2;
+      transform: scale(1.05);
+    }
+    .well-chip.highlight {
+      background: rgba(245, 158, 11, 0.3);
+      color: #fde68a;
+      border-color: #f59e0b;
+    }
+
+    .toast-box {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 0.75rem 1.25rem;
+      border-radius: 8px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.2);
+      z-index: 99999;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: none;
+      animation: fadeIn 0.2s ease;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Sticky Navigation Bar -->
+  <header class="public-header">
+    <div class="public-header-inner">
+      <div class="brand-group">
+        <a href="index.html" class="brand-logo-wrap" title="Go to Home Portal">
+          <img src="images/ongc_logo_clean.png" alt="ONGC Logo">
+        </a>
+        <div class="brand-titles">
+          <h1>ONGC Assam Asset Operations</h1>
+          <p>Reservoir Winch Logistics &bull; Well Site Directory &amp; Analytics</p>
+        </div>
+      </div>
+
+      <div class="nav-actions">
+        <a href="ot-charts.html" class="nav-link-btn nav-link-ot" title="View Overtime & Field Duty Charts">
+          <span>⏱️</span> View OT &amp; FDE Charts &rarr;
+        </a>
+        <a href="index.html" class="nav-link-btn nav-link-secondary" title="Return to Portal Overview">
+          <span>🏠</span> Portal Home
+        </a>
+        <div id="authNavWrap" style="display: flex; align-items: center; gap: 0.5rem;">
+          <button type="button" class="nav-link-btn nav-link-primary" id="btnPageSignIn" onclick="openLoginModal()" title="Sign In with ONGC CPF Credentials">
+            <span>🔑</span> Sign In
+          </button>
+          <div id="userProfileChip" style="display: none; align-items: center; gap: 0.55rem; background: rgba(0, 112, 242, 0.2); border: 1px solid rgba(0, 112, 242, 0.45); padding: 0.35rem 0.8rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700;">
+            <span id="userNameDisplay">CPF User</span>
+            <button type="button" onclick="handlePageSignOut()" style="background: none; border: none; color: #f87171; cursor: pointer; font-size: 0.75rem; font-weight: 700; padding: 0 0.2rem; text-decoration: underline;" title="Sign Out">Sign Out</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ENTERPRISE SIGN IN MODAL -->
+  <div class="login-overlay hidden" id="loginModal" style="display: none; position: fixed; inset: 0; background: rgba(8, 17, 28, 0.85); backdrop-filter: blur(8px); z-index: 10000; align-items: center; justify-content: center; padding: 1rem;">
+    <div class="login-modal-card" style="max-width: 440px; width: 100%; position: relative; background: var(--bg-card, #1e3044); border: 1px solid rgba(255, 255, 255, 0.16); border-radius: 12px; padding: 2rem; box-shadow: 0 20px 45px rgba(0,0,0,0.6); color: #ffffff;">
+      <button type="button" class="login-modal-close" onclick="closeLoginModal()" title="Close Sign In Dialog" style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: #a0c2df; font-size: 1.5rem; cursor: pointer; line-height: 1;">&times;</button>
+      <div style="text-align: center; margin-bottom: 1.4rem;">
+        <div style="background: #ffffff; width: 56px; height: 56px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 0.75rem; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+          <img src="images/ongc_logo_clean.png" alt="ONGC" style="height: 38px; width: auto;">
+        </div>
+        <h3 style="font-size: 1.2rem; font-weight: 800; margin: 0 0 0.35rem 0;">ONGC Operations Sign In</h3>
+        <p style="font-size: 0.8rem; color: #a0c2df; margin: 0;">Reservoir Winch Logistics &bull; Assam Asset</p>
+      </div>
+
+      <div id="pageLoginAlert" style="display: none; padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.82rem; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #fca5a5;"></div>
+
+      <form id="pageLoginForm" onsubmit="handlePageLogin(event)" style="display: flex; flex-direction: column; gap: 0.9rem;">
+        <div>
+          <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #cbd5e1; margin-bottom: 0.4rem;">User ID / Official CPF *</label>
+          <input type="text" id="pageLoginUserId" placeholder="e.g. CPF-140751" required style="width: 100%; box-sizing: border-box; padding: 0.65rem 0.85rem; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 6px; color: #ffffff; font-size: 0.9rem; font-family: inherit;">
+        </div>
+        <div>
+          <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #cbd5e1; margin-bottom: 0.4rem;">Password *</label>
+          <input type="password" id="pageLoginPassword" placeholder="Enter password" required style="width: 100%; box-sizing: border-box; padding: 0.65rem 0.85rem; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 6px; color: #ffffff; font-size: 0.9rem; font-family: inherit;">
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: #cbd5e1;">
+          <input type="checkbox" id="pageLoginRemember" checked style="cursor: pointer;">
+          <label for="pageLoginRemember" style="cursor: pointer;">Remember login session</label>
+        </div>
+        <button type="submit" id="btnPageSubmitLogin" style="width: 100%; padding: 0.75rem; background: var(--primary, #0070f2); color: #ffffff; border: none; border-radius: 6px; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-top: 0.4rem;">
+          Sign In to Portal
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Main Content Area -->
+  <main class="main-container">
+
+    <!-- Hero Status Banner -->
+    <section class="hero-banner">
+      <div>
+        <div class="hero-badge-tag">
+          <span style="font-size: 0.8rem;">📍</span> Verified ONGC Well Site Directory
+        </div>
+        <h2 class="hero-title">112 Active Well Sites across 34 Winch Clusters</h2>
+        <p class="hero-desc">
+          Comprehensive production &amp; survey registry across Borholla, Khoraghat, Nambar, Balijan, Kalyanpur, and Doyalpur fields.
+        </p>
+      </div>
+      <div style="display: flex; gap: 0.5rem; align-items: center;">
+        <span class="count-stat-text" id="kpiBannerText">
+          Loading Well Sites...
+        </span>
+      </div>
+    </section>
+
+    <!-- Visual Charts Dashboard Grid -->
+    <section class="charts-grid">
+      <!-- Chart 1: Wells Distribution by Field (Doughnut) -->
+      <div class="chart-box-card">
+        <div class="chart-box-header">
+          <h3><span>🎯</span> Wells Distribution by Field</h3>
+          <span style="font-size: 0.76rem; color: var(--text-muted);" id="chartFieldTotalText">112 Wells</span>
+        </div>
+        <div class="chart-canvas-wrap">
+          <canvas id="chartWellsByField"></canvas>
+        </div>
+      </div>
+
+      <!-- Chart 2: Top Clusters by Well Count (Horizontal Bar) -->
+      <div class="chart-box-card">
+        <div class="chart-box-header">
+          <h3><span>🏗️</span> Top 10 Winch Clusters by Well Density</h3>
+          <span style="font-size: 0.76rem; color: var(--text-muted);">Wells per Cluster</span>
+        </div>
+        <div class="chart-canvas-wrap">
+          <canvas id="chartTopClusters"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- Search & Field Filter Panel -->
+    <section class="filter-panel">
+      <div class="filter-controls-row">
+        <!-- Search Box -->
+        <div class="search-box-wrap">
+          <svg class="search-icon-svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="wellSearchInput" placeholder="Search wells (e.g. KH#49, BR#62, MR#10)..." autocomplete="off">
+          <button type="button" class="btn-clear-search" id="btnClearSearch" title="Clear Search">&times;</button>
+        </div>
+
+        <!-- Real-Time Counter Display -->
+        <div class="count-stat-text" id="showingCountText">
+          Showing 112 wells across 34 clusters
+        </div>
+      </div>
+
+      <!-- Field Filter Pills Bar -->
+      <div class="field-pills-bar" id="fieldPillsContainer">
+        <!-- Dynamically rendered field pills -->
+      </div>
+    </section>
+
+    <!-- Well Clusters & Wells Grid -->
+    <section class="clusters-grid-container" id="clustersGrid">
+      <!-- Dynamically rendered cluster cards -->
+    </section>
+
+  </main>
+
+  <div class="toast-box" id="toastBox"></div>
+
+  <!-- Chart.js Library & Standalone Controller -->
+  <script src="js/chart.umd.min.js"></script>
+  <script>
+    let wellData = { fields: [], clusters: [], wells: [], totalWells: 0, totalClusters: 0 };
+    let selectedField = 'ALL';
+    let searchQuery = '';
+    let chartFieldInstance = null;
+    let chartClustersInstance = null;
+
+    function showToast(msg) {
+      const toast = document.getElementById('toastBox');
+      if (!toast) return;
+      toast.textContent = msg;
+      toast.style.display = 'block';
+      setTimeout(() => { toast.style.display = 'none'; }, 2500);
+    }
+
+    async function loadWellSites() {
+      try {
+        const res = await fetch('/api/well-sites');
+        const data = await res.json();
+        if (data.success) {
+          wellData = data;
+          document.getElementById('kpiBannerText').textContent = `${data.totalWells || 112} Wells • ${data.totalClusters || 34} Clusters`;
+          renderCharts();
+          renderFieldPills();
+          renderClustersGrid();
+        } else {
+          document.getElementById('kpiBannerText').textContent = 'Error loading data: ' + data.error;
+        }
+      } catch (err) {
+        console.error('Fetch error:', err);
+        document.getElementById('kpiBannerText').textContent = 'Connection error: ' + err.message;
+      }
+    }
+
+    function renderCharts() {
+      if (typeof Chart === 'undefined') return;
+      const canvasField = document.getElementById('chartWellsByField');
+      const canvasClusters = document.getElementById('chartTopClusters');
+      if (!canvasField || !canvasClusters) return;
+
+      const clusters = wellData.clusters || [];
+      const fields = wellData.fields || [];
+
+      // 1. Group wells by field
+      const fieldCounts = {};
+      if (fields.length > 0) {
+        fields.forEach(f => {
+          const cnt = (f.clusters || []).reduce((sum, c) => sum + (c.wells ? c.wells.length : 0), 0);
+          fieldCounts[f.fieldName] = cnt;
+        });
+      } else if (clusters.length > 0) {
+        clusters.forEach(c => {
+          const fName = c.field || 'GENERAL';
+          fieldCounts[fName] = (fieldCounts[fName] || 0) + (c.wells ? c.wells.length : 0);
+        });
+      }
+
+      const fieldLabels = Object.keys(fieldCounts);
+      const fieldValues = Object.values(fieldCounts);
+      const totalWellsCount = fieldValues.reduce((a, b) => a + b, 0);
+      document.getElementById('chartFieldTotalText').textContent = `Total: ${totalWellsCount} Wells`;
+
+      const palette = [
+        '#0284c7', '#0d5c75', '#10b981', '#f59e0b', '#8b5cf6',
+        '#ec4899', '#06b6d4', '#f97316', '#6366f1', '#14b8a6'
+      ];
+
+      if (chartFieldInstance) chartFieldInstance.destroy();
+      chartFieldInstance = new Chart(canvasField, {
+        type: 'doughnut',
+        data: {
+          labels: fieldLabels,
+          datasets: [{
+            data: fieldValues,
+            backgroundColor: palette.slice(0, fieldLabels.length),
+            borderWidth: 2,
+            borderColor: '#1e3044',
+            hoverOffset: 8
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'right',
+              labels: {
+                boxWidth: 12,
+                color: '#cbd5e1',
+                font: { family: 'Inter', size: 11, weight: '600' }
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: function(ctx) {
+                  const val = ctx.parsed;
+                  const pct = totalWellsCount ? ((val / totalWellsCount) * 100).toFixed(1) : 0;
+                  return ` ${ctx.label}: ${val} wells (${pct}%)`;
+                }
+              }
+            }
+          },
+          cutout: '62%',
+          onClick: (evt, elements) => {
+            if (elements.length > 0) {
+              const idx = elements[0].index;
+              const clickedField = fieldLabels[idx];
+              selectedField = (selectedField === clickedField) ? 'ALL' : clickedField;
+              renderFieldPills();
+              renderClustersGrid();
+            }
+          }
+        }
+      });
+
+      // 2. Top 10 clusters by well count
+      const sortedClusters = [...clusters].sort((a, b) => (b.wells?.length || 0) - (a.wells?.length || 0)).slice(0, 10);
+      const clusterLabels = sortedClusters.map(c => c.clusterName || 'Cluster');
+      const clusterValues = sortedClusters.map(c => c.wells?.length || 0);
+
+      if (chartClustersInstance) chartClustersInstance.destroy();
+      chartClustersInstance = new Chart(canvasClusters, {
+        type: 'bar',
+        data: {
+          labels: clusterLabels,
+          datasets: [{
+            label: 'Wells Count',
+            data: clusterValues,
+            backgroundColor: 'rgba(2, 132, 199, 0.75)',
+            borderColor: '#0284c7',
+            borderWidth: 1.5,
+            borderRadius: 5
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              grid: { color: 'rgba(255,255,255,0.08)' },
+              ticks: { color: '#94a3b8', font: { family: 'Inter', size: 10 }, precision: 0 }
+            },
+            y: {
+              grid: { display: false },
+              ticks: { color: '#cbd5e1', font: { family: 'Inter', size: 11, weight: '600' } }
+            }
+          },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (ctx) => ` Wells: ${ctx.parsed.x}`
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function renderFieldPills() {
+      const container = document.getElementById('fieldPillsContainer');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const totalWells = wellData.totalWells || 112;
+      const fields = wellData.fields || [];
+
+      // All Fields pill
+      const allBtn = document.createElement('button');
+      allBtn.type = 'button';
+      allBtn.className = `field-pill-item ${selectedField === 'ALL' ? 'active' : ''}`;
+      allBtn.textContent = `All Fields (${totalWells})`;
+      allBtn.addEventListener('click', () => {
+        selectedField = 'ALL';
+        renderFieldPills();
+        renderClustersGrid();
+      });
+      container.appendChild(allBtn);
+
+      fields.forEach(f => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = `field-pill-item ${selectedField === f.fieldName ? 'active' : ''}`;
+        const fieldWellsCount = (f.clusters || []).reduce((sum, c) => sum + (c.wells ? c.wells.length : 0), 0);
+        btn.textContent = `${f.fieldName} (${fieldWellsCount})`;
+        btn.addEventListener('click', () => {
+          selectedField = f.fieldName;
+          renderFieldPills();
+          renderClustersGrid();
+        });
+        container.appendChild(btn);
+      });
+    }
+
+    function renderClustersGrid() {
+      const container = document.getElementById('clustersGrid');
+      const countText = document.getElementById('showingCountText');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const clusters = wellData.clusters || [];
+      const q = (searchQuery || '').toLowerCase().trim();
+
+      const filtered = clusters.filter(c => {
+        if (selectedField !== 'ALL' && c.field !== selectedField) return false;
+        if (q) {
+          const matchCluster = (c.clusterName || '').toLowerCase().includes(q);
+          const matchField = (c.field || '').toLowerCase().includes(q);
+          const matchWell = (c.wells || []).some(w => (w || '').toLowerCase().includes(q));
+          return matchCluster || matchField || matchWell;
+        }
+        return true;
+      });
+
+      const totalMatchingWells = filtered.reduce((sum, c) => sum + (c.wells ? c.wells.length : 0), 0);
+      if (countText) {
+        countText.textContent = `Showing ${totalMatchingWells} wells across ${filtered.length} clusters`;
+      }
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 3.5rem 1rem; color: var(--text-muted);">
+            <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">🔍</div>
+            <h3 style="font-size: 1.15rem; color: #ffffff; margin-bottom: 0.4rem;">No matching well sites found</h3>
+            <p style="font-size: 0.85rem;">Try clearing your search query or selecting "All Fields".</p>
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach(c => {
+        const card = document.createElement('div');
+        card.className = 'cluster-card';
+
+        const wellChipsHtml = (c.wells || []).map(w => {
+          const isMatched = q && w.toLowerCase().includes(q);
+          return `<span class="well-chip ${isMatched ? 'highlight' : ''}" title="Click to copy ${w}">${w}</span>`;
+        }).join('');
+
+        card.innerHTML = `
+          <div class="cluster-card-top">
+            <span class="cluster-field-badge">${c.field || 'FIELD'}</span>
+            <span class="cluster-wells-count">${(c.wells || []).length} Wells</span>
+          </div>
+          <h4 class="cluster-name-title">
+            <span>📍</span> ${c.clusterName || 'Winch Cluster'}
+          </h4>
+          <div class="well-chips-wrap">
+            ${wellChipsHtml}
+          </div>
+        `;
+
+        card.querySelectorAll('.well-chip').forEach(chip => {
+          chip.addEventListener('click', () => {
+            navigator.clipboard.writeText(chip.textContent.trim());
+            showToast(`Copied ${chip.textContent.trim()} to clipboard!`);
+          });
+        });
+
+        container.appendChild(card);
+      });
+    }
+
+    // Search input handler
+    const searchInput = document.getElementById('wellSearchInput');
+    const btnClearSearch = document.getElementById('btnClearSearch');
+
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        searchQuery = e.target.value;
+        if (btnClearSearch) btnClearSearch.style.display = searchQuery ? 'block' : 'none';
+        renderClustersGrid();
+      });
+    }
+
+    if (btnClearSearch) {
+      btnClearSearch.addEventListener('click', () => {
+        searchQuery = '';
+        if (searchInput) searchInput.value = '';
+        btnClearSearch.style.display = 'none';
+        renderClustersGrid();
+      });
+    }
+
+    // ============================================================
+    // AUTHENTICATION & LOGIN CONTROLLER FOR WELL SITES PAGE
+    // ============================================================
+    function openLoginModal() {
+      const modal = document.getElementById('loginModal');
+      if (modal) {
+        modal.style.display = 'flex';
+        modal.classList.remove('hidden');
+        setTimeout(() => document.getElementById('pageLoginUserId')?.focus(), 50);
+      }
+    }
+
+    function closeLoginModal() {
+      const modal = document.getElementById('loginModal');
+      if (modal) {
+        modal.style.display = 'none';
+        modal.classList.add('hidden');
+      }
+      const alertBox = document.getElementById('pageLoginAlert');
+      if (alertBox) alertBox.style.display = 'none';
+    }
+
+    async function checkPageAuth() {
+      try {
+        const res = await fetch('/api/auth/me');
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.user) {
+            updatePageAuthUI(data.user);
+            return;
+          }
+        }
+      } catch (e) { /* unauthenticated session */ }
+      updatePageAuthUI(null);
+    }
+
+    function updatePageAuthUI(user) {
+      const btnSignIn = document.getElementById('btnPageSignIn');
+      const chip = document.getElementById('userProfileChip');
+      const nameDisp = document.getElementById('userNameDisplay');
+      if (user) {
+        if (btnSignIn) btnSignIn.style.display = 'none';
+        if (chip) chip.style.display = 'inline-flex';
+        if (nameDisp) nameDisp.textContent = `👤 ${user.name || user.userId} (${user.userId || ''})`;
+      } else {
+        if (btnSignIn) btnSignIn.style.display = 'inline-flex';
+        if (chip) chip.style.display = 'none';
+      }
+    }
+
+    async function handlePageLogin(e) {
+      e.preventDefault();
+      const userId = document.getElementById('pageLoginUserId')?.value.trim();
+      const password = document.getElementById('pageLoginPassword')?.value;
+      const rememberMe = !!document.getElementById('pageLoginRemember')?.checked;
+      const alertBox = document.getElementById('pageLoginAlert');
+      const btn = document.getElementById('btnPageSubmitLogin');
+
+      if (!userId || !password) return;
+      if (btn) { btn.disabled = true; btn.textContent = 'Signing In...'; }
+      if (alertBox) alertBox.style.display = 'none';
+
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId, password, rememberMe })
+        });
+        const data = await res.json();
+        if (data.success && data.user) {
+          closeLoginModal();
+          updatePageAuthUI(data.user);
+          showToast(`Welcome back, ${data.user.name || data.user.userId}! Signed in successfully.`);
+        } else {
+          if (alertBox) {
+            alertBox.textContent = data.error || 'Invalid CPF User ID or password.';
+            alertBox.style.display = 'block';
+          }
+        }
+      } catch (err) {
+        if (alertBox) {
+          alertBox.textContent = 'Authentication error: ' + err.message;
+          alertBox.style.display = 'block';
+        }
+      } finally {
+        if (btn) { btn.disabled = false; btn.textContent = 'Sign In to Portal'; }
+      }
+    }
+
+    async function handlePageSignOut() {
+      try {
+        await fetch('/api/auth/logout', { method: 'POST' });
+      } catch (e) {}
+      updatePageAuthUI(null);
+      showToast('Signed out of operations session.');
+    }
+
+    document.addEventListener('click', (e) => {
+      const modal = document.getElementById('loginModal');
+      if (modal && e.target === modal) closeLoginModal();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeLoginModal();
+    });
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      loadWellSites();
+      checkPageAuth();
+    });
+  </script>
+</body>
+</html>

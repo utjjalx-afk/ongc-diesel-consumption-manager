@@ -1,6 +1,8 @@
 import express from 'express';
 import multer from 'multer';
-import cors from 'cors';
+import { randomBytes } from 'node:crypto';
+import { hashPassword, verifyPassword, migratePasswords, publicUser, createSessionManager } from './src/auth.js';
+import { readOperationsStore, writeOperationsStore } from './src/operationsStore.js';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
@@ -21,8 +23,10 @@ const __dirname = path.dirname(__filename);
 // ============================================================
 // USER DATABASE (Persistent JSON store for registered users)
 // ============================================================
-const USERS_DB_PATH = path.join(__dirname, 'data', 'users_db.json');
-const ADMIN_REQUESTS_PATH = path.join(__dirname, 'data', 'admin_requests.json');
+const DATA_DIR = process.env.ONGC_DATA_DIR || path.join(__dirname, 'data');
+fs.mkdirSync(DATA_DIR, { recursive: true });
+const USERS_DB_PATH = path.join(DATA_DIR, 'users_db.json');
+const ADMIN_REQUESTS_PATH = path.join(DATA_DIR, 'admin_requests.json');
 
 function loadAdminRequests() {
   try {
@@ -38,11 +42,11 @@ function loadAdminRequests() {
 
 function saveAdminRequests(store) {
   try {
-    const dataDir = path.join(__dirname, 'data');
+    const dataDir = DATA_DIR;
     if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
-    fs.writeFileSync(ADMIN_REQUESTS_PATH, JSON.stringify(store, null, 2), 'utf8');
+    writeOperationsStore(ADMIN_REQUESTS_PATH, store);
   } catch (e) {
-    console.error('Failed to save admin_requests.json:', e.message);
+    throw new Error(`Failed to save admin requests: ${e.message}`);
   }
 }
 
@@ -50,8 +54,7 @@ const DEFAULT_USERS_DB = {
   users: [
     {
       userId: 'CPF-140751',
-      password: 'CPF-140751',
-      altPasswords: ['140751', 'ongc@123', 'admin123'],
+      password: process.env.ONGC_ADMIN_PASSWORD || randomBytes(18).toString('base64url'),
       name: 'UTJJAL CHETIA',
       role: 'Reservoir Winch Logistics Officer (Assam Asset)',
       initials: 'UC',
@@ -65,8 +68,7 @@ const DEFAULT_USERS_DB = {
     },
     {
       userId: 'admin',
-      password: 'ongc@123',
-      altPasswords: ['admin123', 'CPF-140751'],
+      password: process.env.ONGC_ADMIN_PASSWORD || randomBytes(18).toString('base64url'),
       name: 'Operations Admin',
       role: 'Logistics Operations Administrator',
       initials: 'OA',
@@ -86,21 +88,24 @@ function loadUsersDb() {
   try {
     if (fs.existsSync(USERS_DB_PATH)) {
       const raw = fs.readFileSync(USERS_DB_PATH, 'utf8');
-      return JSON.parse(raw);
+      return migratePasswords(JSON.parse(raw));
     }
   } catch (e) {
-    console.warn('Could not read users_db.json, using defaults:', e.message);
+    throw new Error(`Cannot read users database: ${e.message}`);
   }
-  return JSON.parse(JSON.stringify(DEFAULT_USERS_DB));
+  if (!process.env.ONGC_ADMIN_PASSWORD) {
+    for (const user of DEFAULT_USERS_DB.users) console.log(`Initial password for ${user.userId}: ${user.password}`);
+  }
+  return migratePasswords(JSON.parse(JSON.stringify(DEFAULT_USERS_DB)));
 }
 
 function saveUsersDb(db) {
   try {
-    const dataDir = path.join(__dirname, 'data');
+    const dataDir = DATA_DIR;
     if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
-    fs.writeFileSync(USERS_DB_PATH, JSON.stringify(db, null, 2), 'utf8');
+    writeOperationsStore(USERS_DB_PATH, db);
   } catch (e) {
-    console.error('Failed to save users_db.json:', e.message);
+    throw new Error(`Failed to save users database: ${e.message}`);
   }
 }
 
@@ -119,11 +124,6 @@ function appendAuditLog(db, action, userId, details = {}) {
 
 // Load users DB on startup
 let usersDb = loadUsersDb();
-// Ensure default admin users always exist
-for (const defUser of DEFAULT_USERS_DB.users) {
-  const exists = usersDb.users.some(u => u.userId === defUser.userId);
-  if (!exists) usersDb.users.push(defUser);
-}
 saveUsersDb(usersDb);
 console.log(`Users DB loaded: ${usersDb.users.length} users, ${(usersDb.auditLog||[]).length} audit entries.`);
 
@@ -144,12 +144,61 @@ const storage = multer.diskStorage({
     cb(null, `${Date.now()}-${safeName}`);
   }
 });
-const upload = multer({ storage });
+const upload = multer({ storage, limits: { fileSize: 25 * 1024 * 1024 }, fileFilter(req, file, cb) {
+  if (!/\.(xlsx|xlsm)$/i.test(file.originalname)) return cb(new Error('Please upload an .xlsx or .xlsm workbook.'));
+  cb(null, true);
+} });
 
-app.use(cors());
+const sessions = createSessionManager(loadUsersDb);
+app.use('/api', (req, res, next) => {
+  if (!['GET', 'HEAD', 'OPTIONS'].includes(req.method) && req.headers.origin) {
+    if (req.headers.origin !== `${req.protocol}://${req.get('host')}`) {
+      return res.status(403).json({ success: false, error: 'Cross-site requests are not allowed.' });
+    }
+  }
+  next();
+});
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/api', (req, res, next) => {
+  if (['/auth/login', '/auth/register', '/auth/verify-cpf'].includes(req.path)) return next();
+
+  // If a valid session cookie exists, attach user to req
+  const currentUser = typeof sessions.identify === 'function' ? sessions.identify(req) : null;
+  if (currentUser) {
+    req.user = currentUser;
+  }
+
+  // Public read-only endpoints: Allow viewing Well Site and OT/FDE information without login
+  const isPublicRead = req.method === 'GET' && (
+    req.path.startsWith('/well-site') ||
+    req.path.startsWith('/ot-fde')
+  );
+  if (isPublicRead) {
+    return next();
+  }
+
+  // All other endpoints require authentication
+  if (!req.user) {
+    return res.status(401).json({ success: false, error: 'Please sign in to continue.' });
+  }
+
+  const adminOnly = req.path.startsWith('/auth/users') || req.path === '/auth/audit'
+    || (req.path.startsWith('/admin/') && !(req.path === '/admin/requests' && req.method === 'POST'))
+    || (req.path.startsWith('/ot-fde/employee') && req.method !== 'GET')
+    || req.path.startsWith('/ot-fde/roster/');
+  if (adminOnly && !req.user.isAdmin) {
+    return res.status(403).json({ success: false, error: 'Administrator access is required.' });
+  }
+  next();
+});
+app.get('/api/auth/me', (req, res) => res.json({ success: true, user: req.user }));
+app.post('/api/auth/logout', (req, res) => {
+  sessions.revoke(req, res);
+  res.json({ success: true });
+});
 
 // Default file path provided by user
 const DEFAULT_FILE_PATH = 'C:/Users/utjja/OneDrive/Pictures/Diesel Consumption all vechicle (Autosaved).xlsx';
@@ -211,6 +260,27 @@ async function loadDefaultOtFdeData() {
     console.error('Failed to initialize OT/FDE database:', e);
   }
 }
+
+const OPERATIONS_PATH = path.join(DATA_DIR, 'operations_store.json');
+const savedOperations = readOperationsStore(OPERATIONS_PATH);
+if (savedOperations) {
+  activeData = savedOperations.activeData || activeData;
+  wellSiteData = savedOperations.wellSiteData || wellSiteData;
+  maintenanceData = savedOperations.maintenanceData || maintenanceData;
+}
+app.use('/api', (req, res, next) => {
+  if (['POST', 'PUT', 'DELETE'].includes(req.method) || req.path.endsWith('/load-default')) {
+    const sendJson = res.json.bind(res);
+    res.json = (body) => {
+      if (res.statusCode < 400 && body?.success) {
+        try { writeOperationsStore(OPERATIONS_PATH, { activeData, wellSiteData, maintenanceData }); }
+        catch (error) { res.status(500); return sendJson({ success: false, error: `Could not save changes: ${error.message}` }); }
+      }
+      return sendJson(body);
+    };
+  }
+  next();
+});
 
 // Auto-load helpers
 async function loadDefaultMaintenanceData() {
@@ -288,7 +358,7 @@ app.post('/api/auth/login', (req, res) => {
   }
 
   const cleanUser = String(userId).trim().toUpperCase();
-  const cleanPass = String(password).trim();
+  const cleanPass = String(password);
 
   // Reload db for latest registrations
   usersDb = loadUsersDb();
@@ -316,17 +386,15 @@ app.post('/api/auth/login', (req, res) => {
     return res.status(403).json({ success: false, error: 'Your account is suspended. Contact the administrator.' });
   }
 
-  const altPasswords = matched.altPasswords || [];
-  const isPasswordValid =
-    cleanPass === matched.password ||
-    cleanPass.toUpperCase() === String(matched.password).toUpperCase() ||
-    altPasswords.includes(cleanPass);
+  const isPasswordValid = verifyPassword(cleanPass, matched.passwordHash);
 
   if (!isPasswordValid) {
     appendAuditLog(usersDb, 'LOGIN_FAILED', matched.userId, { reason: 'Wrong password', ip: req.ip });
     saveUsersDb(usersDb);
     return res.status(401).json({ success: false, error: 'Incorrect password. Please try again.' });
   }
+
+  sessions.issue(req, res, matched, !!req.body.rememberMe);
 
   // Update last login
   matched.lastLogin = new Date().toISOString();
@@ -467,8 +535,7 @@ app.post('/api/auth/register', (req, res) => {
 
     const newUser = {
       userId: cleanId,
-      password: password.trim(),
-      altPasswords: [],
+      passwordHash: hashPassword(password),
       name: finalName,
       role: finalRole,
       initials: initials.toUpperCase(),
@@ -632,7 +699,7 @@ app.post('/api/admin/requests', (req, res) => {
       cpf: (cpf || payload?.cpf || '').trim(),
       payload: payload || {},
       reason: reason || '',
-      requestedBy: requestedBy || 'User',
+      requestedBy: req.user.name,
       requestedAt: new Date().toISOString(),
       reviewedBy: null,
       reviewedAt: null,
@@ -643,7 +710,7 @@ app.post('/api/admin/requests', (req, res) => {
     saveAdminRequests(store);
 
     usersDb = loadUsersDb();
-    appendAuditLog(usersDb, 'CREW_REQUEST_SUBMITTED', requestedBy || 'SYSTEM', {
+    appendAuditLog(usersDb, 'CREW_REQUEST_SUBMITTED', req.user.userId, {
       requestId: newReq.id,
       type,
       employee: newReq.employeeName,
@@ -673,7 +740,7 @@ app.put('/api/admin/requests/:id/approve', (req, res) => {
       return res.status(400).json({ success: false, error: `Request is already ${item.status}.` });
     }
 
-    const reviewer = req.body.reviewedBy || 'Admin';
+    const reviewer = req.user.name;
     const remarks = req.body.remarks || 'Approved by Operations Admin';
 
     // Execute the action based on type
@@ -784,7 +851,7 @@ app.put('/api/admin/requests/:id/reject', (req, res) => {
       return res.status(400).json({ success: false, error: `Request is already ${item.status}.` });
     }
 
-    const reviewer = req.body.reviewedBy || 'Admin';
+    const reviewer = req.user.name;
     const remarks = req.body.remarks || 'Rejected by Operations Admin';
 
     item.status = 'rejected';
@@ -850,7 +917,7 @@ app.post('/api/admin/crew/direct-add', (req, res) => {
     saveOtFdeDatabase(otFdeData);
 
     usersDb = loadUsersDb();
-    appendAuditLog(usersDb, 'ADMIN_CREW_ADD', adminUser || 'ADMIN', {
+    appendAuditLog(usersDb, 'ADMIN_CREW_ADD', req.user.userId, {
       name: newEmp.name,
       code,
       cpf: newEmp.cpf,
@@ -914,7 +981,7 @@ app.post('/api/admin/crew/:code/direct-promote', (req, res) => {
     saveOtFdeDatabase(otFdeData);
 
     usersDb = loadUsersDb();
-    appendAuditLog(usersDb, 'ADMIN_CREW_PROMOTE', adminUser || 'ADMIN', {
+    appendAuditLog(usersDb, 'ADMIN_CREW_PROMOTE', req.user.userId, {
       name: emp.name,
       code,
       from: prevDesignation,
@@ -948,7 +1015,7 @@ app.delete('/api/admin/crew/:code/direct-delete', (req, res) => {
     saveOtFdeDatabase(otFdeData);
 
     usersDb = loadUsersDb();
-    appendAuditLog(usersDb, 'ADMIN_CREW_DELETE', req.query.adminUser || 'ADMIN', {
+    appendAuditLog(usersDb, 'ADMIN_CREW_DELETE', req.user.userId, {
       name: removedName,
       code,
       cpf: removedCpf
@@ -1632,7 +1699,7 @@ app.post('/api/maintenance/upload', upload.single('maintenanceFile'), async (req
 // ============================================================
 
 // 25. Get all OT & FDE data (roster, jobs, summaries)
-app.get('/api/ot-fde/data', (req, res) => {
+app.get(['/api/ot-fde/data', '/api/ot-fde'], (req, res) => {
   res.json({
     success: true,
     roster: otFdeData.roster,
@@ -1656,6 +1723,10 @@ app.post('/api/ot-fde/preview', (req, res) => {
       return {
         code,
         name: emp.name,
+        cpf: emp.cpf,
+        designation: emp.designation,
+        basicPay: emp.basicPay,
+        otHours: calcs.otHours,
         otRate: emp.otRate,
         otAmount,
         fdAmount: calcs.fdAmount
@@ -1667,7 +1738,7 @@ app.post('/api/ot-fde/preview', (req, res) => {
       preview: {
         ...calcs,
         crewCount: (crewCodes || []).length,
-        isCrewCountValid: (crewCodes || []).length >= 4 && (crewCodes || []).length <= 6,
+        isCrewCountValid: (crewCodes || []).length >= 4 && (crewCodes || []).length <= 10,
         crewDetails
       }
     });
@@ -1803,6 +1874,7 @@ app.put('/api/ot-fde/job/:id', (req, res) => {
     const updated = allocateJobToCrew({
       ...current,
       ...req.body,
+      memberAllocations: current.memberAllocations,
       id
     }, otFdeData.roster);
 
@@ -2242,7 +2314,7 @@ app.post('/api/ot-fde/roster/batch-da', (req, res) => {
 app.get('/api/ot-fde/export/pdf', async (req, res) => {
   try {
     const month = req.query.month || '2025-01';
-    const employeeCode = (req.query.employee || 'UC').toUpperCase();
+    const employeeCode = (req.query.employee || req.query.empCode || 'UC').toUpperCase();
     const type = (req.query.type || 'ot').toLowerCase();
 
     const statements = generateMonthlyStatements(otFdeData.jobs, otFdeData.roster, month);
@@ -2271,7 +2343,7 @@ app.get('/api/ot-fde/export/pdf', async (req, res) => {
 app.get('/api/ot-fde/export/excel', async (req, res) => {
   try {
     const month = req.query.month || '2025-01';
-    const employeeCode = (req.query.employee || 'UC').toUpperCase();
+    const employeeCode = (req.query.employee || req.query.empCode || 'UC').toUpperCase();
     const type = (req.query.type || 'ot').toLowerCase();
 
     const statements = generateMonthlyStatements(otFdeData.jobs, otFdeData.roster, month);
@@ -2296,14 +2368,26 @@ app.get('/api/ot-fde/export/excel', async (req, res) => {
   }
 });
 
-// Start server
-app.listen(PORT, async () => {
-  console.log(`====================================================`);
-  console.log(`ONGC Diesel Consumption System running on port ${PORT}`);
-  console.log(`http://localhost:${PORT}`);
-  console.log(`====================================================`);
-  await loadDefaultData();
-  await loadDefaultWellSites();
-  await loadDefaultMaintenanceData();
-  await loadDefaultOtFdeData();
+// Complete initialization before accepting requests.
+if (!savedOperations?.activeData) await loadDefaultData();
+if (!savedOperations?.wellSiteData) await loadDefaultWellSites();
+if (!savedOperations?.maintenanceData) await loadDefaultMaintenanceData();
+await loadDefaultOtFdeData();
+// Imported legacy jobs need a rate snapshot before any pay revisions.
+for (const job of otFdeData.jobs) {
+  if (!Array.isArray(job.memberAllocations)) {
+    job.memberAllocations = (job.crewCodes || []).filter(code => otFdeData.roster[code]).map(code => {
+      const emp = otFdeData.roster[code];
+      return { employeeCode: code, employeeName: emp.name, cpf: emp.cpf,
+        designation: emp.designation, otRate: emp.otRate, otHours: job.otHours || 0,
+        otAmount: Math.round((job.otHours || 0) * emp.otRate * 100) / 100,
+        fdAmount: job.fdAmount || 0 };
+    });
+  }
+}
+saveOtFdeDatabase(otFdeData);
+app.use((error, req, res, next) => {
+  if (res.headersSent) return next(error);
+  res.status(error.code === 'LIMIT_FILE_SIZE' ? 413 : 400).json({ success: false, error: error.message });
 });
+app.listen(PORT, () => console.log(`ONGC operations portal: http://localhost:${PORT}`));

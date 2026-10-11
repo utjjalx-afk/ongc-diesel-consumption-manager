@@ -7,3 +7,6 @@ Thumbs.db
 uploads/*
 !uploads/.gitkeep
 .env
+
+.ongc-test-*/
+.preview-data/

@@ -50,20 +50,22 @@ export function toIsoDate(val) {
 
 // Helper: Calculate validity status for statutory documents
 export function calculateDocStatus(isoDate) {
-  if (!isoDate) return { status: 'na', label: 'Not Available', daysLeft: null };
+  if (!isoDate) return { status: 'na', label: 'Not Available', daysLeft: null, isCritical: false, isExpiring10d: false };
   const target = new Date(isoDate + 'T00:00:00Z');
-  if (isNaN(target.getTime())) return { status: 'na', label: 'Not Available', daysLeft: null };
+  if (isNaN(target.getTime())) return { status: 'na', label: 'Not Available', daysLeft: null, isCritical: false, isExpiring10d: false };
 
   const now = new Date();
   const diffMs = target.getTime() - now.getTime();
   const daysLeft = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
 
   if (daysLeft < 0) {
-    return { status: 'expired', label: `Expired (${Math.abs(daysLeft)}d ago)`, daysLeft };
+    return { status: 'expired', label: `Expired (${Math.abs(daysLeft)}d ago)`, daysLeft, isCritical: true, isExpiring10d: false };
+  } else if (daysLeft <= 10) {
+    return { status: 'expiring_soon', label: daysLeft === 0 ? 'Expiring Today' : `Due in ${daysLeft} days`, daysLeft, isCritical: true, isExpiring10d: true };
   } else if (daysLeft <= 60) {
-    return { status: 'expiring_soon', label: `Due in ${daysLeft} days`, daysLeft };
+    return { status: 'expiring_soon', label: `Due in ${daysLeft} days`, daysLeft, isCritical: false, isExpiring10d: false };
   } else {
-    return { status: 'valid', label: `Valid (${daysLeft}d left)`, daysLeft };
+    return { status: 'valid', label: `Valid (${daysLeft}d left)`, daysLeft, isCritical: false, isExpiring10d: false };
   }
 }
 

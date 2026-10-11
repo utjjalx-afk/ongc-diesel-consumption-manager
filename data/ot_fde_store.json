@@ -203,6 +203,48 @@
         "MP",
         "AB",
         "RD"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "YA",
+          "employeeName": "YUSUF ALI",
+          "cpf": "137508",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 4,
+          "otAmount": 1700,
+          "fdAmount": 703.35
+        },
+        {
+          "employeeCode": "MP",
+          "employeeName": "MANABJYOTI PEGU",
+          "cpf": "128734",
+          "designation": "JMVD(W.O.)",
+          "otRate": 518,
+          "otHours": 4,
+          "otAmount": 2072,
+          "fdAmount": 703.35
+        },
+        {
+          "employeeCode": "AB",
+          "employeeName": "ABHIJIT BORAH",
+          "cpf": "129190",
+          "designation": "EA(P)",
+          "otRate": 604,
+          "otHours": 4,
+          "otAmount": 2416,
+          "fdAmount": 703.35
+        },
+        {
+          "employeeCode": "RD",
+          "employeeName": "RAJESH DAS",
+          "cpf": "138139",
+          "designation": "JT(FITTING)",
+          "otRate": 443,
+          "otHours": 4,
+          "otAmount": 1772,
+          "fdAmount": 703.35
+        }
       ]
     },
     {
@@ -223,6 +265,48 @@
         "RRK",
         "MP",
         "AB"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "HR",
+          "employeeName": "HRIDOY RAY",
+          "cpf": "132598",
+          "designation": "Dy. T (FITTING)",
+          "otRate": 537,
+          "otHours": 2.5,
+          "otAmount": 1342.5,
+          "fdAmount": 618.75
+        },
+        {
+          "employeeCode": "RRK",
+          "employeeName": "RAJEN RAJKONWAR",
+          "cpf": "137500",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 2.5,
+          "otAmount": 1062.5,
+          "fdAmount": 618.75
+        },
+        {
+          "employeeCode": "MP",
+          "employeeName": "MANABJYOTI PEGU",
+          "cpf": "128734",
+          "designation": "JMVD(W.O.)",
+          "otRate": 518,
+          "otHours": 2.5,
+          "otAmount": 1295,
+          "fdAmount": 618.75
+        },
+        {
+          "employeeCode": "AB",
+          "employeeName": "ABHIJIT BORAH",
+          "cpf": "129190",
+          "designation": "EA(P)",
+          "otRate": 604,
+          "otHours": 2.5,
+          "otAmount": 1510,
+          "fdAmount": 618.75
+        }
       ]
     },
     {
@@ -243,6 +327,48 @@
         "SD",
         "SR",
         "AB"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "DJB",
+          "employeeName": "DIPJYOTI BORA",
+          "cpf": "128787",
+          "designation": "EA(M)",
+          "otRate": 622,
+          "otHours": 6,
+          "otAmount": 3732,
+          "fdAmount": 815.85
+        },
+        {
+          "employeeCode": "SD",
+          "employeeName": "SUBHASISH DAS",
+          "cpf": "128864",
+          "designation": "MVD(WO)",
+          "otRate": 553,
+          "otHours": 6,
+          "otAmount": 3318,
+          "fdAmount": 815.85
+        },
+        {
+          "employeeCode": "SR",
+          "employeeName": "SAHIDUR ROHMAN",
+          "cpf": "137510",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 6,
+          "otAmount": 2550,
+          "fdAmount": 815.85
+        },
+        {
+          "employeeCode": "AB",
+          "employeeName": "ABHIJIT BORAH",
+          "cpf": "129190",
+          "designation": "EA(P)",
+          "otRate": 604,
+          "otHours": 6,
+          "otAmount": 3624,
+          "fdAmount": 815.85
+        }
       ]
     },
     {
@@ -263,6 +389,48 @@
         "YA",
         "MP",
         "RD"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "PPD",
+          "employeeName": "PRATIK PURNA DUTTA",
+          "cpf": "128584",
+          "designation": "DY T (FITTING)",
+          "otRate": 553,
+          "otHours": 2,
+          "otAmount": 1106,
+          "fdAmount": 562.5
+        },
+        {
+          "employeeCode": "YA",
+          "employeeName": "YUSUF ALI",
+          "cpf": "137508",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 2,
+          "otAmount": 850,
+          "fdAmount": 562.5
+        },
+        {
+          "employeeCode": "MP",
+          "employeeName": "MANABJYOTI PEGU",
+          "cpf": "128734",
+          "designation": "JMVD(W.O.)",
+          "otRate": 518,
+          "otHours": 2,
+          "otAmount": 1036,
+          "fdAmount": 562.5
+        },
+        {
+          "employeeCode": "RD",
+          "employeeName": "RAJESH DAS",
+          "cpf": "138139",
+          "designation": "JT(FITTING)",
+          "otRate": 443,
+          "otHours": 2,
+          "otAmount": 886,
+          "fdAmount": 562.5
+        }
       ]
     },
     {
@@ -283,6 +451,48 @@
         "RRK",
         "AB",
         "UC"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "DB",
+          "employeeName": "DEBAJIT BORA",
+          "cpf": "128798",
+          "designation": "DY. T (FITTING)",
+          "otRate": 553,
+          "otHours": 2,
+          "otAmount": 1106,
+          "fdAmount": 562.5
+        },
+        {
+          "employeeCode": "RRK",
+          "employeeName": "RAJEN RAJKONWAR",
+          "cpf": "137500",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 2,
+          "otAmount": 850,
+          "fdAmount": 562.5
+        },
+        {
+          "employeeCode": "AB",
+          "employeeName": "ABHIJIT BORAH",
+          "cpf": "129190",
+          "designation": "EA(P)",
+          "otRate": 604,
+          "otHours": 2,
+          "otAmount": 1208,
+          "fdAmount": 562.5
+        },
+        {
+          "employeeCode": "UC",
+          "employeeName": "UTJJAL CHETIA",
+          "cpf": "140751",
+          "designation": "JMVD(W.O.)",
+          "otRate": 406,
+          "otHours": 2,
+          "otAmount": 812,
+          "fdAmount": 562.5
+        }
       ]
     },
     {
@@ -303,6 +513,48 @@
         "HR",
         "SR",
         "MP"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "DJB",
+          "employeeName": "DIPJYOTI BORA",
+          "cpf": "128787",
+          "designation": "EA(M)",
+          "otRate": 622,
+          "otHours": 5.5,
+          "otAmount": 3421,
+          "fdAmount": 787.5
+        },
+        {
+          "employeeCode": "HR",
+          "employeeName": "HRIDOY RAY",
+          "cpf": "132598",
+          "designation": "Dy. T (FITTING)",
+          "otRate": 537,
+          "otHours": 5.5,
+          "otAmount": 2953.5,
+          "fdAmount": 787.5
+        },
+        {
+          "employeeCode": "SR",
+          "employeeName": "SAHIDUR ROHMAN",
+          "cpf": "137510",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 5.5,
+          "otAmount": 2337.5,
+          "fdAmount": 787.5
+        },
+        {
+          "employeeCode": "MP",
+          "employeeName": "MANABJYOTI PEGU",
+          "cpf": "128734",
+          "designation": "JMVD(W.O.)",
+          "otRate": 518,
+          "otHours": 5.5,
+          "otAmount": 2849,
+          "fdAmount": 787.5
+        }
       ]
     },
     {
@@ -324,6 +576,58 @@
         "SR",
         "RD",
         "UC"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "PPD",
+          "employeeName": "PRATIK PURNA DUTTA",
+          "cpf": "128584",
+          "designation": "DY T (FITTING)",
+          "otRate": 553,
+          "otHours": 0,
+          "otAmount": 0,
+          "fdAmount": 450
+        },
+        {
+          "employeeCode": "HR",
+          "employeeName": "HRIDOY RAY",
+          "cpf": "132598",
+          "designation": "Dy. T (FITTING)",
+          "otRate": 537,
+          "otHours": 0,
+          "otAmount": 0,
+          "fdAmount": 450
+        },
+        {
+          "employeeCode": "SR",
+          "employeeName": "SAHIDUR ROHMAN",
+          "cpf": "137510",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 0,
+          "otAmount": 0,
+          "fdAmount": 450
+        },
+        {
+          "employeeCode": "RD",
+          "employeeName": "RAJESH DAS",
+          "cpf": "138139",
+          "designation": "JT(FITTING)",
+          "otRate": 443,
+          "otHours": 0,
+          "otAmount": 0,
+          "fdAmount": 450
+        },
+        {
+          "employeeCode": "UC",
+          "employeeName": "UTJJAL CHETIA",
+          "cpf": "140751",
+          "designation": "JMVD(W.O.)",
+          "otRate": 406,
+          "otHours": 0,
+          "otAmount": 0,
+          "fdAmount": 450
+        }
       ]
     },
     {
@@ -344,6 +648,48 @@
         "YA",
         "MP",
         "AB"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "DJB",
+          "employeeName": "DIPJYOTI BORA",
+          "cpf": "128787",
+          "designation": "EA(M)",
+          "otRate": 622,
+          "otHours": 2,
+          "otAmount": 1244,
+          "fdAmount": 590.85
+        },
+        {
+          "employeeCode": "YA",
+          "employeeName": "YUSUF ALI",
+          "cpf": "137508",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 2,
+          "otAmount": 850,
+          "fdAmount": 590.85
+        },
+        {
+          "employeeCode": "MP",
+          "employeeName": "MANABJYOTI PEGU",
+          "cpf": "128734",
+          "designation": "JMVD(W.O.)",
+          "otRate": 518,
+          "otHours": 2,
+          "otAmount": 1036,
+          "fdAmount": 590.85
+        },
+        {
+          "employeeCode": "AB",
+          "employeeName": "ABHIJIT BORAH",
+          "cpf": "129190",
+          "designation": "EA(P)",
+          "otRate": 604,
+          "otHours": 2,
+          "otAmount": 1208,
+          "fdAmount": 590.85
+        }
       ]
     },
     {
@@ -364,6 +710,48 @@
         "RRK",
         "RD",
         "UC"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "PPD",
+          "employeeName": "PRATIK PURNA DUTTA",
+          "cpf": "128584",
+          "designation": "DY T (FITTING)",
+          "otRate": 553,
+          "otHours": 2.5,
+          "otAmount": 1382.5,
+          "fdAmount": 618.75
+        },
+        {
+          "employeeCode": "RRK",
+          "employeeName": "RAJEN RAJKONWAR",
+          "cpf": "137500",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 2.5,
+          "otAmount": 1062.5,
+          "fdAmount": 618.75
+        },
+        {
+          "employeeCode": "RD",
+          "employeeName": "RAJESH DAS",
+          "cpf": "138139",
+          "designation": "JT(FITTING)",
+          "otRate": 443,
+          "otHours": 2.5,
+          "otAmount": 1107.5,
+          "fdAmount": 618.75
+        },
+        {
+          "employeeCode": "UC",
+          "employeeName": "UTJJAL CHETIA",
+          "cpf": "140751",
+          "designation": "JMVD(W.O.)",
+          "otRate": 406,
+          "otHours": 2.5,
+          "otAmount": 1015,
+          "fdAmount": 618.75
+        }
       ]
     },
     {
@@ -385,6 +773,58 @@
         "YA",
         "RD",
         "UC"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "PPD",
+          "employeeName": "PRATIK PURNA DUTTA",
+          "cpf": "128584",
+          "designation": "DY T (FITTING)",
+          "otRate": 553,
+          "otHours": 7.5,
+          "otAmount": 4147.5,
+          "fdAmount": 900
+        },
+        {
+          "employeeCode": "DB",
+          "employeeName": "DEBAJIT BORA",
+          "cpf": "128798",
+          "designation": "DY. T (FITTING)",
+          "otRate": 553,
+          "otHours": 7.5,
+          "otAmount": 4147.5,
+          "fdAmount": 900
+        },
+        {
+          "employeeCode": "YA",
+          "employeeName": "YUSUF ALI",
+          "cpf": "137508",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 7.5,
+          "otAmount": 3187.5,
+          "fdAmount": 900
+        },
+        {
+          "employeeCode": "RD",
+          "employeeName": "RAJESH DAS",
+          "cpf": "138139",
+          "designation": "JT(FITTING)",
+          "otRate": 443,
+          "otHours": 7.5,
+          "otAmount": 3322.5,
+          "fdAmount": 900
+        },
+        {
+          "employeeCode": "UC",
+          "employeeName": "UTJJAL CHETIA",
+          "cpf": "140751",
+          "designation": "JMVD(W.O.)",
+          "otRate": 406,
+          "otHours": 7.5,
+          "otAmount": 3045,
+          "fdAmount": 900
+        }
       ]
     },
     {
@@ -406,6 +846,58 @@
         "RRK",
         "MP",
         "AB"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "DJB",
+          "employeeName": "DIPJYOTI BORA",
+          "cpf": "128787",
+          "designation": "EA(M)",
+          "otRate": 622,
+          "otHours": 7,
+          "otAmount": 4354,
+          "fdAmount": 872.1
+        },
+        {
+          "employeeCode": "HR",
+          "employeeName": "HRIDOY RAY",
+          "cpf": "132598",
+          "designation": "Dy. T (FITTING)",
+          "otRate": 537,
+          "otHours": 7,
+          "otAmount": 3759,
+          "fdAmount": 872.1
+        },
+        {
+          "employeeCode": "RRK",
+          "employeeName": "RAJEN RAJKONWAR",
+          "cpf": "137500",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 7,
+          "otAmount": 2975,
+          "fdAmount": 872.1
+        },
+        {
+          "employeeCode": "MP",
+          "employeeName": "MANABJYOTI PEGU",
+          "cpf": "128734",
+          "designation": "JMVD(W.O.)",
+          "otRate": 518,
+          "otHours": 7,
+          "otAmount": 3626,
+          "fdAmount": 872.1
+        },
+        {
+          "employeeCode": "AB",
+          "employeeName": "ABHIJIT BORAH",
+          "cpf": "129190",
+          "designation": "EA(P)",
+          "otRate": 604,
+          "otHours": 7,
+          "otAmount": 4228,
+          "fdAmount": 872.1
+        }
       ]
     },
     {
@@ -426,6 +918,48 @@
         "SD",
         "HR",
         "SR"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "DJB",
+          "employeeName": "DIPJYOTI BORA",
+          "cpf": "128787",
+          "designation": "EA(M)",
+          "otRate": 622,
+          "otHours": 5,
+          "otAmount": 3110,
+          "fdAmount": 759.6
+        },
+        {
+          "employeeCode": "SD",
+          "employeeName": "SUBHASISH DAS",
+          "cpf": "128864",
+          "designation": "MVD(WO)",
+          "otRate": 553,
+          "otHours": 5,
+          "otAmount": 2765,
+          "fdAmount": 759.6
+        },
+        {
+          "employeeCode": "HR",
+          "employeeName": "HRIDOY RAY",
+          "cpf": "132598",
+          "designation": "Dy. T (FITTING)",
+          "otRate": 537,
+          "otHours": 5,
+          "otAmount": 2685,
+          "fdAmount": 759.6
+        },
+        {
+          "employeeCode": "SR",
+          "employeeName": "SAHIDUR ROHMAN",
+          "cpf": "137510",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 5,
+          "otAmount": 2125,
+          "fdAmount": 759.6
+        }
       ]
     },
     {
@@ -447,6 +981,58 @@
         "YA",
         "RD",
         "UC"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "PPD",
+          "employeeName": "PRATIK PURNA DUTTA",
+          "cpf": "128584",
+          "designation": "DY T (FITTING)",
+          "otRate": 553,
+          "otHours": 8,
+          "otAmount": 4424,
+          "fdAmount": 928.35
+        },
+        {
+          "employeeCode": "DB",
+          "employeeName": "DEBAJIT BORA",
+          "cpf": "128798",
+          "designation": "DY. T (FITTING)",
+          "otRate": 553,
+          "otHours": 8,
+          "otAmount": 4424,
+          "fdAmount": 928.35
+        },
+        {
+          "employeeCode": "YA",
+          "employeeName": "YUSUF ALI",
+          "cpf": "137508",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 8,
+          "otAmount": 3400,
+          "fdAmount": 928.35
+        },
+        {
+          "employeeCode": "RD",
+          "employeeName": "RAJESH DAS",
+          "cpf": "138139",
+          "designation": "JT(FITTING)",
+          "otRate": 443,
+          "otHours": 8,
+          "otAmount": 3544,
+          "fdAmount": 928.35
+        },
+        {
+          "employeeCode": "UC",
+          "employeeName": "UTJJAL CHETIA",
+          "cpf": "140751",
+          "designation": "JMVD(W.O.)",
+          "otRate": 406,
+          "otHours": 8,
+          "otAmount": 3248,
+          "fdAmount": 928.35
+        }
       ]
     },
     {
@@ -468,6 +1054,58 @@
         "DB",
         "SR",
         "RD"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "PPD",
+          "employeeName": "PRATIK PURNA DUTTA",
+          "cpf": "128584",
+          "designation": "DY T (FITTING)",
+          "otRate": 553,
+          "otHours": 7.5,
+          "otAmount": 4147.5,
+          "fdAmount": 900
+        },
+        {
+          "employeeCode": "SD",
+          "employeeName": "SUBHASISH DAS",
+          "cpf": "128864",
+          "designation": "MVD(WO)",
+          "otRate": 553,
+          "otHours": 7.5,
+          "otAmount": 4147.5,
+          "fdAmount": 900
+        },
+        {
+          "employeeCode": "DB",
+          "employeeName": "DEBAJIT BORA",
+          "cpf": "128798",
+          "designation": "DY. T (FITTING)",
+          "otRate": 553,
+          "otHours": 7.5,
+          "otAmount": 4147.5,
+          "fdAmount": 900
+        },
+        {
+          "employeeCode": "SR",
+          "employeeName": "SAHIDUR ROHMAN",
+          "cpf": "137510",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 7.5,
+          "otAmount": 3187.5,
+          "fdAmount": 900
+        },
+        {
+          "employeeCode": "RD",
+          "employeeName": "RAJESH DAS",
+          "cpf": "138139",
+          "designation": "JT(FITTING)",
+          "otRate": 443,
+          "otHours": 7.5,
+          "otAmount": 3322.5,
+          "fdAmount": 900
+        }
       ]
     },
     {
@@ -488,6 +1126,48 @@
         "SD",
         "SR",
         "RD"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "PPD",
+          "employeeName": "PRATIK PURNA DUTTA",
+          "cpf": "128584",
+          "designation": "DY T (FITTING)",
+          "otRate": 553,
+          "otHours": 1,
+          "otAmount": 553,
+          "fdAmount": 506.25
+        },
+        {
+          "employeeCode": "SD",
+          "employeeName": "SUBHASISH DAS",
+          "cpf": "128864",
+          "designation": "MVD(WO)",
+          "otRate": 553,
+          "otHours": 1,
+          "otAmount": 553,
+          "fdAmount": 506.25
+        },
+        {
+          "employeeCode": "SR",
+          "employeeName": "SAHIDUR ROHMAN",
+          "cpf": "137510",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 1,
+          "otAmount": 425,
+          "fdAmount": 506.25
+        },
+        {
+          "employeeCode": "RD",
+          "employeeName": "RAJESH DAS",
+          "cpf": "138139",
+          "designation": "JT(FITTING)",
+          "otRate": 443,
+          "otHours": 1,
+          "otAmount": 443,
+          "fdAmount": 506.25
+        }
       ]
     },
     {
@@ -508,6 +1188,48 @@
         "YA",
         "AB",
         "UC"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "HR",
+          "employeeName": "HRIDOY RAY",
+          "cpf": "132598",
+          "designation": "Dy. T (FITTING)",
+          "otRate": 537,
+          "otHours": 2,
+          "otAmount": 1074,
+          "fdAmount": 590.85
+        },
+        {
+          "employeeCode": "YA",
+          "employeeName": "YUSUF ALI",
+          "cpf": "137508",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 2,
+          "otAmount": 850,
+          "fdAmount": 590.85
+        },
+        {
+          "employeeCode": "AB",
+          "employeeName": "ABHIJIT BORAH",
+          "cpf": "129190",
+          "designation": "EA(P)",
+          "otRate": 604,
+          "otHours": 2,
+          "otAmount": 1208,
+          "fdAmount": 590.85
+        },
+        {
+          "employeeCode": "UC",
+          "employeeName": "UTJJAL CHETIA",
+          "cpf": "140751",
+          "designation": "JMVD(W.O.)",
+          "otRate": 406,
+          "otHours": 2,
+          "otAmount": 812,
+          "fdAmount": 590.85
+        }
       ]
     },
     {
@@ -528,6 +1250,48 @@
         "HR",
         "YA",
         "MP"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "DJB",
+          "employeeName": "DIPJYOTI BORA",
+          "cpf": "128787",
+          "designation": "EA(M)",
+          "otRate": 622,
+          "otHours": 3,
+          "otAmount": 1866,
+          "fdAmount": 647.1
+        },
+        {
+          "employeeCode": "HR",
+          "employeeName": "HRIDOY RAY",
+          "cpf": "132598",
+          "designation": "Dy. T (FITTING)",
+          "otRate": 537,
+          "otHours": 3,
+          "otAmount": 1611,
+          "fdAmount": 647.1
+        },
+        {
+          "employeeCode": "YA",
+          "employeeName": "YUSUF ALI",
+          "cpf": "137508",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 3,
+          "otAmount": 1275,
+          "fdAmount": 647.1
+        },
+        {
+          "employeeCode": "MP",
+          "employeeName": "MANABJYOTI PEGU",
+          "cpf": "128734",
+          "designation": "JMVD(W.O.)",
+          "otRate": 518,
+          "otHours": 3,
+          "otAmount": 1554,
+          "fdAmount": 647.1
+        }
       ]
     },
     {
@@ -546,6 +1310,28 @@
       "crewCodes": [
         "YA",
         "SR"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "YA",
+          "employeeName": "YUSUF ALI",
+          "cpf": "137508",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 2,
+          "otAmount": 850,
+          "fdAmount": 562.5
+        },
+        {
+          "employeeCode": "SR",
+          "employeeName": "SAHIDUR ROHMAN",
+          "cpf": "137510",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 2,
+          "otAmount": 850,
+          "fdAmount": 562.5
+        }
       ]
     },
     {
@@ -564,6 +1350,28 @@
       "crewCodes": [
         "PPD",
         "SR"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "PPD",
+          "employeeName": "PRATIK PURNA DUTTA",
+          "cpf": "128584",
+          "designation": "DY T (FITTING)",
+          "otRate": 553,
+          "otHours": 1.5,
+          "otAmount": 829.5,
+          "fdAmount": 534.6
+        },
+        {
+          "employeeCode": "SR",
+          "employeeName": "SAHIDUR ROHMAN",
+          "cpf": "137510",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 1.5,
+          "otAmount": 637.5,
+          "fdAmount": 534.6
+        }
       ]
     },
     {
@@ -584,6 +1392,48 @@
         "HR",
         "RRK",
         "MP"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "DJB",
+          "employeeName": "DIPJYOTI BORA",
+          "cpf": "128787",
+          "designation": "EA(M)",
+          "otRate": 622,
+          "otHours": 0,
+          "otAmount": 0,
+          "fdAmount": 450
+        },
+        {
+          "employeeCode": "HR",
+          "employeeName": "HRIDOY RAY",
+          "cpf": "132598",
+          "designation": "Dy. T (FITTING)",
+          "otRate": 537,
+          "otHours": 0,
+          "otAmount": 0,
+          "fdAmount": 450
+        },
+        {
+          "employeeCode": "RRK",
+          "employeeName": "RAJEN RAJKONWAR",
+          "cpf": "137500",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 0,
+          "otAmount": 0,
+          "fdAmount": 450
+        },
+        {
+          "employeeCode": "MP",
+          "employeeName": "MANABJYOTI PEGU",
+          "cpf": "128734",
+          "designation": "JMVD(W.O.)",
+          "otRate": 518,
+          "otHours": 0,
+          "otAmount": 0,
+          "fdAmount": 450
+        }
       ]
     },
     {
@@ -604,6 +1454,48 @@
         "DB",
         "YA",
         "RD"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "SD",
+          "employeeName": "SUBHASISH DAS",
+          "cpf": "128864",
+          "designation": "MVD(WO)",
+          "otRate": 553,
+          "otHours": 5.5,
+          "otAmount": 3041.5,
+          "fdAmount": 787.5
+        },
+        {
+          "employeeCode": "DB",
+          "employeeName": "DEBAJIT BORA",
+          "cpf": "128798",
+          "designation": "DY. T (FITTING)",
+          "otRate": 553,
+          "otHours": 5.5,
+          "otAmount": 3041.5,
+          "fdAmount": 787.5
+        },
+        {
+          "employeeCode": "YA",
+          "employeeName": "YUSUF ALI",
+          "cpf": "137508",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 5.5,
+          "otAmount": 2337.5,
+          "fdAmount": 787.5
+        },
+        {
+          "employeeCode": "RD",
+          "employeeName": "RAJESH DAS",
+          "cpf": "138139",
+          "designation": "JT(FITTING)",
+          "otRate": 443,
+          "otHours": 5.5,
+          "otAmount": 2436.5,
+          "fdAmount": 787.5
+        }
       ]
     },
     {
@@ -622,6 +1514,28 @@
       "crewCodes": [
         "RRK",
         "UC"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "RRK",
+          "employeeName": "RAJEN RAJKONWAR",
+          "cpf": "137500",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 0,
+          "otAmount": 0,
+          "fdAmount": 450
+        },
+        {
+          "employeeCode": "UC",
+          "employeeName": "UTJJAL CHETIA",
+          "cpf": "140751",
+          "designation": "JMVD(W.O.)",
+          "otRate": 406,
+          "otHours": 0,
+          "otAmount": 0,
+          "fdAmount": 450
+        }
       ]
     },
     {
@@ -642,6 +1556,48 @@
         "SR",
         "RD",
         "UC"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "PPD",
+          "employeeName": "PRATIK PURNA DUTTA",
+          "cpf": "128584",
+          "designation": "DY T (FITTING)",
+          "otRate": 553,
+          "otHours": 0,
+          "otAmount": 0,
+          "fdAmount": 450
+        },
+        {
+          "employeeCode": "SR",
+          "employeeName": "SAHIDUR ROHMAN",
+          "cpf": "137510",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 0,
+          "otAmount": 0,
+          "fdAmount": 450
+        },
+        {
+          "employeeCode": "RD",
+          "employeeName": "RAJESH DAS",
+          "cpf": "138139",
+          "designation": "JT(FITTING)",
+          "otRate": 443,
+          "otHours": 0,
+          "otAmount": 0,
+          "fdAmount": 450
+        },
+        {
+          "employeeCode": "UC",
+          "employeeName": "UTJJAL CHETIA",
+          "cpf": "140751",
+          "designation": "JMVD(W.O.)",
+          "otRate": 406,
+          "otHours": 0,
+          "otAmount": 0,
+          "fdAmount": 450
+        }
       ]
     },
     {
@@ -662,6 +1618,48 @@
         "HR",
         "RRK",
         "MP"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "DJB",
+          "employeeName": "DIPJYOTI BORA",
+          "cpf": "128787",
+          "designation": "EA(M)",
+          "otRate": 622,
+          "otHours": 6,
+          "otAmount": 3732,
+          "fdAmount": 815.85
+        },
+        {
+          "employeeCode": "HR",
+          "employeeName": "HRIDOY RAY",
+          "cpf": "132598",
+          "designation": "Dy. T (FITTING)",
+          "otRate": 537,
+          "otHours": 6,
+          "otAmount": 3222,
+          "fdAmount": 815.85
+        },
+        {
+          "employeeCode": "RRK",
+          "employeeName": "RAJEN RAJKONWAR",
+          "cpf": "137500",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 6,
+          "otAmount": 2550,
+          "fdAmount": 815.85
+        },
+        {
+          "employeeCode": "MP",
+          "employeeName": "MANABJYOTI PEGU",
+          "cpf": "128734",
+          "designation": "JMVD(W.O.)",
+          "otRate": 518,
+          "otHours": 6,
+          "otAmount": 3108,
+          "fdAmount": 815.85
+        }
       ]
     },
     {
@@ -680,6 +1678,28 @@
       "crewCodes": [
         "SD",
         "YA"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "SD",
+          "employeeName": "SUBHASISH DAS",
+          "cpf": "128864",
+          "designation": "MVD(WO)",
+          "otRate": 553,
+          "otHours": 0,
+          "otAmount": 0,
+          "fdAmount": 393.75
+        },
+        {
+          "employeeCode": "YA",
+          "employeeName": "YUSUF ALI",
+          "cpf": "137508",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 0,
+          "otAmount": 0,
+          "fdAmount": 393.75
+        }
       ]
     },
     {
@@ -700,6 +1720,48 @@
         "SD",
         "DB",
         "SR"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "PPD",
+          "employeeName": "PRATIK PURNA DUTTA",
+          "cpf": "128584",
+          "designation": "DY T (FITTING)",
+          "otRate": 553,
+          "otHours": 7,
+          "otAmount": 3871,
+          "fdAmount": 872.1
+        },
+        {
+          "employeeCode": "SD",
+          "employeeName": "SUBHASISH DAS",
+          "cpf": "128864",
+          "designation": "MVD(WO)",
+          "otRate": 553,
+          "otHours": 7,
+          "otAmount": 3871,
+          "fdAmount": 872.1
+        },
+        {
+          "employeeCode": "DB",
+          "employeeName": "DEBAJIT BORA",
+          "cpf": "128798",
+          "designation": "DY. T (FITTING)",
+          "otRate": 553,
+          "otHours": 7,
+          "otAmount": 3871,
+          "fdAmount": 872.1
+        },
+        {
+          "employeeCode": "SR",
+          "employeeName": "SAHIDUR ROHMAN",
+          "cpf": "137510",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 7,
+          "otAmount": 2975,
+          "fdAmount": 872.1
+        }
       ]
     },
     {
@@ -720,6 +1782,48 @@
         "AB",
         "RD",
         "UC"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "YA",
+          "employeeName": "YUSUF ALI",
+          "cpf": "137508",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 1,
+          "otAmount": 425,
+          "fdAmount": 506.25
+        },
+        {
+          "employeeCode": "AB",
+          "employeeName": "ABHIJIT BORAH",
+          "cpf": "129190",
+          "designation": "EA(P)",
+          "otRate": 604,
+          "otHours": 1,
+          "otAmount": 604,
+          "fdAmount": 506.25
+        },
+        {
+          "employeeCode": "RD",
+          "employeeName": "RAJESH DAS",
+          "cpf": "138139",
+          "designation": "JT(FITTING)",
+          "otRate": 443,
+          "otHours": 1,
+          "otAmount": 443,
+          "fdAmount": 506.25
+        },
+        {
+          "employeeCode": "UC",
+          "employeeName": "UTJJAL CHETIA",
+          "cpf": "140751",
+          "designation": "JMVD(W.O.)",
+          "otRate": 406,
+          "otHours": 1,
+          "otAmount": 406,
+          "fdAmount": 506.25
+        }
       ]
     },
     {
@@ -740,6 +1844,48 @@
         "SD",
         "HR",
         "RRK"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "DJB",
+          "employeeName": "DIPJYOTI BORA",
+          "cpf": "128787",
+          "designation": "EA(M)",
+          "otRate": 622,
+          "otHours": 1,
+          "otAmount": 622,
+          "fdAmount": 506.25
+        },
+        {
+          "employeeCode": "SD",
+          "employeeName": "SUBHASISH DAS",
+          "cpf": "128864",
+          "designation": "MVD(WO)",
+          "otRate": 553,
+          "otHours": 1,
+          "otAmount": 553,
+          "fdAmount": 506.25
+        },
+        {
+          "employeeCode": "HR",
+          "employeeName": "HRIDOY RAY",
+          "cpf": "132598",
+          "designation": "Dy. T (FITTING)",
+          "otRate": 537,
+          "otHours": 1,
+          "otAmount": 537,
+          "fdAmount": 506.25
+        },
+        {
+          "employeeCode": "RRK",
+          "employeeName": "RAJEN RAJKONWAR",
+          "cpf": "137500",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 1,
+          "otAmount": 425,
+          "fdAmount": 506.25
+        }
       ]
     },
     {
@@ -758,6 +1904,28 @@
       "crewCodes": [
         "PPD",
         "YA"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "PPD",
+          "employeeName": "PRATIK PURNA DUTTA",
+          "cpf": "128584",
+          "designation": "DY T (FITTING)",
+          "otRate": 553,
+          "otHours": 2,
+          "otAmount": 1106,
+          "fdAmount": 562.5
+        },
+        {
+          "employeeCode": "YA",
+          "employeeName": "YUSUF ALI",
+          "cpf": "137508",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 2,
+          "otAmount": 850,
+          "fdAmount": 562.5
+        }
       ]
     },
     {
@@ -776,6 +1944,28 @@
       "crewCodes": [
         "HR",
         "UC"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "HR",
+          "employeeName": "HRIDOY RAY",
+          "cpf": "132598",
+          "designation": "Dy. T (FITTING)",
+          "otRate": 537,
+          "otHours": 7.5,
+          "otAmount": 4027.5,
+          "fdAmount": 928.35
+        },
+        {
+          "employeeCode": "UC",
+          "employeeName": "UTJJAL CHETIA",
+          "cpf": "140751",
+          "designation": "JMVD(W.O.)",
+          "otRate": 406,
+          "otHours": 7.5,
+          "otAmount": 3045,
+          "fdAmount": 928.35
+        }
       ]
     },
     {
@@ -794,6 +1984,28 @@
       "crewCodes": [
         "MP",
         "AB"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "MP",
+          "employeeName": "MANABJYOTI PEGU",
+          "cpf": "128734",
+          "designation": "JMVD(W.O.)",
+          "otRate": 518,
+          "otHours": 7,
+          "otAmount": 3626,
+          "fdAmount": 872.1
+        },
+        {
+          "employeeCode": "AB",
+          "employeeName": "ABHIJIT BORAH",
+          "cpf": "129190",
+          "designation": "EA(P)",
+          "otRate": 604,
+          "otHours": 7,
+          "otAmount": 4228,
+          "fdAmount": 872.1
+        }
       ]
     },
     {
@@ -812,6 +2024,28 @@
       "crewCodes": [
         "HR",
         "UC"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "HR",
+          "employeeName": "HRIDOY RAY",
+          "cpf": "132598",
+          "designation": "Dy. T (FITTING)",
+          "otRate": 537,
+          "otHours": 7,
+          "otAmount": 3759,
+          "fdAmount": 872.1
+        },
+        {
+          "employeeCode": "UC",
+          "employeeName": "UTJJAL CHETIA",
+          "cpf": "140751",
+          "designation": "JMVD(W.O.)",
+          "otRate": 406,
+          "otHours": 7,
+          "otAmount": 2842,
+          "fdAmount": 872.1
+        }
       ]
     },
     {
@@ -830,6 +2064,28 @@
       "crewCodes": [
         "RRK",
         "RD"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "RRK",
+          "employeeName": "RAJEN RAJKONWAR",
+          "cpf": "137500",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 1.5,
+          "otAmount": 637.5,
+          "fdAmount": 534.6
+        },
+        {
+          "employeeCode": "RD",
+          "employeeName": "RAJESH DAS",
+          "cpf": "138139",
+          "designation": "JT(FITTING)",
+          "otRate": 443,
+          "otHours": 1.5,
+          "otAmount": 664.5,
+          "fdAmount": 534.6
+        }
       ]
     },
     {
@@ -850,6 +2106,48 @@
         "SR",
         "RD",
         "UC"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "PPD",
+          "employeeName": "PRATIK PURNA DUTTA",
+          "cpf": "128584",
+          "designation": "DY T (FITTING)",
+          "otRate": 553,
+          "otHours": 2,
+          "otAmount": 1106,
+          "fdAmount": 562.5
+        },
+        {
+          "employeeCode": "SR",
+          "employeeName": "SAHIDUR ROHMAN",
+          "cpf": "137510",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 2,
+          "otAmount": 850,
+          "fdAmount": 562.5
+        },
+        {
+          "employeeCode": "RD",
+          "employeeName": "RAJESH DAS",
+          "cpf": "138139",
+          "designation": "JT(FITTING)",
+          "otRate": 443,
+          "otHours": 2,
+          "otAmount": 886,
+          "fdAmount": 562.5
+        },
+        {
+          "employeeCode": "UC",
+          "employeeName": "UTJJAL CHETIA",
+          "cpf": "140751",
+          "designation": "JMVD(W.O.)",
+          "otRate": 406,
+          "otHours": 2,
+          "otAmount": 812,
+          "fdAmount": 562.5
+        }
       ]
     },
     {
@@ -870,6 +2168,48 @@
         "YA",
         "AB",
         "UC"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "DJB",
+          "employeeName": "DIPJYOTI BORA",
+          "cpf": "128787",
+          "designation": "EA(M)",
+          "otRate": 622,
+          "otHours": 4,
+          "otAmount": 2488,
+          "fdAmount": 703.35
+        },
+        {
+          "employeeCode": "YA",
+          "employeeName": "YUSUF ALI",
+          "cpf": "137508",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 4,
+          "otAmount": 1700,
+          "fdAmount": 703.35
+        },
+        {
+          "employeeCode": "AB",
+          "employeeName": "ABHIJIT BORAH",
+          "cpf": "129190",
+          "designation": "EA(P)",
+          "otRate": 604,
+          "otHours": 4,
+          "otAmount": 2416,
+          "fdAmount": 703.35
+        },
+        {
+          "employeeCode": "UC",
+          "employeeName": "UTJJAL CHETIA",
+          "cpf": "140751",
+          "designation": "JMVD(W.O.)",
+          "otRate": 406,
+          "otHours": 4,
+          "otAmount": 1624,
+          "fdAmount": 703.35
+        }
       ]
     },
     {
@@ -890,6 +2230,48 @@
         "HR",
         "RRK",
         "RD"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "SD",
+          "employeeName": "SUBHASISH DAS",
+          "cpf": "128864",
+          "designation": "MVD(WO)",
+          "otRate": 553,
+          "otHours": 6,
+          "otAmount": 3318,
+          "fdAmount": 815.85
+        },
+        {
+          "employeeCode": "HR",
+          "employeeName": "HRIDOY RAY",
+          "cpf": "132598",
+          "designation": "Dy. T (FITTING)",
+          "otRate": 537,
+          "otHours": 6,
+          "otAmount": 3222,
+          "fdAmount": 815.85
+        },
+        {
+          "employeeCode": "RRK",
+          "employeeName": "RAJEN RAJKONWAR",
+          "cpf": "137500",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 6,
+          "otAmount": 2550,
+          "fdAmount": 815.85
+        },
+        {
+          "employeeCode": "RD",
+          "employeeName": "RAJESH DAS",
+          "cpf": "138139",
+          "designation": "JT(FITTING)",
+          "otRate": 443,
+          "otHours": 6,
+          "otAmount": 2658,
+          "fdAmount": 815.85
+        }
       ]
     },
     {
@@ -910,6 +2292,48 @@
         "DJB",
         "SR",
         "MP"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "PPD",
+          "employeeName": "PRATIK PURNA DUTTA",
+          "cpf": "128584",
+          "designation": "DY T (FITTING)",
+          "otRate": 553,
+          "otHours": 3.5,
+          "otAmount": 1935.5,
+          "fdAmount": 675
+        },
+        {
+          "employeeCode": "DJB",
+          "employeeName": "DIPJYOTI BORA",
+          "cpf": "128787",
+          "designation": "EA(M)",
+          "otRate": 622,
+          "otHours": 3.5,
+          "otAmount": 2177,
+          "fdAmount": 675
+        },
+        {
+          "employeeCode": "SR",
+          "employeeName": "SAHIDUR ROHMAN",
+          "cpf": "137510",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 3.5,
+          "otAmount": 1487.5,
+          "fdAmount": 675
+        },
+        {
+          "employeeCode": "MP",
+          "employeeName": "MANABJYOTI PEGU",
+          "cpf": "128734",
+          "designation": "JMVD(W.O.)",
+          "otRate": 518,
+          "otHours": 3.5,
+          "otAmount": 1813,
+          "fdAmount": 675
+        }
       ]
     },
     {
@@ -927,6 +2351,18 @@
       "isWithinDutyHours": false,
       "crewCodes": [
         "YA"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "YA",
+          "employeeName": "YUSUF ALI",
+          "cpf": "137508",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 1,
+          "otAmount": 425,
+          "fdAmount": 506.25
+        }
       ]
     },
     {
@@ -947,6 +2383,48 @@
         "AB",
         "RD",
         "UC"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "SR",
+          "employeeName": "SAHIDUR ROHMAN",
+          "cpf": "137510",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 1.5,
+          "otAmount": 637.5,
+          "fdAmount": 534.6
+        },
+        {
+          "employeeCode": "AB",
+          "employeeName": "ABHIJIT BORAH",
+          "cpf": "129190",
+          "designation": "EA(P)",
+          "otRate": 604,
+          "otHours": 1.5,
+          "otAmount": 906,
+          "fdAmount": 534.6
+        },
+        {
+          "employeeCode": "RD",
+          "employeeName": "RAJESH DAS",
+          "cpf": "138139",
+          "designation": "JT(FITTING)",
+          "otRate": 443,
+          "otHours": 1.5,
+          "otAmount": 664.5,
+          "fdAmount": 534.6
+        },
+        {
+          "employeeCode": "UC",
+          "employeeName": "UTJJAL CHETIA",
+          "cpf": "140751",
+          "designation": "JMVD(W.O.)",
+          "otRate": 406,
+          "otHours": 1.5,
+          "otAmount": 609,
+          "fdAmount": 534.6
+        }
       ]
     },
     {
@@ -964,6 +2442,18 @@
       "isWithinDutyHours": false,
       "crewCodes": [
         "YA"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "YA",
+          "employeeName": "YUSUF ALI",
+          "cpf": "137508",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 1,
+          "otAmount": 425,
+          "fdAmount": 506.25
+        }
       ]
     },
     {
@@ -981,6 +2471,18 @@
       "isWithinDutyHours": false,
       "crewCodes": [
         "YA"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "YA",
+          "employeeName": "YUSUF ALI",
+          "cpf": "137508",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 3.5,
+          "otAmount": 1487.5,
+          "fdAmount": 675
+        }
       ]
     },
     {
@@ -998,6 +2500,18 @@
       "isWithinDutyHours": false,
       "crewCodes": [
         "SR"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "SR",
+          "employeeName": "SAHIDUR ROHMAN",
+          "cpf": "137510",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 1,
+          "otAmount": 425,
+          "fdAmount": 506.25
+        }
       ]
     },
     {
@@ -1015,6 +2529,18 @@
       "isWithinDutyHours": false,
       "crewCodes": [
         "SR"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "SR",
+          "employeeName": "SAHIDUR ROHMAN",
+          "cpf": "137510",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 1,
+          "otAmount": 425,
+          "fdAmount": 506.25
+        }
       ]
     },
     {
@@ -1035,6 +2561,48 @@
         "HR",
         "MP",
         "AB"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "PPD",
+          "employeeName": "PRATIK PURNA DUTTA",
+          "cpf": "128584",
+          "designation": "DY T (FITTING)",
+          "otRate": 553,
+          "otHours": 1,
+          "otAmount": 553,
+          "fdAmount": 506.25
+        },
+        {
+          "employeeCode": "HR",
+          "employeeName": "HRIDOY RAY",
+          "cpf": "132598",
+          "designation": "Dy. T (FITTING)",
+          "otRate": 537,
+          "otHours": 1,
+          "otAmount": 537,
+          "fdAmount": 506.25
+        },
+        {
+          "employeeCode": "MP",
+          "employeeName": "MANABJYOTI PEGU",
+          "cpf": "128734",
+          "designation": "JMVD(W.O.)",
+          "otRate": 518,
+          "otHours": 1,
+          "otAmount": 518,
+          "fdAmount": 506.25
+        },
+        {
+          "employeeCode": "AB",
+          "employeeName": "ABHIJIT BORAH",
+          "cpf": "129190",
+          "designation": "EA(P)",
+          "otRate": 604,
+          "otHours": 1,
+          "otAmount": 604,
+          "fdAmount": 506.25
+        }
       ]
     },
     {
@@ -1054,6 +2622,38 @@
         "PPD",
         "RRK",
         "AB"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "PPD",
+          "employeeName": "PRATIK PURNA DUTTA",
+          "cpf": "128584",
+          "designation": "DY T (FITTING)",
+          "otRate": 553,
+          "otHours": 1.5,
+          "otAmount": 829.5,
+          "fdAmount": 534.6
+        },
+        {
+          "employeeCode": "RRK",
+          "employeeName": "RAJEN RAJKONWAR",
+          "cpf": "137500",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 1.5,
+          "otAmount": 637.5,
+          "fdAmount": 534.6
+        },
+        {
+          "employeeCode": "AB",
+          "employeeName": "ABHIJIT BORAH",
+          "cpf": "129190",
+          "designation": "EA(P)",
+          "otRate": 604,
+          "otHours": 1.5,
+          "otAmount": 906,
+          "fdAmount": 534.6
+        }
       ]
     },
     {
@@ -1074,6 +2674,48 @@
         "HR",
         "MP",
         "UC"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "SD",
+          "employeeName": "SUBHASISH DAS",
+          "cpf": "128864",
+          "designation": "MVD(WO)",
+          "otRate": 553,
+          "otHours": 2,
+          "otAmount": 1106,
+          "fdAmount": 562.5
+        },
+        {
+          "employeeCode": "HR",
+          "employeeName": "HRIDOY RAY",
+          "cpf": "132598",
+          "designation": "Dy. T (FITTING)",
+          "otRate": 537,
+          "otHours": 2,
+          "otAmount": 1074,
+          "fdAmount": 562.5
+        },
+        {
+          "employeeCode": "MP",
+          "employeeName": "MANABJYOTI PEGU",
+          "cpf": "128734",
+          "designation": "JMVD(W.O.)",
+          "otRate": 518,
+          "otHours": 2,
+          "otAmount": 1036,
+          "fdAmount": 562.5
+        },
+        {
+          "employeeCode": "UC",
+          "employeeName": "UTJJAL CHETIA",
+          "cpf": "140751",
+          "designation": "JMVD(W.O.)",
+          "otRate": 406,
+          "otHours": 2,
+          "otAmount": 812,
+          "fdAmount": 562.5
+        }
       ]
     },
     {
@@ -1091,6 +2733,18 @@
       "isWithinDutyHours": false,
       "crewCodes": [
         "SR"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "SR",
+          "employeeName": "SAHIDUR ROHMAN",
+          "cpf": "137510",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 1,
+          "otAmount": 425,
+          "fdAmount": 506.25
+        }
       ]
     },
     {
@@ -1111,6 +2765,48 @@
         "SR",
         "AB",
         "UC"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "HR",
+          "employeeName": "HRIDOY RAY",
+          "cpf": "132598",
+          "designation": "Dy. T (FITTING)",
+          "otRate": 537,
+          "otHours": 2,
+          "otAmount": 1074,
+          "fdAmount": 562.5
+        },
+        {
+          "employeeCode": "SR",
+          "employeeName": "SAHIDUR ROHMAN",
+          "cpf": "137510",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 2,
+          "otAmount": 850,
+          "fdAmount": 562.5
+        },
+        {
+          "employeeCode": "AB",
+          "employeeName": "ABHIJIT BORAH",
+          "cpf": "129190",
+          "designation": "EA(P)",
+          "otRate": 604,
+          "otHours": 2,
+          "otAmount": 1208,
+          "fdAmount": 562.5
+        },
+        {
+          "employeeCode": "UC",
+          "employeeName": "UTJJAL CHETIA",
+          "cpf": "140751",
+          "designation": "JMVD(W.O.)",
+          "otRate": 406,
+          "otHours": 2,
+          "otAmount": 812,
+          "fdAmount": 562.5
+        }
       ]
     },
     {
@@ -1131,6 +2827,48 @@
         "RRK",
         "RD",
         "UC"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "PPD",
+          "employeeName": "PRATIK PURNA DUTTA",
+          "cpf": "128584",
+          "designation": "DY T (FITTING)",
+          "otRate": 553,
+          "otHours": 1,
+          "otAmount": 553,
+          "fdAmount": 506.25
+        },
+        {
+          "employeeCode": "RRK",
+          "employeeName": "RAJEN RAJKONWAR",
+          "cpf": "137500",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 1,
+          "otAmount": 425,
+          "fdAmount": 506.25
+        },
+        {
+          "employeeCode": "RD",
+          "employeeName": "RAJESH DAS",
+          "cpf": "138139",
+          "designation": "JT(FITTING)",
+          "otRate": 443,
+          "otHours": 1,
+          "otAmount": 443,
+          "fdAmount": 506.25
+        },
+        {
+          "employeeCode": "UC",
+          "employeeName": "UTJJAL CHETIA",
+          "cpf": "140751",
+          "designation": "JMVD(W.O.)",
+          "otRate": 406,
+          "otHours": 1,
+          "otAmount": 406,
+          "fdAmount": 506.25
+        }
       ]
     },
     {
@@ -1151,6 +2889,48 @@
         "HR",
         "RRK",
         "MP"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "DJB",
+          "employeeName": "DIPJYOTI BORA",
+          "cpf": "128787",
+          "designation": "EA(M)",
+          "otRate": 622,
+          "otHours": 5,
+          "otAmount": 3110,
+          "fdAmount": 759.6
+        },
+        {
+          "employeeCode": "HR",
+          "employeeName": "HRIDOY RAY",
+          "cpf": "132598",
+          "designation": "Dy. T (FITTING)",
+          "otRate": 537,
+          "otHours": 5,
+          "otAmount": 2685,
+          "fdAmount": 759.6
+        },
+        {
+          "employeeCode": "RRK",
+          "employeeName": "RAJEN RAJKONWAR",
+          "cpf": "137500",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 5,
+          "otAmount": 2125,
+          "fdAmount": 759.6
+        },
+        {
+          "employeeCode": "MP",
+          "employeeName": "MANABJYOTI PEGU",
+          "cpf": "128734",
+          "designation": "JMVD(W.O.)",
+          "otRate": 518,
+          "otHours": 5,
+          "otAmount": 2590,
+          "fdAmount": 759.6
+        }
       ]
     },
     {
@@ -1171,6 +2951,48 @@
         "AB",
         "RD",
         "UC"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "YA",
+          "employeeName": "YUSUF ALI",
+          "cpf": "137508",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 1.5,
+          "otAmount": 637.5,
+          "fdAmount": 534.6
+        },
+        {
+          "employeeCode": "AB",
+          "employeeName": "ABHIJIT BORAH",
+          "cpf": "129190",
+          "designation": "EA(P)",
+          "otRate": 604,
+          "otHours": 1.5,
+          "otAmount": 906,
+          "fdAmount": 534.6
+        },
+        {
+          "employeeCode": "RD",
+          "employeeName": "RAJESH DAS",
+          "cpf": "138139",
+          "designation": "JT(FITTING)",
+          "otRate": 443,
+          "otHours": 1.5,
+          "otAmount": 664.5,
+          "fdAmount": 534.6
+        },
+        {
+          "employeeCode": "UC",
+          "employeeName": "UTJJAL CHETIA",
+          "cpf": "140751",
+          "designation": "JMVD(W.O.)",
+          "otRate": 406,
+          "otHours": 1.5,
+          "otAmount": 609,
+          "fdAmount": 534.6
+        }
       ]
     },
     {
@@ -1188,6 +3010,18 @@
       "isWithinDutyHours": false,
       "crewCodes": [
         "YA"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "YA",
+          "employeeName": "YUSUF ALI",
+          "cpf": "137508",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 1,
+          "otAmount": 425,
+          "fdAmount": 506.25
+        }
       ]
     },
     {
@@ -1208,6 +3042,48 @@
         "HR",
         "YA",
         "UC"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "PPD",
+          "employeeName": "PRATIK PURNA DUTTA",
+          "cpf": "128584",
+          "designation": "DY T (FITTING)",
+          "otRate": 553,
+          "otHours": 2.5,
+          "otAmount": 1382.5,
+          "fdAmount": 590.85
+        },
+        {
+          "employeeCode": "HR",
+          "employeeName": "HRIDOY RAY",
+          "cpf": "132598",
+          "designation": "Dy. T (FITTING)",
+          "otRate": 537,
+          "otHours": 2.5,
+          "otAmount": 1342.5,
+          "fdAmount": 590.85
+        },
+        {
+          "employeeCode": "YA",
+          "employeeName": "YUSUF ALI",
+          "cpf": "137508",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 2.5,
+          "otAmount": 1062.5,
+          "fdAmount": 590.85
+        },
+        {
+          "employeeCode": "UC",
+          "employeeName": "UTJJAL CHETIA",
+          "cpf": "140751",
+          "designation": "JMVD(W.O.)",
+          "otRate": 406,
+          "otHours": 2.5,
+          "otAmount": 1015,
+          "fdAmount": 590.85
+        }
       ]
     },
     {
@@ -1228,6 +3104,48 @@
         "SR",
         "MP",
         "RD"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "DJB",
+          "employeeName": "DIPJYOTI BORA",
+          "cpf": "128787",
+          "designation": "EA(M)",
+          "otRate": 622,
+          "otHours": 3.5,
+          "otAmount": 2177,
+          "fdAmount": 675
+        },
+        {
+          "employeeCode": "SR",
+          "employeeName": "SAHIDUR ROHMAN",
+          "cpf": "137510",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 3.5,
+          "otAmount": 1487.5,
+          "fdAmount": 675
+        },
+        {
+          "employeeCode": "MP",
+          "employeeName": "MANABJYOTI PEGU",
+          "cpf": "128734",
+          "designation": "JMVD(W.O.)",
+          "otRate": 518,
+          "otHours": 3.5,
+          "otAmount": 1813,
+          "fdAmount": 675
+        },
+        {
+          "employeeCode": "RD",
+          "employeeName": "RAJESH DAS",
+          "cpf": "138139",
+          "designation": "JT(FITTING)",
+          "otRate": 443,
+          "otHours": 3.5,
+          "otAmount": 1550.5,
+          "fdAmount": 675
+        }
       ]
     },
     {
@@ -1245,6 +3163,18 @@
       "isWithinDutyHours": false,
       "crewCodes": [
         "RRK"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "RRK",
+          "employeeName": "RAJEN RAJKONWAR",
+          "cpf": "137500",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 1.5,
+          "otAmount": 637.5,
+          "fdAmount": 534.6
+        }
       ]
     },
     {
@@ -1265,6 +3195,48 @@
         "SD",
         "RRK",
         "RD"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "DJB",
+          "employeeName": "DIPJYOTI BORA",
+          "cpf": "128787",
+          "designation": "EA(M)",
+          "otRate": 622,
+          "otHours": 2.5,
+          "otAmount": 1555,
+          "fdAmount": 590.85
+        },
+        {
+          "employeeCode": "SD",
+          "employeeName": "SUBHASISH DAS",
+          "cpf": "128864",
+          "designation": "MVD(WO)",
+          "otRate": 553,
+          "otHours": 2.5,
+          "otAmount": 1382.5,
+          "fdAmount": 590.85
+        },
+        {
+          "employeeCode": "RRK",
+          "employeeName": "RAJEN RAJKONWAR",
+          "cpf": "137500",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 2.5,
+          "otAmount": 1062.5,
+          "fdAmount": 590.85
+        },
+        {
+          "employeeCode": "RD",
+          "employeeName": "RAJESH DAS",
+          "cpf": "138139",
+          "designation": "JT(FITTING)",
+          "otRate": 443,
+          "otHours": 2.5,
+          "otAmount": 1107.5,
+          "fdAmount": 590.85
+        }
       ]
     },
     {
@@ -1283,6 +3255,28 @@
       "crewCodes": [
         "YA",
         "UC"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "YA",
+          "employeeName": "YUSUF ALI",
+          "cpf": "137508",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 1.5,
+          "otAmount": 637.5,
+          "fdAmount": 534.6
+        },
+        {
+          "employeeCode": "UC",
+          "employeeName": "UTJJAL CHETIA",
+          "cpf": "140751",
+          "designation": "JMVD(W.O.)",
+          "otRate": 406,
+          "otHours": 1.5,
+          "otAmount": 609,
+          "fdAmount": 534.6
+        }
       ]
     },
     {
@@ -1304,6 +3298,58 @@
         "RRK",
         "MP",
         "AB"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "DJB",
+          "employeeName": "DIPJYOTI BORA",
+          "cpf": "128787",
+          "designation": "EA(M)",
+          "otRate": 622,
+          "otHours": 8,
+          "otAmount": 4976,
+          "fdAmount": 927
+        },
+        {
+          "employeeCode": "HR",
+          "employeeName": "HRIDOY RAY",
+          "cpf": "132598",
+          "designation": "Dy. T (FITTING)",
+          "otRate": 537,
+          "otHours": 8,
+          "otAmount": 4296,
+          "fdAmount": 927
+        },
+        {
+          "employeeCode": "RRK",
+          "employeeName": "RAJEN RAJKONWAR",
+          "cpf": "137500",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 8,
+          "otAmount": 3400,
+          "fdAmount": 927
+        },
+        {
+          "employeeCode": "MP",
+          "employeeName": "MANABJYOTI PEGU",
+          "cpf": "128734",
+          "designation": "JMVD(W.O.)",
+          "otRate": 518,
+          "otHours": 8,
+          "otAmount": 4144,
+          "fdAmount": 927
+        },
+        {
+          "employeeCode": "AB",
+          "employeeName": "ABHIJIT BORAH",
+          "cpf": "129190",
+          "designation": "EA(P)",
+          "otRate": 604,
+          "otHours": 8,
+          "otAmount": 4832,
+          "fdAmount": 927
+        }
       ]
     },
     {
@@ -1324,8 +3370,50 @@
         "SD",
         "YA",
         "AB"
+      ],
+      "memberAllocations": [
+        {
+          "employeeCode": "PPD",
+          "employeeName": "PRATIK PURNA DUTTA",
+          "cpf": "128584",
+          "designation": "DY T (FITTING)",
+          "otRate": 553,
+          "otHours": 8,
+          "otAmount": 4424,
+          "fdAmount": 506.25
+        },
+        {
+          "employeeCode": "SD",
+          "employeeName": "SUBHASISH DAS",
+          "cpf": "128864",
+          "designation": "MVD(WO)",
+          "otRate": 553,
+          "otHours": 8,
+          "otAmount": 4424,
+          "fdAmount": 506.25
+        },
+        {
+          "employeeCode": "YA",
+          "employeeName": "YUSUF ALI",
+          "cpf": "137508",
+          "designation": "JR KHALASHI",
+          "otRate": 425,
+          "otHours": 8,
+          "otAmount": 3400,
+          "fdAmount": 506.25
+        },
+        {
+          "employeeCode": "AB",
+          "employeeName": "ABHIJIT BORAH",
+          "cpf": "129190",
+          "designation": "EA(P)",
+          "otRate": 604,
+          "otHours": 8,
+          "otAmount": 4832,
+          "fdAmount": 506.25
+        }
       ]
     }
   ],
-  "lastUpdated": "2026-09-24T15:23:53.076Z"
+  "lastUpdated": "2026-10-11T15:44:36.023Z"
 }

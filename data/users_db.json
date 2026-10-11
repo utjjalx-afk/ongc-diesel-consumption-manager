@@ -2,12 +2,6 @@
   "users": [
     {
       "userId": "CPF-140751",
-      "password": "CPF-140751",
-      "altPasswords": [
-        "140751",
-        "ongc@123",
-        "admin123"
-      ],
       "name": "UTJJAL CHETIA",
       "role": "Reservoir Winch Logistics Officer (Assam Asset)",
       "initials": "UC",
@@ -18,15 +12,11 @@
       "status": "active",
       "registeredAt": "2024-01-01T00:00:00.000Z",
       "registeredBy": "SYSTEM",
-      "lastLogin": "2026-09-24T15:05:51.433Z"
+      "lastLogin": "2026-10-11T18:01:41.962Z",
+      "passwordHash": "scrypt:353db30e92c371c30f049320760023e1:5b5bf1b5adf47be545cbabe9fa048cfcc9df3edab3b9a0333b15fa85102ce7f1a812b65894ab8a0769b10a6aba2ddb8fcbd0e5bbc0da40a539286085fbef7972"
     },
     {
       "userId": "admin",
-      "password": "ongc@123",
-      "altPasswords": [
-        "admin123",
-        "CPF-140751"
-      ],
       "name": "Operations Admin",
       "role": "Logistics Operations Administrator",
       "initials": "OA",
@@ -36,10 +26,192 @@
       "isAdmin": true,
       "status": "active",
       "registeredAt": "2024-01-01T00:00:00.000Z",
-      "registeredBy": "SYSTEM"
+      "registeredBy": "SYSTEM",
+      "passwordHash": "scrypt:2d439885d30f88fab85209dafd2d4f77:abe32adf707ad7f0ce923f36ca3cd88319f9d426f6d5d1e01771c68d88d52d27efbe69a015312d0c47c6c085b21779e44982966c5d011aa62e56a40435c14cf6",
+      "lastLogin": "2026-10-10T08:26:50.465Z"
     }
   ],
   "auditLog": [
+    {
+      "id": "audit_1791741701962_444",
+      "timestamp": "2026-10-11T18:01:41.962Z",
+      "action": "LOGIN_SUCCESS",
+      "userId": "CPF-140751",
+      "details": {
+        "name": "UTJJAL CHETIA",
+        "ip": "::1"
+      }
+    },
+    {
+      "id": "audit_1791741077021_140",
+      "timestamp": "2026-10-11T17:51:17.021Z",
+      "action": "LOGIN_SUCCESS",
+      "userId": "CPF-140751",
+      "details": {
+        "name": "UTJJAL CHETIA",
+        "ip": "::1"
+      }
+    },
+    {
+      "id": "audit_1791740858161_534",
+      "timestamp": "2026-10-11T17:47:38.161Z",
+      "action": "LOGIN_SUCCESS",
+      "userId": "CPF-140751",
+      "details": {
+        "name": "UTJJAL CHETIA",
+        "ip": "::1"
+      }
+    },
+    {
+      "id": "audit_1791740359188_703",
+      "timestamp": "2026-10-11T17:39:19.188Z",
+      "action": "LOGIN_SUCCESS",
+      "userId": "CPF-140751",
+      "details": {
+        "name": "UTJJAL CHETIA",
+        "ip": "::1"
+      }
+    },
+    {
+      "id": "audit_1791736541224_819",
+      "timestamp": "2026-10-11T16:35:41.224Z",
+      "action": "LOGIN_SUCCESS",
+      "userId": "CPF-140751",
+      "details": {
+        "name": "UTJJAL CHETIA",
+        "ip": "::1"
+      }
+    },
+    {
+      "id": "audit_1791733902270_509",
+      "timestamp": "2026-10-11T15:51:42.270Z",
+      "action": "LOGIN_FAILED",
+      "userId": "CPF-140751",
+      "details": {
+        "reason": "Wrong password",
+        "ip": "::1"
+      }
+    },
+    {
+      "id": "audit_1791733769565_52",
+      "timestamp": "2026-10-11T15:49:29.565Z",
+      "action": "LOGIN_FAILED",
+      "userId": "admin",
+      "details": {
+        "reason": "Wrong password",
+        "ip": "::1"
+      }
+    },
+    {
+      "id": "audit_1791733697044_32",
+      "timestamp": "2026-10-11T15:48:17.044Z",
+      "action": "LOGIN_FAILED",
+      "userId": "admin",
+      "details": {
+        "reason": "Wrong password",
+        "ip": "::1"
+      }
+    },
+    {
+      "id": "audit_1791733635016_299",
+      "timestamp": "2026-10-11T15:47:15.016Z",
+      "action": "LOGIN_FAILED",
+      "userId": "admin",
+      "details": {
+        "reason": "Wrong password",
+        "ip": "::1"
+      }
+    },
+    {
+      "id": "audit_1791733558480_623",
+      "timestamp": "2026-10-11T15:45:58.480Z",
+      "action": "LOGIN_FAILED",
+      "userId": "CPF-140751",
+      "details": {
+        "reason": "Wrong password",
+        "ip": "::1"
+      }
+    },
+    {
+      "id": "audit_1791732739230_542",
+      "timestamp": "2026-10-11T15:32:19.230Z",
+      "action": "LOGIN_SUCCESS",
+      "userId": "CPF-140751",
+      "details": {
+        "name": "UTJJAL CHETIA",
+        "ip": "::1"
+      }
+    },
+    {
+      "id": "audit_1791622190450_114",
+      "timestamp": "2026-10-10T08:49:50.450Z",
+      "action": "LOGIN_SUCCESS",
+      "userId": "CPF-140751",
+      "details": {
+        "name": "UTJJAL CHETIA",
+        "ip": "::1"
+      }
+    },
+    {
+      "id": "audit_1791620893113_279",
+      "timestamp": "2026-10-10T08:28:13.113Z",
+      "action": "LOGIN_SUCCESS",
+      "userId": "CPF-140751",
+      "details": {
+        "name": "UTJJAL CHETIA",
+        "ip": "::1"
+      }
+    },
+    {
+      "id": "audit_1791620810465_944",
+      "timestamp": "2026-10-10T08:26:50.465Z",
+      "action": "LOGIN_SUCCESS",
+      "userId": "admin",
+      "details": {
+        "name": "Operations Admin",
+        "ip": "::1"
+      }
+    },
+    {
+      "id": "audit_1791620804528_64",
+      "timestamp": "2026-10-10T08:26:44.528Z",
+      "action": "LOGIN_SUCCESS",
+      "userId": "CPF-140751",
+      "details": {
+        "name": "UTJJAL CHETIA",
+        "ip": "::1"
+      }
+    },
+    {
+      "id": "audit_1791616866587_53",
+      "timestamp": "2026-10-10T07:21:06.587Z",
+      "action": "LOGIN_FAILED",
+      "userId": "CPF-140751",
+      "details": {
+        "reason": "Wrong password",
+        "ip": "::1"
+      }
+    },
+    {
+      "id": "audit_1791616723860_154",
+      "timestamp": "2026-10-10T07:18:43.860Z",
+      "action": "LOGIN_FAILED",
+      "userId": "CPF-140751",
+      "details": {
+        "reason": "Wrong password",
+        "ip": "::1"
+      }
+    },
+    {
+      "id": "audit_1791616577857_905",
+      "timestamp": "2026-10-10T07:16:17.857Z",
+      "action": "LOGIN_FAILED",
+      "userId": "CPF-140751",
+      "details": {
+        "reason": "Wrong password",
+        "ip": "::1"
+      }
+    },
     {
       "id": "audit_1790263433085_822",
       "timestamp": "2026-09-24T15:23:53.085Z",

@@ -24,11 +24,12 @@ export function calculateOtRate(basicPay, da) {
  * Parse time string (e.g. "08:30", "8:30", "18:00", "00:00") into minutes from midnight
  */
 export function timeToMinutes(tStr) {
-  if (!tStr) return 0;
+  if (!tStr) throw new Error('Departure and arrival times are required.');
   if (tStr instanceof Date) {
     return tStr.getUTCHours() * 60 + tStr.getUTCMinutes();
   }
   const clean = String(tStr).trim();
+  if (!/^([01]?\d|2[0-3]):[0-5]\d$/.test(clean)) throw new Error('Time must be a valid HH:mm value.');
   const parts = clean.split(':');
   if (parts.length < 2) return 0;
   const h = parseInt(parts[0], 10) || 0;
@@ -62,7 +63,7 @@ export function calculateDutyAndOt(depTimeStr, arrTimeStr, options = {}) {
   let arrMin = timeToMinutes(arrTimeStr);
 
   // Handle shifts crossing midnight (or next day)
-  if (arrMin <= depMin) {
+  if (arrMin < depMin) {
     arrMin += 1440; // 24 hours in minutes
   }
 
@@ -91,12 +92,12 @@ export function calculateDutyAndOt(depTimeStr, arrTimeStr, options = {}) {
       // Completed within duty hours -> Person gets ONLY FD, NOT OT
       otHours = 0;
     } else {
-      // Early OT (before 08:30)
-      const earlyMin = Math.max(0, normalStart - depMin);
-      // Late OT (after 16:30)
-      const lateMin = Math.max(0, arrMin - normalEnd);
-      
-      rawOt = (earlyMin + lateMin) / 60;
+      let normalMinutes = 0;
+      for (let day = 0; day <= Math.floor(arrMin / 1440); day++) {
+        normalMinutes += Math.max(0, Math.min(arrMin, day * 1440 + normalEnd)
+          - Math.max(depMin, day * 1440 + normalStart));
+      }
+      rawOt = Math.max(0, durationMin - normalMinutes) / 60;
 
       // PSU practice: 30 min rest deduction for extended shifts > 10 hours
       if (durationMin > 600 && rawOt >= 0.5) {
@@ -109,7 +110,8 @@ export function calculateDutyAndOt(depTimeStr, arrTimeStr, options = {}) {
 
   // Allow manual override if provided
   if (options.manualOtHours !== undefined && options.manualOtHours !== null && options.manualOtHours !== '') {
-    otHours = parseFloat(options.manualOtHours) || 0;
+    otHours = Number(options.manualOtHours);
+    if (!Number.isFinite(otHours) || otHours < 0 || otHours > dutyHours) throw new Error('Manual OT must be between zero and duty hours.');
   }
 
   return {
@@ -129,6 +131,8 @@ export function calculateDutyAndOt(depTimeStr, arrTimeStr, options = {}) {
  */
 export function allocateJobToCrew(jobData, roster) {
   const crewCodes = jobData.crewCodes || [];
+  if (!Array.isArray(crewCodes) || new Set(crewCodes).size !== crewCodes.length) throw new Error('Crew members must be unique.');
+  if (crewCodes.some(code => !Object.hasOwn(roster, code) || roster[code].status === 'retired')) throw new Error('Select active crew members from the roster.');
   const calculations = calculateDutyAndOt(jobData.depTime, jobData.arrTime, {
     isHoliday: jobData.isHoliday,
     manualOtHours: jobData.manualOtHours
@@ -147,7 +151,9 @@ export function allocateJobToCrew(jobData, roster) {
       fdRate: FD_FIXED_RATE
     };
 
-    const otAmount = Math.round(calculations.otHours * emp.otRate * 100) / 100;
+    const savedRate = jobData.memberAllocations?.find(a => a.employeeCode === code)?.otRate;
+    const otRate = savedRate ?? emp.otRate;
+    const otAmount = Math.round(calculations.otHours * otRate * 100) / 100;
     const fdAmount = calculations.fdAmount;
 
     totalOtPayout += otAmount;
@@ -158,7 +164,7 @@ export function allocateJobToCrew(jobData, roster) {
       employeeName: emp.name,
       cpf: emp.cpf,
       designation: emp.designation,
-      otRate: emp.otRate,
+      otRate,
       otHours: calculations.otHours,
       otAmount,
       dutyHours: calculations.dutyHours,
@@ -264,7 +270,9 @@ export function generateMonthlyStatements(jobs, roster, targetMonth) {
     for (const code of crew) {
       if (!roster[code]) continue;
       const emp = roster[code];
-      const otAmt = Math.round((job.otHours || 0) * emp.otRate * 100) / 100;
+      const allocation = job.memberAllocations?.find(a => a.employeeCode === code);
+      const rate = allocation?.otRate ?? emp.otRate;
+      const otAmt = allocation?.otAmount ?? Math.round((job.otHours || 0) * rate * 100) / 100;
       const fdAmt = job.fdAmount || 0;
 
       // Add to OT statement
@@ -275,7 +283,7 @@ export function generateMonthlyStatements(jobs, roster, targetMonth) {
         arrTime: job.arrTime,
         dutyHours: job.dutyHours,
         otHours: job.otHours,
-        otRate: emp.otRate,
+        otRate: rate,
         otAmount: otAmt,
         location: job.location,
         vehicle: job.vehicle,
@@ -427,7 +435,9 @@ export function generateYearlyStatements(jobs, roster, targetYear = '2025') {
       if (!roster[code]) continue;
       mObj.crewParticipated.add(code);
       const emp = roster[code];
-      const otAmt = Math.round((job.otHours || 0) * emp.otRate * 100) / 100;
+      const allocation = job.memberAllocations?.find(a => a.employeeCode === code);
+      const rate = allocation?.otRate ?? emp.otRate;
+      const otAmt = allocation?.otAmount ?? Math.round((job.otHours || 0) * rate * 100) / 100;
       const fdAmt = job.fdAmount || 0;
 
       mObj.totalOtAmount += otAmt;

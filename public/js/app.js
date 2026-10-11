@@ -50,11 +50,15 @@ const elements = {
   rememberMe: document.getElementById('rememberMe'),
   btnSubmitLogin: document.getElementById('btnSubmitLogin'),
   loginAlertBox: document.getElementById('loginAlertBox'),
-  hintUserId: document.getElementById('hintUserId'),
-  hintPassword: document.getElementById('hintPassword'),
   btnSignOut: document.getElementById('btnSignOut'),
+  btnGuestWellSites: document.getElementById('btnGuestWellSites'),
+  btnGuestOt: document.getElementById('btnGuestOt'),
+  btnHeaderSignIn: document.getElementById('btnHeaderSignIn'),
+  guestModeHeader: document.getElementById('guestModeHeader'),
 
   // Brand & Actions
+  brandLogoContainer: document.getElementById('brandLogoContainer'),
+  brandText: document.getElementById('brandText'),
   btnLoadDefault: document.getElementById('btnLoadDefault'),
   fileInput: document.getElementById('fileInput'),
   btnExportExcel: document.getElementById('btnExportExcel'),
@@ -288,6 +292,10 @@ const elements = {
 
   // Maintenance Tables & Filters
   maintenanceDocMatrixBody: document.getElementById('maintenanceDocMatrixBody'),
+  homeMaintenanceDocMatrixBody: document.getElementById('homeMaintenanceDocMatrixBody'),
+  homeDocAlertBanner: document.getElementById('homeDocAlertBanner'),
+  homeDocAlertTitle: document.getElementById('homeDocAlertTitle'),
+  homeDocAlertDesc: document.getElementById('homeDocAlertDesc'),
   maintRecordsCountText: document.getElementById('maintRecordsCountText'),
   maintenanceSearchInput: document.getElementById('maintenanceSearchInput'),
   maintenanceVehicleFilterBar: document.getElementById('maintenanceVehicleFilterBar'),
@@ -524,39 +532,153 @@ function showToast(message, type = 'info') {
 }
 
 // ============================================================
-// ENTERPRISE AUTHENTICATION SYSTEM & SESSION CONTROLLER
 // ============================================================
-function checkAuthStatus() {
-  if (!elements.loginScreen) return;
-
-  const stored = localStorage.getItem('ongc_auth_user') || sessionStorage.getItem('ongc_auth_user');
-  if (stored) {
-    try {
-      const user = JSON.parse(stored);
-      if (user && user.userId) {
-        appState.isAuthenticated = true;
-        appState.currentUser = user;
-        applyAuthenticatedUser(user);
-        elements.loginScreen.classList.add('hidden');
-        return;
-      }
-    } catch (e) {
-      console.warn('Failed to parse stored auth user:', e);
+// ENTERPRISE AUTHENTICATION & GUEST ACCESS SYSTEM
+// ============================================================
+function updateExportButtonsAuth(isAuthed) {
+  const exportBtns = [
+    elements.btnHeaderExportOtPdf,
+    elements.btnHeaderExportFdePdf,
+    elements.btnExportOtPdf,
+    elements.btnExportOtExcel,
+    elements.btnExportFdePdf,
+    elements.btnExportFdeExcel
+  ];
+  exportBtns.forEach(btn => {
+    if (!btn) return;
+    if (isAuthed) {
+      btn.classList.remove('disabled');
+      btn.removeAttribute('aria-disabled');
+      btn.removeAttribute('disabled');
+      btn.title = btn.dataset.defaultTitle || btn.title.replace(/🔒 Sign in with CPF credentials to export\s*/i, 'Export ');
+    } else {
+      btn.classList.add('disabled');
+      btn.setAttribute('aria-disabled', 'true');
+      btn.title = '🔒 Sign in with CPF credentials to export statement';
     }
-  }
+  });
+}
+window.updateExportButtonsAuth = updateExportButtonsAuth;
 
-  // If not authenticated, ensure login screen is visible
+function enterGuestMode(targetTab = null) {
+  appState.isGuest = true;
+  appState.isAuthenticated = false;
+  document.body.classList.remove('is-authenticated');
+  document.body.classList.add('is-guest');
+  updateExportButtonsAuth(false);
+  if (elements.loginScreen) elements.loginScreen.classList.add('hidden');
+
+  const guestHeader = document.getElementById('guestModeHeader');
+  if (guestHeader) guestHeader.style.display = 'inline-flex';
+  if (elements.shellUserAvatar) {
+    elements.shellUserAvatar.textContent = 'GUEST';
+    elements.shellUserAvatar.title = 'Public Operations View (Read-Only)';
+    elements.shellUserAvatar.style.display = 'none';
+  }
+  if (elements.btnSignOut) elements.btnSignOut.style.display = 'none';
+  const adminNavBtn = document.getElementById('btnHeaderAdminPanel');
+  if (adminNavBtn) adminNavBtn.style.display = 'none';
+
+  switchMainTab(targetTab);
+  if (targetTab === 'wellSites') {
+    renderWellSiteCharts();
+  } else if (targetTab === 'otFde') {
+    renderOtCharts();
+  }
+  showToast('Viewing ONGC public operations in Guest Mode.', 'info');
+}
+window.enterGuestMode = enterGuestMode;
+
+function openSignInModal() {
+  if (elements.loginScreen) {
+    elements.loginScreen.classList.remove('hidden');
+    switchAuthTab('login');
+  }
+}
+window.openSignInModal = openSignInModal;
+
+function closeLoginModal() {
+  if (elements.loginScreen) {
+    elements.loginScreen.classList.add('hidden');
+    clearLoginAlert();
+  }
+}
+window.closeLoginModal = closeLoginModal;
+
+function handleCardNav(tabName) {
+  if (appState.isAuthenticated) {
+    if (['logJob', 'roster', 'otStatement', 'fdeStatement', 'allJobs'].includes(tabName)) {
+      navigateToOtSection(tabName);
+    } else {
+      switchMainTab(tabName);
+    }
+  } else {
+    openSignInModal();
+    const moduleName = tabName === 'vehicleLog' ? 'Vehicle HSD Logs' :
+      tabName === 'maintenance' ? 'Fleet Maintenance' :
+      tabName === 'settings' ? 'Settings' :
+      tabName === 'logJob' ? 'Daily Single Entry' :
+      tabName === 'roster' ? 'Crew Editor & Pay Scales' :
+      tabName === 'otStatement' ? 'OT Statement' :
+      tabName === 'fdeStatement' ? 'FDE Statement' :
+      tabName === 'allJobs' ? 'All Field Jobs' : tabName;
+    showLoginAlert('Please sign in with CPF credentials to access ' + moduleName + '.');
+  }
+}
+window.handleCardNav = handleCardNav;
+
+async function checkAuthStatus() {
+  if (!elements.loginScreen) return false;
+  try {
+    const response = await fetch('/api/auth/me');
+    if (response.ok) {
+      const data = await response.json();
+      if (data.user) {
+        appState.isAuthenticated = true;
+        appState.currentUser = data.user;
+        appState.isGuest = false;
+        applyAuthenticatedUser(data.user);
+        elements.loginScreen.classList.add('hidden');
+        const guestHeader = document.getElementById('guestModeHeader');
+        if (guestHeader) guestHeader.style.display = 'none';
+        if (elements.btnSignOut) elements.btnSignOut.style.display = 'inline-flex';
+        return true;
+      }
+    }
+  } catch (error) { console.warn('Session check failed:', error.message); }
+  localStorage.removeItem('ongc_auth_user');
+  localStorage.removeItem('ongc_current_user');
+  sessionStorage.removeItem('ongc_auth_user');
   appState.isAuthenticated = false;
   appState.currentUser = null;
-  elements.loginScreen.classList.remove('hidden');
+  document.body.classList.remove('is-authenticated');
+  document.body.classList.add('is-guest');
+  updateExportButtonsAuth(false);
+  // Keep login screen hidden by default on home portal load - do not force direct login
+  if (elements.loginScreen) elements.loginScreen.classList.add('hidden');
+  const guestHeader = document.getElementById('guestModeHeader');
+  if (guestHeader) guestHeader.style.display = 'inline-flex';
+  if (elements.shellUserAvatar) elements.shellUserAvatar.style.display = 'none';
+  if (elements.btnSignOut) elements.btnSignOut.style.display = 'none';
+  return false;
+}
+
+async function refreshPortalData() {
+  await Promise.all([fetchCurrentData(), fetchWellSites(), fetchMaintenanceData(), fetchOtFdeData()]);
 }
 
 function applyAuthenticatedUser(user) {
+  document.body.classList.add('is-authenticated');
+  document.body.classList.remove('is-guest');
+  updateExportButtonsAuth(true);
   if (elements.shellUserAvatar) {
+    elements.shellUserAvatar.style.display = 'inline-flex';
     elements.shellUserAvatar.textContent = user.initials || 'UC';
     elements.shellUserAvatar.title = `${user.name} (${user.role || 'ONGC Logistics'})`;
   }
-  // Sync to local storage for Admin Control Center access
+  const guestHeader = document.getElementById('guestModeHeader');
+  if (guestHeader) guestHeader.style.display = 'none';
+  if (elements.btnSignOut) elements.btnSignOut.style.display = 'inline-flex';
   if (user) {
     localStorage.setItem('ongc_current_user', JSON.stringify(user));
   }
@@ -564,6 +686,25 @@ function applyAuthenticatedUser(user) {
   if (adminNavBtn) {
     adminNavBtn.style.display = (user && user.isAdmin) ? 'inline-flex' : 'none';
   }
+  // Render main page statutory document validity matrix immediately on authentication
+  if (appState.maintenanceData?.vehicles?.length) {
+    renderDocumentMatrix();
+  }
+}
+
+// Guest access click handlers
+if (elements.btnGuestWellSites) {
+  elements.btnGuestWellSites.addEventListener('click', (e) => {
+    window.location.href = 'well-sites.html';
+  });
+}
+if (elements.btnGuestOt) {
+  elements.btnGuestOt.addEventListener('click', (e) => {
+    window.location.href = 'ot-charts.html';
+  });
+}
+if (elements.btnHeaderSignIn) {
+  elements.btnHeaderSignIn.addEventListener('click', () => openSignInModal());
 }
 
 // Form submit login handler
@@ -571,14 +712,13 @@ if (elements.loginForm) {
   elements.loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const userId = elements.loginUserId.value.trim();
-    const password = elements.loginPassword.value.trim();
+    const password = elements.loginPassword.value;
 
     if (!userId || !password) {
       showLoginAlert('Please enter both User ID and Password.');
       return;
     }
 
-    // Disable submit button while logging in
     if (elements.btnSubmitLogin) {
       elements.btnSubmitLogin.disabled = true;
       elements.btnSubmitLogin.innerHTML = 'Signing In...';
@@ -589,55 +729,33 @@ if (elements.loginForm) {
       const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId, password })
+        body: JSON.stringify({ userId, password, rememberMe: !!elements.rememberMe?.checked })
       });
 
       const data = await res.json();
       if (data.success && data.user) {
         appState.isAuthenticated = true;
         appState.currentUser = data.user;
+        appState.isGuest = false;
 
-        // Remember Me option
         if (elements.rememberMe && elements.rememberMe.checked) {
           localStorage.setItem('ongc_auth_user', JSON.stringify(data.user));
         } else {
           sessionStorage.setItem('ongc_auth_user', JSON.stringify(data.user));
           localStorage.removeItem('ongc_auth_user');
-    localStorage.removeItem('ongc_current_user');
-    const _adminBtn = document.getElementById('btnHeaderAdminPanel');
-    if (_adminBtn) _adminBtn.style.display = 'none';
+          localStorage.removeItem('ongc_current_user');
+          const _adminBtn = document.getElementById('btnHeaderAdminPanel');
+          if (_adminBtn) _adminBtn.style.display = 'none';
         }
 
         applyAuthenticatedUser(data.user);
         elements.loginScreen.classList.add('hidden');
         showToast(data.message || `Welcome back, ${data.user.name}!`, 'success');
+        await refreshPortalData();
       } else {
         showLoginAlert(data.error || 'Authentication failed. Please verify your credentials.');
       }
     } catch (err) {
-      // Fallback local verification in case of offline/network issues
-      const cleanU = userId.trim().toUpperCase();
-      const cleanP = password.trim();
-      const cleanPUpper = cleanP.toUpperCase();
-
-      const isUserMatch = cleanU === 'CPF-140751' || cleanU === '140751' || cleanU === 'CPF140751' || cleanU === 'UTJJAL CHETIA' || cleanU === 'UTJJAL.CHUTIA' || cleanU === 'ADMIN';
-      const isPassMatch = cleanPUpper === 'CPF-140751' || cleanP === '140751' || cleanP === 'ongc@123' || cleanP === 'admin123';
-
-      if (isUserMatch && isPassMatch) {
-        const fallbackUser = {
-          userId: cleanU === 'ADMIN' ? 'admin' : 'CPF-140751',
-          name: cleanU === 'ADMIN' ? 'Operations Admin' : 'UTJJAL CHETIA',
-          role: 'Reservoir Winch Logistics Officer (Assam Asset)',
-          initials: cleanU === 'ADMIN' ? 'OA' : 'UC'
-        };
-        appState.isAuthenticated = true;
-        appState.currentUser = fallbackUser;
-        localStorage.setItem('ongc_auth_user', JSON.stringify(fallbackUser));
-        applyAuthenticatedUser(fallbackUser);
-        elements.loginScreen.classList.add('hidden');
-        showToast(`Welcome back, ${fallbackUser.name}!`, 'success');
-        return;
-      }
       showLoginAlert('Authentication server error: ' + err.message);
     } finally {
       if (elements.btnSubmitLogin) {
@@ -669,24 +787,6 @@ function clearLoginAlert() {
   }
 }
 
-// Quick Autofill Hint Clickers
-if (elements.hintUserId) {
-  elements.hintUserId.addEventListener('click', () => {
-    if (elements.loginUserId) {
-      elements.loginUserId.value = 'CPF-140751';
-      elements.loginUserId.focus();
-    }
-  });
-}
-if (elements.hintPassword) {
-  elements.hintPassword.addEventListener('click', () => {
-    if (elements.loginPassword) {
-      elements.loginPassword.value = 'CPF-140751';
-      elements.loginPassword.focus();
-    }
-  });
-}
-
 // Password toggle eye icon
 if (elements.btnTogglePassword && elements.loginPassword) {
   elements.btnTogglePassword.addEventListener('click', () => {
@@ -702,7 +802,12 @@ if (elements.btnTogglePassword && elements.loginPassword) {
 
 // Sign Out Handler
 if (elements.btnSignOut) {
-  elements.btnSignOut.addEventListener('click', () => {
+  elements.btnSignOut.addEventListener('click', async () => {
+    try {
+      const response = await fetch('/api/auth/logout', { method: 'POST' });
+      if (!response.ok && response.status !== 401) throw new Error('Sign out failed.');
+    } catch (error) { showToast(error.message, 'error'); return; }
+    localStorage.removeItem('ongc_current_user');
     localStorage.removeItem('ongc_auth_user');
     sessionStorage.removeItem('ongc_auth_user');
     appState.isAuthenticated = false;
@@ -710,8 +815,8 @@ if (elements.btnSignOut) {
     clearLoginAlert();
     if (elements.loginUserId) elements.loginUserId.value = '';
     if (elements.loginPassword) elements.loginPassword.value = '';
-    if (elements.loginScreen) elements.loginScreen.classList.remove('hidden');
-    showToast('Signed out of operations portal.', 'info');
+    enterGuestMode(null);
+    showToast('Signed out of operations portal. Switched to public Guest Mode.', 'info');
   });
 }
 
@@ -732,6 +837,9 @@ function applyTheme(themeName) {
   document.documentElement.setAttribute('data-theme', themeName);
   localStorage.setItem('ongc_theme', themeName);
   updateThemePickerUI(themeName);
+  // Redraw active charts to match new palette
+  if (appState.activeMainTab === 'wellSites') renderWellSiteCharts();
+  if (appState.activeMainTab === 'otFde') renderOtCharts();
   // Close panel after selection
   const panel = document.getElementById('themePickerPanel');
   if (panel) panel.classList.remove('open');
@@ -1983,8 +2091,8 @@ function resetScrollToTop() {
   const doScroll = () => {
     try {
       window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-    } catch (e) {
-      window.scrollTo(0, 0);
+    } catch (_) {
+      try { window.scrollTo(0, 0); } catch (__) {}
     }
     if (document.documentElement) document.documentElement.scrollTop = 0;
     if (document.body) document.body.scrollTop = 0;
@@ -1995,15 +2103,26 @@ function resetScrollToTop() {
     const wrapper = document.querySelector('.main-content-wrapper');
     if (wrapper) wrapper.scrollTop = 0;
 
+    const appLayout = document.querySelector('.app-layout');
+    if (appLayout) appLayout.scrollTop = 0;
+
     const viewOtFde = document.getElementById('viewOtFde');
     if (viewOtFde) viewOtFde.scrollTop = 0;
 
     const otHub = document.getElementById('otDashboardHub');
     if (otHub) otHub.scrollTop = 0;
 
-    document.querySelectorAll('.tab-view, .ot-subpage-view').forEach(el => {
-      if (el && el.scrollTop !== undefined) el.scrollTop = 0;
+    document.querySelectorAll('.tab-view, .ot-subpage-view, .ot-subview').forEach(el => {
+      if (el) el.scrollTop = 0;
     });
+
+    const activeSubpage = document.querySelector('.ot-subpage-view.active');
+    if (activeSubpage) {
+      activeSubpage.scrollTop = 0;
+      try {
+        activeSubpage.scrollIntoView({ behavior: 'instant', block: 'start' });
+      } catch (_) {}
+    }
   };
 
   // Immediate synchronous pass
@@ -2012,9 +2131,11 @@ function resetScrollToTop() {
   // Frame paint pass
   requestAnimationFrame(doScroll);
 
-  // Microtask timeouts for dynamic table reflows
-  setTimeout(doScroll, 30);
-  setTimeout(doScroll, 100);
+  // Microtask timeouts for dynamic table reflows and async renders
+  setTimeout(doScroll, 20);
+  setTimeout(doScroll, 60);
+  setTimeout(doScroll, 150);
+  setTimeout(doScroll, 300);
 }
 window.resetScrollToTop = resetScrollToTop;
 
@@ -2055,6 +2176,7 @@ function switchMainTab(tabName) {
   // Trigger renders if opened
   if (tabName === 'wellSites') {
     renderMainWellSiteDirectory();
+    renderWellSiteCharts();
   } else if (tabName === 'settings') {
     renderSettingsClusterTable();
   } else if (tabName === 'vehicleLog') {
@@ -2064,6 +2186,11 @@ function switchMainTab(tabName) {
     renderMaintenanceView();
   } else if (tabName === 'otFde') {
     renderOtFdeView();
+    renderOtCharts();
+  } else if (tabName === null) {
+    if (appState.maintenanceData?.vehicles?.length) {
+      renderDocumentMatrix();
+    }
   }
 
   // Post-render scroll reset pass
@@ -2083,6 +2210,63 @@ function updateHubBadges() {
 }
 
 window.switchMainTab = switchMainTab;
+
+function returnToDashboard(e) {
+  if (e && e.preventDefault) e.preventDefault();
+  closeMobileSidebar();
+  switchMainTab(null);
+  if (typeof openOtPage === 'function') {
+    openOtPage('hub');
+  }
+  try {
+    if (window.location.hash) {
+      history.pushState(null, '', window.location.pathname + window.location.search);
+    }
+  } catch (_) {}
+  resetScrollToTop();
+}
+window.returnToDashboard = returnToDashboard;
+
+if (elements.brandLogoContainer) {
+  elements.brandLogoContainer.addEventListener('click', returnToDashboard);
+  elements.brandLogoContainer.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      returnToDashboard(e);
+    }
+  });
+}
+if (elements.brandText) {
+  elements.brandText.addEventListener('click', returnToDashboard);
+  elements.brandText.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      returnToDashboard(e);
+    }
+  });
+}
+
+function navigateToOtSection(subpageId) {
+  if (['logJob', 'roster', 'otStatement', 'fdeStatement', 'allJobs'].includes(subpageId) && !appState.isAuthenticated) {
+    openSignInModal();
+    const moduleName = subpageId === 'logJob' ? 'Daily Single Entry' :
+      subpageId === 'roster' ? 'Crew Editor & Pay Scales' :
+      subpageId === 'otStatement' ? 'OT Statement' :
+      subpageId === 'fdeStatement' ? 'FDE Statement' :
+      subpageId === 'allJobs' ? 'All Field Jobs' : 'Operations Module';
+    showLoginAlert('Please sign in with CPF credentials to access ' + moduleName + '.');
+    return;
+  }
+  closeMobileSidebar();
+  switchMainTab('otFde');
+  if (subpageId && typeof openOtPage === 'function') {
+    openOtPage(subpageId);
+    try {
+      history.replaceState(null, '', '#' + subpageId);
+    } catch (_) {}
+  }
+}
+window.navigateToOtSection = navigateToOtSection;
 
 // Select a vehicle by Name (e.g. AS-04AC-3120) or ID
 function selectVehicleByNameOrId(nameOrId) {
@@ -2106,7 +2290,10 @@ function toggleSidebar(forceState) {
 
   // On mobile (< 900px), toggle mobile-open class instead
   if (window.innerWidth <= 900) {
+    elements.appSidebar.classList.remove('minimized');
     elements.appSidebar.classList.toggle('mobile-open');
+    document.body.classList.toggle('navigation-open', elements.appSidebar.classList.contains('mobile-open'));
+    syncResponsiveNavigation();
     if (elements.sidebarBackdrop) {
       elements.sidebarBackdrop.classList.toggle('active', elements.appSidebar.classList.contains('mobile-open'));
     }
@@ -2125,6 +2312,8 @@ function toggleSidebar(forceState) {
 function closeMobileSidebar() {
   if (elements.appSidebar && elements.appSidebar.classList.contains('mobile-open')) {
     elements.appSidebar.classList.remove('mobile-open');
+    document.body.classList.remove('navigation-open');
+    elements.btnHeaderSidebarToggle?.setAttribute('aria-expanded', 'false');
     if (elements.sidebarBackdrop) elements.sidebarBackdrop.classList.remove('active');
   }
 }
@@ -2160,16 +2349,25 @@ if (elements.tabBtnWellSites) {
   elements.tabBtnWellSites.addEventListener('click', () => { closeMobileSidebar(); switchMainTab('wellSites'); });
 }
 if (elements.tabBtnVehicleLog) {
-  elements.tabBtnVehicleLog.addEventListener('click', () => { closeMobileSidebar(); switchMainTab('vehicleLog'); });
+  elements.tabBtnVehicleLog.addEventListener('click', () => { closeMobileSidebar(); handleCardNav('vehicleLog'); });
 }
 if (elements.tabBtnMaintenance) {
-  elements.tabBtnMaintenance.addEventListener('click', () => { closeMobileSidebar(); switchMainTab('maintenance'); });
+  elements.tabBtnMaintenance.addEventListener('click', () => { closeMobileSidebar(); handleCardNav('maintenance'); });
 }
 if (elements.tabBtnOtFde) {
   elements.tabBtnOtFde.addEventListener('click', () => { closeMobileSidebar(); switchMainTab('otFde'); });
 }
 if (elements.tabBtnSettings) {
-  elements.tabBtnSettings.addEventListener('click', () => { closeMobileSidebar(); switchMainTab('settings'); });
+  elements.tabBtnSettings.addEventListener('click', () => { closeMobileSidebar(); handleCardNav('settings'); });
+}
+
+// Dismiss Login Modal when clicking backdrop outside card
+if (elements.loginScreen) {
+  elements.loginScreen.addEventListener('click', (e) => {
+    if (e.target === elements.loginScreen) {
+      closeLoginModal();
+    }
+  });
 }
 
 // Shell Search & User Avatar
@@ -2203,6 +2401,371 @@ if (elements.btnGoToSettingsWell) {
 if (elements.btnReturnToWellSites) {
   elements.btnReturnToWellSites.addEventListener('click', () => switchMainTab('wellSites'));
 }
+
+// ============================================================
+// VISUAL ANALYTICS & CHARTS CONTROLLER (WELL SITES & OT/FDE)
+// ============================================================
+let chartWellsByFieldInstance = null;
+let chartTopClustersInstance = null;
+let chartOtMonthlyTrendInstance = null;
+let chartCrewOtHoursInstance = null;
+let chartOtPayoutBreakdownInstance = null;
+
+function getChartColors() {
+  const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark-blue';
+  const isLight = currentTheme === 'light';
+  return {
+    textColor: isLight ? '#475569' : '#cbd5e1',
+    gridColor: isLight ? 'rgba(0, 0, 0, 0.06)' : 'rgba(255, 255, 255, 0.08)',
+    cardBg: isLight ? '#ffffff' : '#1e293b',
+    palette: [
+      '#0284c7', // Sky Blue
+      '#0d5c75', // Deep ONGC Teal
+      '#10b981', // Emerald
+      '#f59e0b', // Amber
+      '#8b5cf6', // Purple
+      '#ec4899', // Pink
+      '#06b6d4', // Cyan
+      '#f97316', // Orange
+      '#6366f1', // Indigo
+      '#14b8a6'  // Teal
+    ]
+  };
+}
+
+function renderWellSiteCharts() {
+  if (typeof Chart === 'undefined') return;
+  const canvasField = document.getElementById('chartWellsByField');
+  const canvasClusters = document.getElementById('chartTopClusters');
+  if (!canvasField || !canvasClusters) return;
+
+  const data = appState.wellSiteData || { fields: [], clusters: [], wells: [] };
+  const clusters = data.clusters || [];
+  const fields = data.fields || [];
+  const colors = getChartColors();
+
+  // 1. Group wells by field
+  const fieldCounts = {};
+  if (fields.length > 0) {
+    fields.forEach(f => {
+      const cnt = (f.clusters || []).reduce((sum, c) => sum + (c.wells ? c.wells.length : 0), 0);
+      fieldCounts[f.fieldName] = cnt;
+    });
+  } else if (clusters.length > 0) {
+    clusters.forEach(c => {
+      const fName = c.field || 'GENERAL';
+      fieldCounts[fName] = (fieldCounts[fName] || 0) + (c.wells ? c.wells.length : 0);
+    });
+  }
+
+  const fieldLabels = Object.keys(fieldCounts);
+  const fieldValues = Object.values(fieldCounts);
+  const totalWellsCount = fieldValues.reduce((a, b) => a + b, 0);
+
+  const totalLbl = document.getElementById('wellFieldChartTotal');
+  if (totalLbl) totalLbl.textContent = `Total: ${totalWellsCount || data.totalWells || 112} Wells`;
+
+  if (chartWellsByFieldInstance) chartWellsByFieldInstance.destroy();
+  chartWellsByFieldInstance = new Chart(canvasField, {
+    type: 'doughnut',
+    data: {
+      labels: fieldLabels,
+      datasets: [{
+        data: fieldValues,
+        backgroundColor: colors.palette.slice(0, fieldLabels.length),
+        borderWidth: 2,
+        borderColor: colors.cardBg,
+        hoverOffset: 6
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'right',
+          labels: {
+            boxWidth: 12,
+            color: colors.textColor,
+            font: { family: 'Inter', size: 11, weight: '600' }
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: function(ctx) {
+              const val = ctx.parsed;
+              const pct = totalWellsCount ? ((val / totalWellsCount) * 100).toFixed(1) : 0;
+              return ` ${ctx.label}: ${val} wells (${pct}%)`;
+            }
+          }
+        }
+      },
+      cutout: '62%'
+    }
+  });
+
+  // 2. Top 10 Clusters by Well Count
+  const sortedClusters = [...clusters].sort((a, b) => (b.wells?.length || 0) - (a.wells?.length || 0)).slice(0, 10);
+  const clusterLabels = sortedClusters.map(c => c.clusterName || 'Cluster');
+  const clusterValues = sortedClusters.map(c => c.wells?.length || 0);
+
+  if (chartTopClustersInstance) chartTopClustersInstance.destroy();
+  chartTopClustersInstance = new Chart(canvasClusters, {
+    type: 'bar',
+    data: {
+      labels: clusterLabels,
+      datasets: [{
+        label: 'Wells Count',
+        data: clusterValues,
+        backgroundColor: 'rgba(2, 132, 199, 0.75)',
+        borderColor: '#0284c7',
+        borderWidth: 1.5,
+        borderRadius: 4
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: {
+          grid: { color: colors.gridColor },
+          ticks: { color: colors.textColor, font: { family: 'Inter', size: 10 }, precision: 0 }
+        },
+        y: {
+          grid: { display: false },
+          ticks: { color: colors.textColor, font: { family: 'Inter', size: 10, weight: '600' } }
+        }
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => ` Wells: ${ctx.parsed.x}`
+          }
+        }
+      }
+    }
+  });
+}
+
+function renderOtCharts() {
+  if (typeof Chart === 'undefined') return;
+  const canvasMonthly = document.getElementById('chartOtMonthlyTrend');
+  const canvasCrew = document.getElementById('chartCrewOtHours');
+  const canvasPayout = document.getElementById('chartOtPayoutBreakdown');
+  if (!canvasMonthly || !canvasCrew || !canvasPayout) return;
+
+  const data = appState.otFdeData || { jobs: [], roster: {} };
+  const jobs = data.jobs || [];
+  const roster = data.roster || {};
+  const colors = getChartColors();
+
+  // 1. Group jobs by Month
+  const monthMap = {};
+  jobs.forEach(j => {
+    const m = j.month || (j.date ? j.date.slice(0, 7) : 'Unknown');
+    if (!monthMap[m]) {
+      monthMap[m] = { otHours: 0, dutyHours: 0, otAmount: 0, fdAmount: 0, jobCount: 0 };
+    }
+    monthMap[m].otHours += (j.otHours || 0);
+    monthMap[m].dutyHours += (j.dutyHours || 0);
+    monthMap[m].otAmount += (j.otAmount || 0);
+    monthMap[m].fdAmount += (j.fdAmount || 0);
+    monthMap[m].jobCount += 1;
+  });
+
+  const sortedMonths = Object.keys(monthMap).sort();
+  const monthLabels = sortedMonths.map(m => {
+    const parts = m.split('-');
+    if (parts.length === 2) {
+      const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      const idx = parseInt(parts[1], 10) - 1;
+      return `${monthNames[idx] || parts[1]} ${parts[0]}`;
+    }
+    return m;
+  });
+  const monthOtHours = sortedMonths.map(m => Math.round(monthMap[m].otHours * 10) / 10);
+  const monthDutyHours = sortedMonths.map(m => Math.round(monthMap[m].dutyHours * 10) / 10);
+
+  if (chartOtMonthlyTrendInstance) chartOtMonthlyTrendInstance.destroy();
+  chartOtMonthlyTrendInstance = new Chart(canvasMonthly, {
+    type: 'bar',
+    data: {
+      labels: monthLabels,
+      datasets: [
+        {
+          label: 'Mines Act OT Hours',
+          data: monthOtHours,
+          backgroundColor: 'rgba(239, 68, 68, 0.8)',
+          borderColor: '#ef4444',
+          borderWidth: 1.5,
+          borderRadius: 4
+        },
+        {
+          label: 'Duty Hours',
+          data: monthDutyHours,
+          backgroundColor: 'rgba(14, 165, 233, 0.4)',
+          borderColor: '#0ea5e9',
+          borderWidth: 1.5,
+          borderRadius: 4
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: {
+          grid: { color: colors.gridColor },
+          ticks: { color: colors.textColor, font: { family: 'Inter', size: 10, weight: '600' } }
+        },
+        y: {
+          grid: { color: colors.gridColor },
+          ticks: { color: colors.textColor, font: { family: 'Inter', size: 10 } }
+        }
+      },
+      plugins: {
+        legend: {
+          position: 'top',
+          labels: {
+            boxWidth: 12,
+            color: colors.textColor,
+            font: { family: 'Inter', size: 11, weight: '600' }
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => ` ${ctx.dataset.label}: ${ctx.parsed.y} hrs`
+          }
+        }
+      }
+    }
+  });
+
+  // 2. Overtime hours per crew member
+  const crewOtMap = {};
+  Object.keys(roster).forEach(code => {
+    crewOtMap[code] = { name: roster[code].name || code, otHours: 0, jobs: 0 };
+  });
+
+  jobs.forEach(j => {
+    (j.memberAllocations || []).forEach(alloc => {
+      const c = alloc.employeeCode;
+      if (!crewOtMap[c]) {
+        crewOtMap[c] = { name: alloc.employeeName || c, otHours: 0, jobs: 0 };
+      }
+      crewOtMap[c].otHours += (alloc.otHours || 0);
+      crewOtMap[c].jobs += 1;
+    });
+  });
+
+  const sortedCrew = Object.entries(crewOtMap)
+    .sort((a, b) => b[1].otHours - a[1].otHours)
+    .slice(0, 10);
+
+  const crewLabels = sortedCrew.map(([code, data]) => {
+    const firstName = data.name.split(' ')[0] || data.name;
+    return `${firstName} (${code})`;
+  });
+  const crewOtValues = sortedCrew.map(([_, data]) => Math.round(data.otHours * 10) / 10);
+
+  if (chartCrewOtHoursInstance) chartCrewOtHoursInstance.destroy();
+  chartCrewOtHoursInstance = new Chart(canvasCrew, {
+    type: 'bar',
+    data: {
+      labels: crewLabels,
+      datasets: [{
+        label: 'OT Hours',
+        data: crewOtValues,
+        backgroundColor: 'rgba(139, 92, 246, 0.75)',
+        borderColor: '#8b5cf6',
+        borderWidth: 1.5,
+        borderRadius: 4
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: {
+          grid: { color: colors.gridColor },
+          ticks: { color: colors.textColor, font: { family: 'Inter', size: 10 } }
+        },
+        y: {
+          grid: { display: false },
+          ticks: { color: colors.textColor, font: { family: 'Inter', size: 10, weight: '600' } }
+        }
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => ` OT: ${ctx.parsed.x} hrs`
+          }
+        }
+      }
+    }
+  });
+
+  // 3. Payout Composition (Total OT vs Total FD)
+  let totalOtAmount = 0;
+  let totalFdAmount = 0;
+  jobs.forEach(j => {
+    (j.memberAllocations || []).forEach(alloc => {
+      totalOtAmount += (alloc.otAmount || 0);
+      totalFdAmount += (alloc.fdAmount || 0);
+    });
+  });
+
+  const grandTotal = totalOtAmount + totalFdAmount;
+  const payoutTotalEl = document.getElementById('otPayoutChartTotal');
+  if (payoutTotalEl) {
+    payoutTotalEl.textContent = `₹${Math.round(grandTotal).toLocaleString('en-IN')}`;
+  }
+
+  if (chartOtPayoutBreakdownInstance) chartOtPayoutBreakdownInstance.destroy();
+  chartOtPayoutBreakdownInstance = new Chart(canvasPayout, {
+    type: 'doughnut',
+    data: {
+      labels: ['Mines Act Overtime (OT)', 'Field Duty Exp (₹450/shift)'],
+      datasets: [{
+        data: [Math.round(totalOtAmount), Math.round(totalFdAmount)],
+        backgroundColor: ['#ef4444', '#0d5c75'],
+        borderWidth: 2,
+        borderColor: colors.cardBg,
+        hoverOffset: 6
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            boxWidth: 12,
+            color: colors.textColor,
+            font: { family: 'Inter', size: 11, weight: '600' }
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: function(ctx) {
+              const val = ctx.parsed;
+              const pct = grandTotal ? ((val / grandTotal) * 100).toFixed(1) : 0;
+              return ` ${ctx.label}: ₹${val.toLocaleString('en-IN')} (${pct}%)`;
+            }
+          }
+        }
+      },
+      cutout: '62%'
+    }
+  });
+}
+window.renderWellSiteCharts = renderWellSiteCharts;
+window.renderOtCharts = renderOtCharts;
 
 // ============================================================
 // TAB 1: MAIN WELL SITES DIRECTORY
@@ -2319,6 +2882,7 @@ function renderMainWellSiteDirectory() {
 
     elements.mainWellClusterGrid.appendChild(card);
   });
+  renderWellSiteCharts();
 }
 
 // Search Well Sites Input on Tab 1
@@ -2734,85 +3298,206 @@ function renderMaintenanceView() {
   renderMaintenanceTable();
 }
 
-// Render Document Validity Matrix Table
-function renderDocumentMatrix() {
-  if (!elements.maintenanceDocMatrixBody) return;
-  elements.maintenanceDocMatrixBody.innerHTML = '';
+// Compute document status with real-time 10-day flashing expiry calculation
+function computeDocStatus(isoDate, fallbackStatusObj) {
+  if (!isoDate || isoDate === 'N/A' || isoDate === 'Not Specified') {
+    return { status: 'na', label: 'Not Specified', daysLeft: null, isExpiring10d: false, isExpired: false };
+  }
+  const cleanIso = typeof isoDate === 'string' ? isoDate.trim() : '';
+  const target = new Date(cleanIso + (cleanIso.includes('T') ? '' : 'T00:00:00'));
+  if (isNaN(target.getTime())) {
+    if (fallbackStatusObj && fallbackStatusObj.status) {
+      const days = typeof fallbackStatusObj.daysLeft === 'number' ? fallbackStatusObj.daysLeft : null;
+      return {
+        ...fallbackStatusObj,
+        daysLeft: days,
+        isExpiring10d: days !== null && days <= 10 && days >= 0,
+        isExpired: fallbackStatusObj.status === 'expired' || (days !== null && days < 0)
+      };
+    }
+    return { status: 'na', label: 'Not Specified', daysLeft: null, isExpiring10d: false, isExpired: false };
+  }
 
-  const vehicles = appState.maintenanceData.vehicles || [];
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const targetDay = new Date(target.getFullYear(), target.getMonth(), target.getDate());
+  const diffMs = targetDay.getTime() - today.getTime();
+  const daysLeft = Math.round(diffMs / (1000 * 60 * 60 * 24));
+
+  if (daysLeft < 0) {
+    return {
+      status: 'expired',
+      label: `Expired (${Math.abs(daysLeft)}d ago)`,
+      daysLeft,
+      isExpiring10d: false,
+      isExpired: true
+    };
+  } else if (daysLeft <= 10) {
+    return {
+      status: 'expiring_soon',
+      label: daysLeft === 0 ? '⚠️ Expiring Today!' : (daysLeft === 1 ? '⚡ Due in 1 Day!' : `⚡ Due in ${daysLeft} Days!`),
+      daysLeft,
+      isExpiring10d: true,
+      isExpired: false
+    };
+  } else if (daysLeft <= 60) {
+    return {
+      status: 'expiring_soon',
+      label: `Due in ${daysLeft} days`,
+      daysLeft,
+      isExpiring10d: false,
+      isExpired: false
+    };
+  } else {
+    return {
+      status: 'valid',
+      label: `Valid (${daysLeft}d left)`,
+      daysLeft,
+      isExpiring10d: false,
+      isExpired: false
+    };
+  }
+}
+
+// Render Document Validity Matrix Table (Supports both Tab 3 and Authenticated Main Page)
+function renderDocumentMatrix() {
+  const targetBodies = [];
+  if (elements.maintenanceDocMatrixBody) targetBodies.push(elements.maintenanceDocMatrixBody);
+  if (elements.homeMaintenanceDocMatrixBody) targetBodies.push(elements.homeMaintenanceDocMatrixBody);
+  if (targetBodies.length === 0) return;
+
+  targetBodies.forEach(tbody => { tbody.innerHTML = ''; });
+
+  const vehicles = appState.maintenanceData?.vehicles || [];
   if (vehicles.length === 0) {
-    elements.maintenanceDocMatrixBody.innerHTML = `
-      <tr>
-        <td colspan="7" style="text-align: center; padding: 2rem; color: var(--text-muted);">
-          No vehicle statutory records found. Click "Reload Maintenance File" to load default data.
-        </td>
-      </tr>
-    `;
+    targetBodies.forEach(tbody => {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="7" style="text-align: center; padding: 2rem; color: var(--text-muted);">
+            No vehicle statutory records found. Click "Reload Maintenance File" to load default data.
+          </td>
+        </tr>
+      `;
+    });
+    if (elements.homeDocAlertBanner) elements.homeDocAlertBanner.style.display = 'none';
     return;
   }
 
-  vehicles.forEach(v => {
-    const tr = document.createElement('tr');
-
-    function createDocCell(isoDate, formatted, statusObj) {
-      if (!isoDate || !statusObj || statusObj.status === 'na') {
-        return `
-          <span class="compliance-pill na">
-            <span class="compliance-date">N/A</span>
-            <span class="compliance-status-label">Not Specified</span>
-          </span>
-        `;
-      }
-      const pillClass = statusObj.status === 'valid' ? 'valid' : (statusObj.status === 'expiring_soon' ? 'expiring' : 'expired');
-      const label = statusObj.label || (statusObj.status === 'valid' ? 'Valid' : (statusObj.status === 'expiring_soon' ? 'Expiring Soon' : 'Expired'));
-
+  function createDocCell(isoDate, formatted, statusObj) {
+    const computed = computeDocStatus(isoDate, statusObj);
+    if (!isoDate || computed.status === 'na') {
       return `
-        <span class="compliance-pill ${pillClass}">
-          <span class="compliance-date">${escapeHtml(formatted || isoDate)}</span>
-          <span class="compliance-status-label">${escapeHtml(label)}</span>
+        <span class="compliance-pill na">
+          <span class="compliance-date">N/A</span>
+          <span class="compliance-status-label">Not Specified</span>
         </span>
       `;
     }
 
-    // Determine overall compliance
-    const statuses = [v.taxStatus, v.pollutionStatus, v.insuranceStatus, v.permitStatus];
-    const hasExpired = statuses.some(s => s && s.status === 'expired');
-    const hasExpiring = statuses.some(s => s && s.status === 'expiring_soon');
+    const pillClass = computed.status === 'valid' ? 'valid' : (computed.status === 'expiring_soon' ? 'expiring' : 'expired');
+    const extraClass = computed.isExpiring10d ? ' flash-urgent-10d' : (computed.isExpired ? ' flash-expired' : '');
+    const alertPrefix = computed.isExpiring10d ? '<span style="display:inline-block; margin-right:2px;">⚡</span>' : (computed.isExpired ? '<span style="display:inline-block; margin-right:2px;">🚨</span>' : '');
+
+    return `
+      <span class="compliance-pill ${pillClass}${extraClass}" title="${escapeHtml(computed.label)}">
+        <span class="compliance-date">${escapeHtml(formatted || isoDate)}</span>
+        <span class="compliance-status-label">${alertPrefix}${escapeHtml(computed.label)}</span>
+      </span>
+    `;
+  }
+
+  let critical10dCount = 0;
+  let totalExpiredCount = 0;
+  const criticalVehicles = new Set();
+
+  vehicles.forEach(v => {
+    const taxStatus = computeDocStatus(v.tax, v.taxStatus);
+    const pollutionStatus = computeDocStatus(v.pollution, v.pollutionStatus);
+    const insuranceStatus = computeDocStatus(v.insurance, v.insuranceStatus);
+    const permitStatus = computeDocStatus(v.permit, v.permitStatus);
+
+    const docStatuses = [taxStatus, pollutionStatus, insuranceStatus, permitStatus];
+    docStatuses.forEach(s => {
+      if (s.isExpiring10d) {
+        critical10dCount++;
+        criticalVehicles.add(v.vehicleId);
+      }
+      if (s.isExpired) {
+        totalExpiredCount++;
+        criticalVehicles.add(v.vehicleId);
+      }
+    });
+
+    const hasCritical10d = docStatuses.some(s => s && s.isExpiring10d);
+    const hasExpired = docStatuses.some(s => s && s.isExpired);
+    const hasExpiring60d = docStatuses.some(s => s && s.status === 'expiring_soon');
+
     let overallBadge = `<span class="badge badge-success" style="font-size: 0.76rem; padding: 0.25rem 0.6rem;">Compliant</span>`;
-    if (hasExpired) {
+    if (hasCritical10d) {
+      overallBadge = `<span class="badge badge-danger flash-critical-badge" style="font-size: 0.76rem; padding: 0.25rem 0.6rem;">⚡ Expiring (&le;10d)</span>`;
+    } else if (hasExpired) {
       overallBadge = `<span class="badge badge-danger" style="font-size: 0.76rem; padding: 0.25rem 0.6rem;">Attention Needed</span>`;
-    } else if (hasExpiring) {
+    } else if (hasExpiring60d) {
       overallBadge = `<span class="badge badge-warning" style="font-size: 0.76rem; padding: 0.25rem 0.6rem;">Expiring Soon</span>`;
     }
 
-    tr.innerHTML = `
-      <td>
-        <div style="font-weight: 800; font-size: 0.95rem; color: var(--text-main);">${escapeHtml(v.vehicleId)}</div>
-        <div style="font-size: 0.75rem; color: var(--text-muted);">${escapeHtml(v.vehicleName || 'Reservoir Winch')}</div>
-      </td>
-      <td>${createDocCell(v.tax, v.taxFormatted, v.taxStatus)}</td>
-      <td>${createDocCell(v.pollution, v.pollutionFormatted, v.pollutionStatus)}</td>
-      <td>${createDocCell(v.insurance, v.insuranceFormatted, v.insuranceStatus)}</td>
-      <td>${createDocCell(v.permit, v.permitFormatted, v.permitStatus)}</td>
-      <td class="text-center">${overallBadge}</td>
-      <td class="text-center">
-        <button type="button" class="btn btn-secondary btn-action-small btn-edit-docs" data-vid="${escapeHtml(v.vehicleId)}" title="Edit / Renew statutory documents validity dates">
-          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-          </svg>
-          Renew / Edit
-        </button>
-      </td>
-    `;
+    function createRow() {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>
+          <div style="font-weight: 800; font-size: 0.95rem; color: var(--text-main);">${escapeHtml(v.vehicleId)}</div>
+          <div style="font-size: 0.75rem; color: var(--text-muted);">${escapeHtml(v.vehicleName || 'Reservoir Winch')}</div>
+        </td>
+        <td>${createDocCell(v.tax, v.taxFormatted, v.taxStatus)}</td>
+        <td>${createDocCell(v.pollution, v.pollutionFormatted, v.pollutionStatus)}</td>
+        <td>${createDocCell(v.insurance, v.insuranceFormatted, v.insuranceStatus)}</td>
+        <td>${createDocCell(v.permit, v.permitFormatted, v.permitStatus)}</td>
+        <td class="text-center">${overallBadge}</td>
+        <td class="text-center">
+          <button type="button" class="btn btn-secondary btn-action-small btn-edit-docs" data-vid="${escapeHtml(v.vehicleId)}" title="Edit / Renew statutory documents validity dates">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+            </svg>
+            Renew / Edit
+          </button>
+        </td>
+      `;
 
-    const btnEdit = tr.querySelector('.btn-edit-docs');
-    if (btnEdit) {
-      btnEdit.addEventListener('click', () => openEditDocumentsModal(v));
+      const btnEdit = tr.querySelector('.btn-edit-docs');
+      if (btnEdit) {
+        btnEdit.addEventListener('click', () => openEditDocumentsModal(v));
+      }
+      return tr;
     }
 
-    elements.maintenanceDocMatrixBody.appendChild(tr);
+    if (elements.maintenanceDocMatrixBody) {
+      elements.maintenanceDocMatrixBody.appendChild(createRow());
+    }
+    if (elements.homeMaintenanceDocMatrixBody) {
+      elements.homeMaintenanceDocMatrixBody.appendChild(createRow());
+    }
   });
+
+  // Update Dynamic Alert Banner on Main Page
+  if (elements.homeDocAlertBanner) {
+    if (critical10dCount > 0 || totalExpiredCount > 0) {
+      elements.homeDocAlertBanner.style.display = 'flex';
+      if (elements.homeDocAlertTitle) {
+        elements.homeDocAlertTitle.innerHTML = critical10dCount > 0
+          ? `⚡ CRITICAL ALERT: ${critical10dCount} DOCUMENT(S) EXPIRING IN &le; 10 DAYS!`
+          : `⚠️ STATUTORY WARNING: ${totalExpiredCount} VEHICLE DOCUMENT(S) EXPIRED!`;
+      }
+      if (elements.homeDocAlertDesc) {
+        const vList = Array.from(criticalVehicles).join(', ');
+        elements.homeDocAlertDesc.textContent = critical10dCount > 0
+          ? `Flashing alerts active for winch documents due in 10 days or less (${vList}). Please process renewals immediately.`
+          : `Expired documents detected on ${vList}. Renew to ensure transport and legal compliance.`;
+      }
+    } else {
+      elements.homeDocAlertBanner.style.display = 'none';
+    }
+  }
 }
 
 // Render Vehicle Filter Pills for Maintenance History
@@ -3104,6 +3789,11 @@ async function deleteMaintenanceRecordConfirm(record) {
 
 // Open Edit Documents Modal
 function openEditDocumentsModal(vehicle) {
+  if (!appState.isAuthenticated) {
+    openSignInModal();
+    showLoginAlert('Please sign in with CPF credentials to update vehicle statutory document validity.');
+    return;
+  }
   if (!elements.editDocumentsModal) return;
   elements.editDocVehicleId.value = vehicle.vehicleId;
   if (elements.editDocVehicleBadge) {
@@ -3348,6 +4038,17 @@ function updateOtDashboardCounts() {
 }
 
 function openOtPage(pageId) {
+  if (['logJob', 'roster', 'otStatement', 'fdeStatement', 'allJobs'].includes(pageId) && !appState.isAuthenticated) {
+    openSignInModal();
+    const moduleName = pageId === 'logJob' ? 'Daily Single Entry' :
+      pageId === 'roster' ? 'Crew Editor & Pay Scales' :
+      pageId === 'otStatement' ? 'OT Statement' :
+      pageId === 'fdeStatement' ? 'FDE Statement' :
+      pageId === 'allJobs' ? 'All Field Jobs' : 'Operations Module';
+    showLoginAlert('Please sign in with CPF credentials to access ' + moduleName + '.');
+    return;
+  }
+
   // Pre-reset viewport
   resetScrollToTop();
 
@@ -3370,6 +4071,10 @@ function openOtPage(pageId) {
   const targetPage = document.getElementById(`otPage-${pageId}`);
   if (targetPage) {
     targetPage.classList.add('active');
+    targetPage.scrollTop = 0;
+    try {
+      targetPage.scrollIntoView({ behavior: 'instant', block: 'start' });
+    } catch (_) {}
   }
 
   // Update active status on subnav pill buttons across all subpage headers
@@ -3403,6 +4108,26 @@ window.openOtPage = openOtPage;
 window.toggleOtAccordion = (sectionId) => openOtPage(sectionId);
 window.switchOtSubTab = (sectionId) => openOtPage(sectionId);
 window.closeAllOtAccordions = () => openOtPage('hub');
+
+function toggleDutyLogicBanner(forceState) {
+  const banner = document.getElementById('otRuleBanner');
+  const btnText = document.getElementById('btnToggleDutyLogicText');
+  const btnIcon = document.getElementById('btnToggleDutyLogicIcon');
+  if (!banner) return;
+
+  const isMin = (typeof forceState === 'boolean')
+    ? forceState
+    : !banner.classList.contains('minimized');
+
+  banner.classList.toggle('minimized', isMin);
+  if (btnText) btnText.textContent = isMin ? 'Expand' : 'Minimize';
+  if (btnIcon) btnIcon.textContent = isMin ? '▸' : '▴';
+
+  try {
+    localStorage.setItem('ongc_duty_logic_minimized', isMin ? 'true' : 'false');
+  } catch (_) {}
+}
+window.toggleDutyLogicBanner = toggleDutyLogicBanner;
 
 const btnQuickLog = document.getElementById('btnQuickLogJob');
 if (btnQuickLog) {
@@ -3540,8 +4265,12 @@ async function updateLiveJobPreview() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ depTime, arrTime, isHoliday, crewCodes })
     });
-    const data = await res.json();
-    if (!data.success) return;
+    const payload = await res.json();
+    if (!payload.success) return;
+    const data = { ...payload.preview, fdAmountPerPerson: payload.preview.fdAmount,
+      crewBreakdown: payload.preview.crewDetails,
+      totalFdAcrossCrew: payload.preview.crewDetails.reduce((sum, member) => sum + member.fdAmount, 0),
+      totalOtAcrossCrew: payload.preview.crewDetails.reduce((sum, member) => sum + member.otAmount, 0) };
 
     if (elements.prevDutyHours) elements.prevDutyHours.textContent = `${data.dutyHours.toFixed(1)} hrs`;
     if (elements.prevFdShifts) elements.prevFdShifts.textContent = `${data.fdShifts.toFixed(3)} shifts`;
@@ -3787,7 +4516,7 @@ if (elements.formOtFieldJob) {
         await fetchOtFdeData();
         // Also refresh Tab 2 Vehicle Log so the new entry reflects there immediately
         if (typeof fetchData === 'function') {
-          await fetchData();
+          await fetchCurrentData();
         }
         if (elements.otJobWellRemarks) elements.otJobWellRemarks.value = '';
         if (elements.otWinchRemarks) elements.otWinchRemarks.value = '';
@@ -4039,6 +4768,8 @@ async function renderOtStatement() {
       `;
     }
 
+    // Ensure OT Statement view stays scrolled to top
+    resetScrollToTop();
   } catch (err) {
     console.error('Failed to load OT statement:', err);
   }
@@ -4295,6 +5026,8 @@ async function renderFdeStatement() {
       `;
     }
 
+    // Ensure the FDE statement view stays scrolled to the very top after data population
+    resetScrollToTop();
   } catch (err) {
     console.error('Failed to load FDE statement:', err);
   }
@@ -5025,28 +5758,53 @@ if (elements.btnApplyBatchDa) {
 
 // Exports
 function exportOtPdf() {
+  if (!appState.isAuthenticated) {
+    openSignInModal();
+    showLoginAlert('Please sign in with CPF credentials to export OT PDF statements.');
+    return;
+  }
   const empCode = elements.otStatementEmployee?.value || appState.activeOtStatementEmployee || 'UC';
   const month = elements.otStatementMonth?.value || appState.activeOtStatementMonth || '2025-01';
   window.open(`/api/ot-fde/export/pdf?type=OT&empCode=${encodeURIComponent(empCode)}&month=${encodeURIComponent(month)}`, '_blank');
 }
 
 function exportOtExcel() {
+  if (!appState.isAuthenticated) {
+    openSignInModal();
+    showLoginAlert('Please sign in with CPF credentials to export OT Excel statements.');
+    return;
+  }
   const empCode = elements.otStatementEmployee?.value || appState.activeOtStatementEmployee || 'UC';
   const month = elements.otStatementMonth?.value || appState.activeOtStatementMonth || '2025-01';
   window.location.href = `/api/ot-fde/export/excel?type=OT&empCode=${encodeURIComponent(empCode)}&month=${encodeURIComponent(month)}`;
 }
 
 function exportFdePdf() {
+  if (!appState.isAuthenticated) {
+    openSignInModal();
+    showLoginAlert('Please sign in with CPF credentials to export FDE PDF statements.');
+    return;
+  }
   const empCode = elements.fdeStatementEmployee?.value || appState.activeFdeStatementEmployee || 'UC';
   const month = elements.fdeStatementMonth?.value || appState.activeFdeStatementMonth || '2025-01';
   window.open(`/api/ot-fde/export/pdf?type=FDE&empCode=${encodeURIComponent(empCode)}&month=${encodeURIComponent(month)}`, '_blank');
 }
 
 function exportFdeExcel() {
+  if (!appState.isAuthenticated) {
+    openSignInModal();
+    showLoginAlert('Please sign in with CPF credentials to export FDE Excel statements.');
+    return;
+  }
   const empCode = elements.fdeStatementEmployee?.value || appState.activeFdeStatementEmployee || 'UC';
   const month = elements.fdeStatementMonth?.value || appState.activeFdeStatementMonth || '2025-01';
   window.location.href = `/api/ot-fde/export/excel?type=FDE&empCode=${encodeURIComponent(empCode)}&month=${encodeURIComponent(month)}`;
 }
+
+window.exportOtPdf = exportOtPdf;
+window.exportOtExcel = exportOtExcel;
+window.exportFdePdf = exportFdePdf;
+window.exportFdeExcel = exportFdeExcel;
 
 // Event Listeners for Tab 4 Nav and Actions
 if (elements.btnSubOtLogJob) elements.btnSubOtLogJob.addEventListener('click', () => switchOtSubTab('logJob'));
@@ -5168,14 +5926,71 @@ function getDayName(dateStr) {
 // ============================================================
 // INITIALIZATION
 // ============================================================
-window.addEventListener('DOMContentLoaded', () => {
+function handleUrlHash() {
+  const hash = window.location.hash.replace('#', '');
+  if (!hash) return;
+  if (['logJob', 'roster', 'otStatement', 'fdeStatement', 'allJobs'].includes(hash) && !appState.isAuthenticated) {
+    openSignInModal();
+    const moduleName = hash === 'logJob' ? 'Daily Single Entry' :
+      hash === 'roster' ? 'Crew Editor & Pay Scales' :
+      hash === 'otStatement' ? 'OT Statement' :
+      hash === 'fdeStatement' ? 'FDE Statement' :
+      hash === 'allJobs' ? 'All Field Jobs' : 'Operations Module';
+    showLoginAlert('Please sign in with CPF credentials to access ' + moduleName + '.');
+    return;
+  }
+  if (['logJob', 'roster', 'otStatement', 'fdeStatement', 'allJobs', 'hub'].includes(hash)) {
+    switchMainTab('otFde');
+    openOtPage(hash);
+  } else if (hash === 'otFde') {
+    switchMainTab('otFde');
+  } else if (hash === 'wellSites') {
+    switchMainTab('wellSites');
+  } else if (hash === 'vehicleLog') {
+    handleCardNav('vehicleLog');
+  } else if (hash === 'maintenance') {
+    handleCardNav('maintenance');
+  } else if (hash === 'settings') {
+    handleCardNav('settings');
+  }
+}
+window.addEventListener('hashchange', handleUrlHash);
+window.handleUrlHash = handleUrlHash;
+
+window.addEventListener('DOMContentLoaded', async () => {
   initTheme();
-  checkAuthStatus();
-  switchMainTab(null); // All tabs start in closed system!
-  fetchCurrentData();
-  fetchWellSites();
-  fetchMaintenanceData();
-  fetchOtFdeData();
+  switchMainTab(null);
+  const isAuthed = await checkAuthStatus();
+  if (isAuthed) {
+    await refreshPortalData();
+  } else {
+    // Automatically load well sites, OT/FDE data, and maintenance data for immediate display
+    await Promise.all([fetchWellSites(), fetchOtFdeData(), fetchMaintenanceData()]);
+  }
+  handleUrlHash();
+  syncResponsiveNavigation();
+  try {
+    if (localStorage.getItem('ongc_duty_logic_minimized') === 'true') {
+      toggleDutyLogicBanner(true);
+    }
+  } catch (_) {}
 });
 
+function syncResponsiveNavigation() {
+  const header = document.querySelector('.app-header');
+  document.documentElement.style.setProperty('--app-header-height', `${header?.getBoundingClientRect().height || 64}px`);
+  if (window.innerWidth > 900) closeMobileSidebar();
+  elements.btnHeaderSidebarToggle?.setAttribute('aria-expanded', String(window.innerWidth <= 900
+    ? elements.appSidebar?.classList.contains('mobile-open') : !elements.appSidebar?.classList.contains('minimized')));
+}
+if (window.ResizeObserver) new ResizeObserver(syncResponsiveNavigation).observe(document.querySelector('.app-header'));
+window.addEventListener('resize', syncResponsiveNavigation);
+document.addEventListener('keydown', event => { if (event.key === 'Escape') closeMobileSidebar(); });
 
+// Module cards support the same activation with a keyboard as with touch.
+document.addEventListener('keydown', event => {
+  if (['Enter', ' '].includes(event.key) && event.target.matches('.module-launch-card, .ot-box-card')) {
+    event.preventDefault();
+    event.target.click();
+  }
+});
