@@ -106,6 +106,38 @@
       border-color: rgba(255, 255, 255, 0.3);
     }
 
+    /* Auth-conditional topbar navigation */
+    body:not(.is-authenticated) #topbarAuthNavLinks,
+    body:not(.is-authenticated) .auth-only-nav,
+    body:not(.is-authenticated) .auth-only-btn {
+      display: none !important;
+    }
+
+    /* System action buttons disabled without login */
+    body:not(.is-authenticated) .auth-disabled-btn {
+      opacity: 0.52 !important;
+      cursor: not-allowed !important;
+      filter: grayscale(0.45);
+      border: 1px dashed rgba(255, 255, 255, 0.28) !important;
+      background: rgba(255, 255, 255, 0.05) !important;
+      color: #94a3b8 !important;
+      position: relative;
+    }
+    body:not(.is-authenticated) .auth-disabled-btn:hover {
+      opacity: 0.78 !important;
+      border-color: rgba(248, 113, 113, 0.5) !important;
+      color: #fca5a5 !important;
+      transform: none !important;
+    }
+    .auth-lock-badge {
+      display: inline-block;
+      margin-left: 0.35rem;
+      font-size: 0.75rem;
+    }
+    body.is-authenticated .auth-lock-badge {
+      display: none !important;
+    }
+
     .main-container {
       max-width: 1400px;
       margin: 0 auto;
@@ -334,21 +366,24 @@
       </div>
 
       <div class="nav-actions">
-        <a href="index.html#logJob" class="nav-link-btn" style="background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.45);" title="Open All-in-One Daily Entry Form">
-          <span>⚡</span> All-in-One Daily Entry
-        </a>
-        <a href="index.html#roster" class="nav-link-btn" style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.45);" title="Open Crew Editor & Pay Scales">
-          <span>👥</span> Crew Editor
-        </a>
-        <a href="index.html#otFde" class="nav-link-btn" style="background: rgba(168, 85, 247, 0.2); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.45);" title="Open OT & FDE Portal">
-          <span>⏱️</span> OT / FDE Portal
-        </a>
-        <a href="well-sites.html" class="nav-link-btn nav-link-wells" title="View Well Sites & Directory">
-          <span>📍</span> Well Sites &rarr;
-        </a>
-        <a href="index.html" class="nav-link-btn nav-link-secondary" title="Return to Portal Overview">
-          <span>🏠</span> Portal Home
-        </a>
+        <!-- Authenticated Navigation Links (Removed/Hidden without login) -->
+        <div id="topbarAuthNavLinks" class="auth-only-nav" style="display: none; align-items: center; gap: 0.65rem;">
+          <a href="index.html#logJob" class="nav-link-btn" style="background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.45);" title="Open All-in-One Daily Entry Form">
+            <span>⚡</span> All-in-One Daily Entry
+          </a>
+          <a href="index.html#roster" class="nav-link-btn" style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.45);" title="Open Crew Editor & Pay Scales">
+            <span>👥</span> Crew Editor
+          </a>
+          <a href="index.html#otFde" class="nav-link-btn" style="background: rgba(168, 85, 247, 0.2); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.45);" title="Open OT & FDE Portal">
+            <span>⏱️</span> OT / FDE Portal
+          </a>
+          <a href="well-sites.html" class="nav-link-btn nav-link-wells" title="View Well Sites & Directory">
+            <span>📍</span> Well Sites &rarr;
+          </a>
+          <a href="index.html" class="nav-link-btn nav-link-secondary" title="Return to Portal Overview">
+            <span>🏠</span> Portal Home
+          </a>
+        </div>
         <div id="authNavWrap" style="display: flex; align-items: center; gap: 0.5rem;">
           <button type="button" class="nav-link-btn" id="btnPageSignIn" onclick="openLoginModal()" title="Sign In with ONGC CPF Credentials" style="background: var(--primary, #0070f2); color: #ffffff; border: 1px solid var(--primary, #0070f2);">
             <span>🔑</span> Sign In
@@ -410,23 +445,23 @@
           Official statutory claim analysis • Single Entry Crew Allocation • Mines Act (Basic+DA)/104 formula • Fixed ₹450 Field Duty allowance.
         </p>
         <div style="display: flex; gap: 0.6rem; margin-top: 0.9rem; flex-wrap: wrap;">
-          <a href="index.html#logJob" class="nav-link-btn" style="background: #10b981; color: #ffffff; border: none; font-weight: 700;">
+          <a href="index.html#logJob" class="nav-link-btn auth-only-btn" style="background: #10b981; color: #ffffff; border: none; font-weight: 700;">
             <span>⚡</span> Open All-in-One Daily Entry Form &rarr;
           </a>
-          <a href="index.html#roster" class="nav-link-btn" style="background: #f59e0b; color: #ffffff; border: none; font-weight: 700;">
+          <a href="index.html#roster" class="nav-link-btn auth-only-btn" style="background: #f59e0b; color: #ffffff; border: none; font-weight: 700;">
             <span>👥</span> Open Crew Editor &amp; Pay Scales &rarr;
           </a>
           <a href="index.html#otFde" class="nav-link-btn" style="background: rgba(168, 85, 247, 0.25); color: #d8b4fe; border: 1px solid rgba(168, 85, 247, 0.5);">
             <span>⏱️</span> OT &amp; FDE Portal Hub
           </a>
-          <a href="index.html#otStatement" class="nav-link-btn nav-link-secondary">
-            <span>📑</span> OT Statement
+          <a href="index.html#otStatement" id="btnHeroOtStatement" class="nav-link-btn nav-link-secondary auth-disabled-btn" data-active-title="View Monthly OT Statement" onclick="return handleProtectedHeroNav(event, 'otStatement');" title="🔒 Sign in required to access OT Statement">
+            <span>📑</span> OT Statement <span class="auth-lock-badge">🔒</span>
           </a>
-          <a href="index.html#fdeStatement" class="nav-link-btn nav-link-secondary">
-            <span>🏕️</span> FDE Statement
+          <a href="index.html#fdeStatement" id="btnHeroFdeStatement" class="nav-link-btn nav-link-secondary auth-disabled-btn" data-active-title="View Monthly FDE Statement" onclick="return handleProtectedHeroNav(event, 'fdeStatement');" title="🔒 Sign in required to access FDE Statement">
+            <span>🏕️</span> FDE Statement <span class="auth-lock-badge">🔒</span>
           </a>
-          <a href="index.html#allJobs" class="nav-link-btn nav-link-secondary">
-            <span>📋</span> All Field Jobs
+          <a href="index.html#allJobs" id="btnHeroAllJobs" class="nav-link-btn nav-link-secondary auth-disabled-btn" data-active-title="View All Field Jobs Directory" onclick="return handleProtectedHeroNav(event, 'allJobs');" title="🔒 Sign in required to access All Field Jobs">
+            <span>📋</span> All Field Jobs <span class="auth-lock-badge">🔒</span>
           </a>
         </div>
       </div>
@@ -935,17 +970,45 @@
       updatePageAuthUI(null);
     }
 
+    window.isPageAuthenticated = false;
+
+    function handleProtectedHeroNav(e, targetSection) {
+      if (!window.isPageAuthenticated) {
+        if (e) e.preventDefault();
+        openLoginModal();
+        showToast('🔒 Sign in required with ONGC CPF credentials to view official Statements & Field Jobs.');
+        return false;
+      }
+      return true;
+    }
+
     function updatePageAuthUI(user) {
+      window.isPageAuthenticated = !!user;
       const btnSignIn = document.getElementById('btnPageSignIn');
       const chip = document.getElementById('userProfileChip');
       const nameDisp = document.getElementById('userNameDisplay');
+      const topbarAuthLinks = document.getElementById('topbarAuthNavLinks');
+      const protectedHeroBtns = document.querySelectorAll('.auth-disabled-btn');
+
       if (user) {
+        document.body.classList.add('is-authenticated');
+        if (topbarAuthLinks) topbarAuthLinks.style.display = 'inline-flex';
         if (btnSignIn) btnSignIn.style.display = 'none';
         if (chip) chip.style.display = 'inline-flex';
         if (nameDisp) nameDisp.textContent = `👤 ${user.name || user.userId} (${user.userId || ''})`;
+        protectedHeroBtns.forEach(btn => {
+          btn.removeAttribute('aria-disabled');
+          btn.setAttribute('title', btn.dataset.activeTitle || '');
+        });
       } else {
+        document.body.classList.remove('is-authenticated');
+        if (topbarAuthLinks) topbarAuthLinks.style.display = 'none';
         if (btnSignIn) btnSignIn.style.display = 'inline-flex';
         if (chip) chip.style.display = 'none';
+        protectedHeroBtns.forEach(btn => {
+          btn.setAttribute('aria-disabled', 'true');
+          btn.setAttribute('title', '🔒 Sign in required with ONGC CPF credentials to access this system feature');
+        });
       }
     }
 

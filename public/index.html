@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=20261013b">
 
   <style>
     .login-alert-error {
@@ -94,11 +94,14 @@
             </div>
           </div>
 
-          <div class="login-options-row">
+          <div class="login-options-row" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
             <label class="checkbox-label">
               <input type="checkbox" id="rememberMe" checked>
               <span>Keep session logged in</span>
             </label>
+            <a href="javascript:void(0)" onclick="switchAuthTab('forgot')" class="btn-forgot-password" style="font-size: 0.8rem; color: #38bdf8; text-decoration: none; font-weight: 700; cursor: pointer;">
+              🔑 Forgot Password?
+            </a>
           </div>
 
           <button type="submit" class="btn btn-primary btn-login" id="btnSubmitLogin">
@@ -193,6 +196,20 @@
             </div>
           </div>
 
+          <div class="form-group" style="margin:0">
+            <label for="regDob" style="font-size:0.8rem; font-weight: 700; color: #fdba74;">Date of Birth (DOB) *</label>
+            <div class="input-with-icon">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+              <input type="date" id="regDob" required style="color:#fff; background:rgba(15,23,42,0.6); font-weight:600;">
+            </div>
+            <span style="font-size:0.72rem; color:#94a3b8;">Required for secure password recovery</span>
+          </div>
+
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.65rem;">
             <div class="form-group" style="margin:0">
               <label for="regPassword" style="font-size:0.8rem; font-weight: 700; color: #e2e8f0;">Password * (min 6)</label>
@@ -228,6 +245,73 @@
         </form>
       </div>
 
+      <!-- Tab 3: FORGOT PASSWORD (DOB RESET) PANEL -->
+      <div id="panelForgot" style="display:none;">
+        <div class="register-instruction-card" style="border-left: 4px solid #38bdf8; background: rgba(56, 189, 248, 0.1);">
+          <div style="font-size: 1.1rem;">🔑</div>
+          <div>
+            <strong style="color: #38bdf8;">Reset Password via Date of Birth (DOB)</strong>
+            <p style="margin: 0.2rem 0 0 0; font-size: 0.77rem; color: #bae6fd;">Enter your registered User ID or CPF number and your official Date of Birth to set a new password.</p>
+          </div>
+        </div>
+
+        <div id="forgotSuccessMsg" style="display:none; background: linear-gradient(135deg,#052e16,#14532d); border:1px solid #22c55e; border-radius:10px; padding:1.1rem 1.2rem; margin-bottom:1rem; color:#bbf7d0; font-size:0.88rem; line-height:1.5;">
+          <div style="font-size:1.3rem; margin-bottom:0.35rem;">✅ Password Reset Successful!</div>
+          <div id="forgotSuccessDetail">Your password has been updated. You can now sign in with your new password.</div>
+          <button type="button" onclick="switchAuthTab('login')" class="btn btn-primary" style="margin-top:0.75rem; background:#22c55e; border-color: #22c55e; color:#052e16; font-weight:700; font-size:0.85rem; width: 100%;">
+            👉 Return to Sign In
+          </button>
+        </div>
+
+        <form id="forgotPasswordForm" class="login-form" style="display:flex;flex-direction:column;gap:0.75rem;" onsubmit="submitForgotPassword(event)">
+          <div class="form-group" style="margin:0">
+            <label for="forgotUserId" style="font-size:0.8rem; font-weight:700; color: #e2e8f0;">Official User ID or CPF *</label>
+            <div class="input-with-icon">
+              <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              <input type="text" id="forgotUserId" placeholder="e.g. CPF-140751 or admin" required style="text-transform:uppercase; font-weight:700;">
+            </div>
+          </div>
+
+          <div class="form-group" style="margin:0">
+            <label for="forgotDob" style="font-size:0.8rem; font-weight:700; color: #fdba74;">Date of Birth (DOB) *</label>
+            <div class="input-with-icon">
+              <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+              <input type="date" id="forgotDob" required style="color:#fff; background:rgba(15,23,42,0.6); font-weight:600;">
+            </div>
+            <span style="font-size:0.72rem; color:#94a3b8;">Must match your official recorded birth date</span>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.65rem;">
+            <div class="form-group" style="margin:0">
+              <label for="forgotNewPassword" style="font-size:0.8rem; font-weight:700; color: #e2e8f0;">New Password *</label>
+              <input type="password" id="forgotNewPassword" placeholder="••••••••" required minlength="6">
+            </div>
+            <div class="form-group" style="margin:0">
+              <label for="forgotConfirmPassword" style="font-size:0.8rem; font-weight:700; color: #e2e8f0;">Confirm *</label>
+              <input type="password" id="forgotConfirmPassword" placeholder="••••••••" required minlength="6">
+            </div>
+          </div>
+
+          <button type="submit" id="btnSubmitForgot" class="btn btn-primary btn-login" style="margin-top:0.4rem; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); border-color: #38bdf8; box-shadow: 0 4px 16px rgba(2, 132, 199, 0.35);">
+            <span>🔄</span> Reset Password Now
+          </button>
+
+          <div style="text-align: center; margin-top: 0.5rem;">
+            <a href="javascript:void(0)" onclick="switchAuthTab('login')" style="color: #94a3b8; font-size: 0.8rem; text-decoration: none; font-weight: 600;">
+              &larr; Remember your password? Back to Sign In
+            </a>
+          </div>
+        </form>
+      </div>
+
       <!-- Trust Footer -->
       <div class="login-footer">
         <div class="login-trust-badge">
@@ -242,27 +326,46 @@
     function switchAuthTab(tab) {
       var panelLogin = document.getElementById('panelLogin');
       var panelReg = document.getElementById('panelRegister');
+      var panelForgot = document.getElementById('panelForgot');
       var tabLogin = document.getElementById('tabBtnLogin');
       var tabReg = document.getElementById('tabBtnRegister');
       var alertBox = document.getElementById('loginAlertBox');
       if (alertBox) { alertBox.style.display = 'none'; alertBox.textContent = ''; }
 
       if (tab === 'register') {
-        panelLogin.style.display = 'none';
-        panelReg.style.display = 'block';
-        tabLogin.className = 'auth-tab-btn';
-        tabReg.className = 'auth-tab-btn auth-tab-active';
+        if (panelLogin) panelLogin.style.display = 'none';
+        if (panelForgot) panelForgot.style.display = 'none';
+        if (panelReg) panelReg.style.display = 'block';
+        if (tabLogin) tabLogin.className = 'auth-tab-btn';
+        if (tabReg) tabReg.className = 'auth-tab-btn auth-tab-active';
         var regForm = document.getElementById('registerForm');
         var successMsg = document.getElementById('registerSuccessMsg');
         if (regForm) regForm.style.display = 'flex';
         if (successMsg) successMsg.style.display = 'none';
         var cpfInput = document.getElementById('regCpf');
         if (cpfInput) cpfInput.focus();
+      } else if (tab === 'forgot') {
+        if (panelLogin) panelLogin.style.display = 'none';
+        if (panelReg) panelReg.style.display = 'none';
+        if (panelForgot) panelForgot.style.display = 'block';
+        if (tabLogin) tabLogin.className = 'auth-tab-btn';
+        if (tabReg) tabReg.className = 'auth-tab-btn';
+        var forgotForm = document.getElementById('forgotPasswordForm');
+        var forgotSuccess = document.getElementById('forgotSuccessMsg');
+        if (forgotForm) forgotForm.style.display = 'flex';
+        if (forgotSuccess) forgotSuccess.style.display = 'none';
+        var forgotUserInput = document.getElementById('forgotUserId');
+        if (forgotUserInput) {
+          var currentLoginUser = document.getElementById('loginUserId')?.value.trim();
+          if (currentLoginUser) forgotUserInput.value = currentLoginUser;
+          forgotUserInput.focus();
+        }
       } else {
-        panelLogin.style.display = 'block';
-        panelReg.style.display = 'none';
-        tabLogin.className = 'auth-tab-btn auth-tab-active';
-        tabReg.className = 'auth-tab-btn';
+        if (panelLogin) panelLogin.style.display = 'block';
+        if (panelReg) panelReg.style.display = 'none';
+        if (panelForgot) panelForgot.style.display = 'none';
+        if (tabLogin) tabLogin.className = 'auth-tab-btn auth-tab-active';
+        if (tabReg) tabReg.className = 'auth-tab-btn';
       }
     }
 
@@ -341,6 +444,7 @@
       var role = document.getElementById('regRole').value.trim();
       var department = document.getElementById('regDept').value.trim();
       var location = document.getElementById('regLocation').value.trim();
+      var dob = document.getElementById('regDob')?.value.trim();
       var password = document.getElementById('regPassword').value;
       var confirmPassword = document.getElementById('regConfirmPassword').value;
 
@@ -348,6 +452,13 @@
         alertBox.style.display = '';
         alertBox.className = 'login-alert login-alert-error';
         alertBox.textContent = 'Official ONGC CPF number is required.';
+        return;
+      }
+
+      if (!dob) {
+        alertBox.style.display = '';
+        alertBox.className = 'login-alert login-alert-error';
+        alertBox.textContent = 'Date of Birth (DOB) is required for password recovery security.';
         return;
       }
 
@@ -372,6 +483,7 @@
             role: role,
             department: department,
             location: location,
+            dob: dob,
             password: password,
             confirmPassword: confirmPassword
           })
@@ -396,6 +508,78 @@
         alertBox.textContent = 'Registration failed: ' + err.message;
         btn.disabled = false;
         btn.textContent = 'Create Crew Account';
+      }
+    }
+
+    async function submitForgotPassword(e) {
+      e.preventDefault();
+      var alertBox = document.getElementById('loginAlertBox');
+      var successMsg = document.getElementById('forgotSuccessMsg');
+      var form = document.getElementById('forgotPasswordForm');
+      var btn = document.getElementById('btnSubmitForgot');
+
+      var userId = document.getElementById('forgotUserId').value.trim();
+      var dob = document.getElementById('forgotDob').value.trim();
+      var newPassword = document.getElementById('forgotNewPassword').value;
+      var confirmPassword = document.getElementById('forgotConfirmPassword').value;
+
+      if (!userId || !dob) {
+        alertBox.style.display = '';
+        alertBox.className = 'login-alert login-alert-error';
+        alertBox.textContent = 'Please enter both User ID / CPF and Date of Birth.';
+        return;
+      }
+
+      if (newPassword !== confirmPassword) {
+        alertBox.style.display = '';
+        alertBox.className = 'login-alert login-alert-error';
+        alertBox.textContent = 'Passwords do not match.';
+        return;
+      }
+
+      if (newPassword.length < 6) {
+        alertBox.style.display = '';
+        alertBox.className = 'login-alert login-alert-error';
+        alertBox.textContent = 'Password must be at least 6 characters.';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Verifying DOB & Resetting...';
+
+      try {
+        var resp = await fetch('/api/auth/reset-password-dob', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userId: userId,
+            dob: dob,
+            newPassword: newPassword,
+            confirmPassword: confirmPassword
+          })
+        });
+
+        var data = await resp.json();
+        if (data.success) {
+          alertBox.style.display = 'none';
+          form.style.display = 'none';
+          successMsg.style.display = '';
+          document.getElementById('forgotSuccessDetail').innerHTML = '<strong>' + data.message + '</strong>';
+          var loginInput = document.getElementById('loginUserId');
+          if (loginInput) loginInput.value = userId;
+        } else {
+          alertBox.style.display = '';
+          alertBox.className = 'login-alert login-alert-error';
+          alertBox.textContent = data.error;
+          btn.disabled = false;
+          btn.innerHTML = '<span>🔄</span> Reset Password Now';
+        }
+      } catch (err) {
+        alertBox.style.display = '';
+        alertBox.className = 'login-alert login-alert-error';
+        alertBox.textContent = 'Reset request failed: ' + err.message;
+        btn.disabled = false;
+        btn.innerHTML = '<span>🔄</span> Reset Password Now';
       }
     }
   </script>
@@ -431,6 +615,11 @@
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
           Search
+        </button>
+
+        <!-- Drag & Drop Layout Customizer Button (Admin Only) -->
+        <button type="button" class="btn btn-secondary btn-sm admin-only-feature" id="btnToggleLayoutCustomizer" onclick="toggleLayoutCustomizer()" title="Drag &amp; Drop to rearrange sections (Admin Only) (Alt+C)" style="display: none; align-items: center; gap: 0.35rem; font-size: 0.76rem; font-weight: 700; border: 1px solid rgba(56, 189, 248, 0.4); background: rgba(56, 189, 248, 0.12); color: #38bdf8; padding: 0.38rem 0.75rem;">
+          <span>✋</span> Drag &amp; Drop Layout
         </button>
 
         <!-- Theme Picker -->
@@ -593,24 +782,30 @@
         </button>
 
         <!-- Sub-navigation links under OT & FDE for direct 1-click access -->
-        <div class="sidebar-subnav-group" id="sidebarOtSubnav" style="padding-left: 1.5rem; display: flex; flex-direction: column; gap: 0.2rem; margin: -0.2rem 0 0.5rem 0;">
-          <a href="#logJob" onclick="handleCardNav('logJob'); return false;" class="sidebar-subnav-item auth-only-nav" style="display: flex; align-items: center; gap: 0.45rem; padding: 0.38rem 0.65rem; border-radius: 6px; font-size: 0.77rem; font-weight: 700; color: #34d399; text-decoration: none; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25);">
-            <span>⚡</span> All-in-One Daily Entry
+        <div class="sidebar-subnav-group" id="sidebarOtSubnav">
+          <a href="#logJob" onclick="handleCardNav('logJob'); return false;" class="sidebar-subnav-item subnav-dailyentry" data-tooltip="⚡ All-in-One Daily Entry">
+            <span class="subnav-icon">⚡</span>
+            <span class="subnav-label">All-in-One Daily Entry</span>
           </a>
-          <a href="#roster" onclick="handleCardNav('roster'); return false;" class="sidebar-subnav-item auth-only-nav" style="display: flex; align-items: center; gap: 0.45rem; padding: 0.38rem 0.65rem; border-radius: 6px; font-size: 0.77rem; font-weight: 700; color: #fbbf24; text-decoration: none; background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.25);">
-            <span>👥</span> Crew Editor &amp; Pay Scales
+          <a href="#roster" onclick="handleCardNav('roster'); return false;" class="sidebar-subnav-item subnav-roster" data-tooltip="👥 Crew Editor &amp; Pay Scales">
+            <span class="subnav-icon">👥</span>
+            <span class="subnav-label">Crew Editor &amp; Pay Scales</span>
           </a>
-          <a href="ot-charts.html" class="sidebar-subnav-item" style="display: flex; align-items: center; gap: 0.45rem; padding: 0.38rem 0.65rem; border-radius: 6px; font-size: 0.77rem; font-weight: 700; color: #c084fc; text-decoration: none; background: rgba(168, 85, 247, 0.08); border: 1px solid rgba(168, 85, 247, 0.25);">
-            <span>📊</span> OT &amp; FDE Charts &rarr;
+          <a href="ot-charts.html" class="sidebar-subnav-item subnav-charts" data-tooltip="📊 OT &amp; FDE Charts">
+            <span class="subnav-icon">📊</span>
+            <span class="subnav-label">OT &amp; FDE Charts &rarr;</span>
           </a>
-          <a href="#otStatement" onclick="navigateToOtSection('otStatement'); return false;" class="sidebar-subnav-item auth-only-nav" style="display: flex; align-items: center; gap: 0.45rem; padding: 0.35rem 0.65rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; color: #94a3b8; text-decoration: none;">
-            <span>📋</span> OT Statement
+          <a href="#otStatement" onclick="navigateToOtSection('otStatement'); return false;" class="sidebar-subnav-item subnav-otstmt" data-tooltip="📋 OT Statement">
+            <span class="subnav-icon">📋</span>
+            <span class="subnav-label">OT Statement</span>
           </a>
-          <a href="#fdeStatement" onclick="navigateToOtSection('fdeStatement'); return false;" class="sidebar-subnav-item auth-only-nav" style="display: flex; align-items: center; gap: 0.45rem; padding: 0.35rem 0.65rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; color: #94a3b8; text-decoration: none;">
-            <span>🏕️</span> FDE Statement
+          <a href="#fdeStatement" onclick="navigateToOtSection('fdeStatement'); return false;" class="sidebar-subnav-item subnav-fdestmt" data-tooltip="🏕️ FDE Statement">
+            <span class="subnav-icon">🏕️</span>
+            <span class="subnav-label">FDE Statement</span>
           </a>
-          <a href="#allJobs" onclick="navigateToOtSection('allJobs'); return false;" class="sidebar-subnav-item auth-only-nav" style="display: flex; align-items: center; gap: 0.45rem; padding: 0.35rem 0.65rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; color: #94a3b8; text-decoration: none;">
-            <span>📑</span> All Field Jobs
+          <a href="#allJobs" onclick="navigateToOtSection('allJobs'); return false;" class="sidebar-subnav-item subnav-alljobs" data-tooltip="📑 All Field Jobs">
+            <span class="subnav-icon">📑</span>
+            <span class="subnav-label">All Field Jobs</span>
           </a>
         </div>
 
@@ -680,7 +875,75 @@
             <a href="well-sites.html" class="btn btn-secondary" style="font-weight: 700; font-size: 0.86rem; padding: 0.55rem 1.1rem; display: inline-flex; align-items: center; gap: 0.45rem; text-decoration: none;">
               <span>📍</span> Well Sites &amp; Charts &rarr;
             </a>
+            <button type="button" class="btn btn-secondary admin-only-feature" id="btnHeroLayoutCustomizer" onclick="toggleLayoutCustomizer()" style="display: none; font-weight: 700; font-size: 0.86rem; padding: 0.55rem 1.1rem; align-items: center; gap: 0.45rem; border: 1px dashed #38bdf8; background: rgba(56, 189, 248, 0.08); color: #38bdf8;">
+              <span>✋</span> Drag &amp; Drop Reorder
+            </button>
           </div>
+        </div>
+      </div>
+
+      <!-- MAIN PAGE SECTION: Vehicle Statutory Documents & Validity Status (Publicly Visible with Flashing Alerts) -->
+      <div id="homeStatutorySection" class="workspace-card" style="margin: 1.5rem 0 1.75rem 0; border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; background: var(--bg-card); box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
+        <!-- Critical Expiry Alert Banner (Flashing when documents expire within 10 days or expired) -->
+        <div id="homeDocAlertBanner" style="display: none; padding: 0.9rem 1.35rem; background: linear-gradient(90deg, rgba(239, 68, 68, 0.16) 0%, rgba(245, 158, 11, 0.22) 100%); border-bottom: 1px solid rgba(239, 68, 68, 0.35); align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <span class="alert-beacon-dot"></span>
+            <div>
+              <strong id="homeDocAlertTitle" style="color: #ef4444; font-size: 0.88rem; letter-spacing: 0.3px; display: flex; align-items: center; gap: 0.4rem;">
+                ⚠️ CRITICAL STATUTORY EXPIRATION WARNING
+              </strong>
+              <div id="homeDocAlertDesc" style="color: var(--text-main); font-size: 0.8rem; margin-top: 0.2rem;">
+                One or more vehicle statutory documents expire in 10 days or less. Immediate renewal required.
+              </div>
+            </div>
+          </div>
+          <button type="button" class="btn btn-secondary" onclick="handleCardNav('maintenance')" style="font-size: 0.78rem; padding: 0.4rem 0.85rem; font-weight: 700;">
+            Open Maintenance Portal &rarr;
+          </button>
+        </div>
+
+        <div class="card-header" style="padding: 1.15rem 1.4rem; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.85rem;">
+          <div>
+            <h3 style="font-size: 1.12rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 0.55rem; margin: 0;">
+              <span>📋</span> Vehicle Statutory Documents &amp; Validity Status
+            </h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0.3rem 0 0 0;">
+              Active Winch fleet statutory compliance (Tax, PUC Pollution, Insurance, and Fitness/Permit) with automated 10-day flashing alert warnings
+            </p>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.55rem; flex-wrap: wrap;">
+            <span class="compliance-legend-pill valid">● Valid</span>
+            <span class="compliance-legend-pill expiring">● Expiring (&le;60d)</span>
+            <span class="compliance-legend-pill flashing-legend">⚡ Expiring (&le;10d Flashing)</span>
+            <span class="compliance-legend-pill expired">● Expired</span>
+            <button type="button" class="btn btn-secondary" onclick="handleCardNav('maintenance')" style="font-size: 0.78rem; padding: 0.4rem 0.8rem; margin-left: 0.3rem;">
+              Full Maintenance Log &rarr;
+            </button>
+          </div>
+        </div>
+
+        <!-- Mobile Horizontal Swipe Hint -->
+        <div class="mobile-swipe-hint">
+          <span>👈 Swipe horizontally to view full dates &amp; compliance 👉</span>
+        </div>
+
+        <div class="table-responsive statutory-table-responsive" style="overflow-x: auto;">
+          <table class="data-table statutory-data-table">
+            <thead>
+              <tr>
+                <th style="width: 170px;">Vehicle Winch ID</th>
+                <th>Tax Validity</th>
+                <th>Pollution (PUC) Validity</th>
+                <th>Insurance Validity</th>
+                <th>Fitness / Permit</th>
+                <th style="width: 135px;" class="text-center">Compliance</th>
+                <th style="width: 140px;" class="text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody id="homeMaintenanceDocMatrixBody">
+              <!-- Dynamically populated document validity rows -->
+            </tbody>
+          </table>
         </div>
       </div>
 
@@ -820,66 +1083,6 @@
           <div class="mod-footer">
             <span class="mod-action-link" style="color: #38bdf8;">Sign In to Portal &rarr;</span>
           </div>
-        </div>
-      </div>
-
-      <!-- MAIN PAGE SECTION: Vehicle Statutory Documents & Validity Status (Publicly Visible with Flashing Alerts) -->
-      <div id="homeStatutorySection" class="workspace-card" style="margin-top: 1.75rem; border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; background: var(--bg-card); box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
-        <!-- Critical Expiry Alert Banner (Flashing when documents expire within 10 days or expired) -->
-        <div id="homeDocAlertBanner" style="display: none; padding: 0.9rem 1.35rem; background: linear-gradient(90deg, rgba(239, 68, 68, 0.16) 0%, rgba(245, 158, 11, 0.22) 100%); border-bottom: 1px solid rgba(239, 68, 68, 0.35); align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;">
-          <div style="display: flex; align-items: center; gap: 0.75rem;">
-            <span class="alert-beacon-dot"></span>
-            <div>
-              <strong id="homeDocAlertTitle" style="color: #ef4444; font-size: 0.88rem; letter-spacing: 0.3px; display: flex; align-items: center; gap: 0.4rem;">
-                ⚠️ CRITICAL STATUTORY EXPIRATION WARNING
-              </strong>
-              <div id="homeDocAlertDesc" style="color: var(--text-main); font-size: 0.8rem; margin-top: 0.2rem;">
-                One or more vehicle statutory documents expire in 10 days or less. Immediate renewal required.
-              </div>
-            </div>
-          </div>
-          <button type="button" class="btn btn-secondary" onclick="handleCardNav('maintenance')" style="font-size: 0.78rem; padding: 0.4rem 0.85rem; font-weight: 700;">
-            Open Maintenance Portal &rarr;
-          </button>
-        </div>
-
-        <div class="card-header" style="padding: 1.15rem 1.4rem; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.85rem;">
-          <div>
-            <h3 style="font-size: 1.12rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 0.55rem; margin: 0;">
-              <span>📋</span> Vehicle Statutory Documents &amp; Validity Status
-            </h3>
-            <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0.3rem 0 0 0;">
-              Active Winch fleet statutory compliance (Tax, PUC Pollution, Insurance, and Fitness/Permit) with automated 10-day flashing alert warnings
-            </p>
-          </div>
-          <div style="display: flex; align-items: center; gap: 0.55rem; flex-wrap: wrap;">
-            <span class="compliance-legend-pill valid">● Valid</span>
-            <span class="compliance-legend-pill expiring">● Expiring (&le;60d)</span>
-            <span class="compliance-legend-pill flashing-legend">⚡ Expiring (&le;10d Flashing)</span>
-            <span class="compliance-legend-pill expired">● Expired</span>
-            <button type="button" class="btn btn-secondary" onclick="handleCardNav('maintenance')" style="font-size: 0.78rem; padding: 0.4rem 0.8rem; margin-left: 0.3rem;">
-              Full Maintenance Log &rarr;
-            </button>
-          </div>
-        </div>
-
-        <div class="table-responsive" style="overflow-x: auto;">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th style="width: 170px;">Vehicle Winch ID</th>
-                <th>Tax Validity</th>
-                <th>Pollution (PUC) Validity</th>
-                <th>Insurance Validity</th>
-                <th>Fitness / Permit</th>
-                <th style="width: 135px;" class="text-center">Compliance</th>
-                <th style="width: 140px;" class="text-center">Action</th>
-              </tr>
-            </thead>
-            <tbody id="homeMaintenanceDocMatrixBody">
-              <!-- Dynamically populated document validity rows -->
-            </tbody>
-          </table>
         </div>
       </div>
     </section>
@@ -1793,11 +1996,11 @@
             </div>
           </div>
           <div class="ot-subnav-pill-group">
-            <button type="button" class="ot-subnav-pill auth-only-nav active" data-sub="logJob" onclick="handleCardNav('logJob')">➕ 1. Single Entry</button>
-            <button type="button" class="ot-subnav-pill auth-only-nav" data-sub="otStatement" onclick="handleCardNav('otStatement')">📋 2. OT Statement</button>
-            <button type="button" class="ot-subnav-pill auth-only-nav" data-sub="fdeStatement" onclick="handleCardNav('fdeStatement')">🏕️ 3. FDE Statement</button>
-            <button type="button" class="ot-subnav-pill auth-only-nav" data-sub="allJobs" onclick="handleCardNav('allJobs')">📑 4. All Jobs (<span class="badgeAllJobsCountText">59</span>)</button>
-            <button type="button" class="ot-subnav-pill auth-only-nav" data-sub="roster" onclick="handleCardNav('roster')">👥 5. Crew Roster</button>
+            <button type="button" class="ot-subnav-pill active" data-sub="logJob" onclick="handleCardNav('logJob')">➕ 1. Single Entry</button>
+            <button type="button" class="ot-subnav-pill" data-sub="otStatement" onclick="handleCardNav('otStatement')">📋 2. OT Statement</button>
+            <button type="button" class="ot-subnav-pill" data-sub="fdeStatement" onclick="handleCardNav('fdeStatement')">🏕️ 3. FDE Statement</button>
+            <button type="button" class="ot-subnav-pill" data-sub="allJobs" onclick="handleCardNav('allJobs')">📑 4. All Jobs (<span class="badgeAllJobsCountText">59</span>)</button>
+            <button type="button" class="ot-subnav-pill" data-sub="roster" onclick="handleCardNav('roster')">👥 5. Crew Roster</button>
           </div>
         </div>
 
@@ -2152,11 +2355,11 @@
               </div>
             </div>
             <div class="ot-subnav-pill-group">
-              <button type="button" class="ot-subnav-pill auth-only-nav" data-sub="logJob" onclick="handleCardNav('logJob')">➕ 1. Single Entry</button>
-              <button type="button" class="ot-subnav-pill auth-only-nav active" data-sub="otStatement" onclick="handleCardNav('otStatement')">📋 2. OT Statement</button>
-              <button type="button" class="ot-subnav-pill auth-only-nav" data-sub="fdeStatement" onclick="handleCardNav('fdeStatement')">🏕️ 3. FDE Statement</button>
-              <button type="button" class="ot-subnav-pill auth-only-nav" data-sub="allJobs" onclick="handleCardNav('allJobs')">📑 4. All Jobs (<span class="badgeAllJobsCountText">59</span>)</button>
-              <button type="button" class="ot-subnav-pill auth-only-nav" data-sub="roster" onclick="handleCardNav('roster')">👥 5. Crew Roster</button>
+              <button type="button" class="ot-subnav-pill" data-sub="logJob" onclick="handleCardNav('logJob')">➕ 1. Single Entry</button>
+              <button type="button" class="ot-subnav-pill active" data-sub="otStatement" onclick="handleCardNav('otStatement')">📋 2. OT Statement</button>
+              <button type="button" class="ot-subnav-pill" data-sub="fdeStatement" onclick="handleCardNav('fdeStatement')">🏕️ 3. FDE Statement</button>
+              <button type="button" class="ot-subnav-pill" data-sub="allJobs" onclick="handleCardNav('allJobs')">📑 4. All Jobs (<span class="badgeAllJobsCountText">59</span>)</button>
+              <button type="button" class="ot-subnav-pill" data-sub="roster" onclick="handleCardNav('roster')">👥 5. Crew Roster</button>
             </div>
           </div>
 
@@ -2435,15 +2638,11 @@
                         <!-- Totals row -->
                       </tfoot>
                     </table>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </div>
-          </div> <!-- /otSubViewOtStatement -->
-        </div> <!-- /otPage-otStatement -->
+                  </div> <!-- /table-responsive -->
+                </div> <!-- /workspace-card -->
+              </div> <!-- /otYearlyContainer -->
+            </div> <!-- /otSubViewOtStatement -->
+          </div> <!-- /otPage-otStatement -->
 
         <!-- ======================================================= -->
         <!-- DEDICATED SUBPAGE 3: FDE STATEMENT                      -->
@@ -2463,11 +2662,11 @@
               </div>
             </div>
             <div class="ot-subnav-pill-group">
-              <button type="button" class="ot-subnav-pill auth-only-nav" data-sub="logJob" onclick="handleCardNav('logJob')">➕ 1. Single Entry</button>
-              <button type="button" class="ot-subnav-pill auth-only-nav" data-sub="otStatement" onclick="handleCardNav('otStatement')">📋 2. OT Statement</button>
-              <button type="button" class="ot-subnav-pill auth-only-nav active" data-sub="fdeStatement" onclick="handleCardNav('fdeStatement')">🏕️ 3. FDE Statement</button>
-              <button type="button" class="ot-subnav-pill auth-only-nav" data-sub="allJobs" onclick="handleCardNav('allJobs')">📑 4. All Jobs (<span class="badgeAllJobsCountText">59</span>)</button>
-              <button type="button" class="ot-subnav-pill auth-only-nav" data-sub="roster" onclick="handleCardNav('roster')">👥 5. Crew Roster</button>
+              <button type="button" class="ot-subnav-pill" data-sub="logJob" onclick="handleCardNav('logJob')">➕ 1. Single Entry</button>
+              <button type="button" class="ot-subnav-pill" data-sub="otStatement" onclick="handleCardNav('otStatement')">📋 2. OT Statement</button>
+              <button type="button" class="ot-subnav-pill active" data-sub="fdeStatement" onclick="handleCardNav('fdeStatement')">🏕️ 3. FDE Statement</button>
+              <button type="button" class="ot-subnav-pill" data-sub="allJobs" onclick="handleCardNav('allJobs')">📑 4. All Jobs (<span class="badgeAllJobsCountText">59</span>)</button>
+              <button type="button" class="ot-subnav-pill" data-sub="roster" onclick="handleCardNav('roster')">👥 5. Crew Roster</button>
             </div>
           </div>
 
@@ -2594,11 +2793,11 @@
               </div>
             </div>
             <div class="ot-subnav-pill-group">
-              <button type="button" class="ot-subnav-pill auth-only-nav" data-sub="logJob" onclick="handleCardNav('logJob')">➕ 1. Single Entry</button>
-              <button type="button" class="ot-subnav-pill auth-only-nav" data-sub="otStatement" onclick="handleCardNav('otStatement')">📋 2. OT Statement</button>
-              <button type="button" class="ot-subnav-pill auth-only-nav" data-sub="fdeStatement" onclick="handleCardNav('fdeStatement')">🏕️ 3. FDE Statement</button>
-              <button type="button" class="ot-subnav-pill auth-only-nav active" data-sub="allJobs" onclick="handleCardNav('allJobs')">📑 4. All Jobs (<span class="badgeAllJobsCountText">59</span>)</button>
-              <button type="button" class="ot-subnav-pill auth-only-nav" data-sub="roster" onclick="handleCardNav('roster')">👥 5. Crew Roster</button>
+              <button type="button" class="ot-subnav-pill" data-sub="logJob" onclick="handleCardNav('logJob')">➕ 1. Single Entry</button>
+              <button type="button" class="ot-subnav-pill" data-sub="otStatement" onclick="handleCardNav('otStatement')">📋 2. OT Statement</button>
+              <button type="button" class="ot-subnav-pill" data-sub="fdeStatement" onclick="handleCardNav('fdeStatement')">🏕️ 3. FDE Statement</button>
+              <button type="button" class="ot-subnav-pill active" data-sub="allJobs" onclick="handleCardNav('allJobs')">📑 4. All Jobs (<span class="badgeAllJobsCountText">59</span>)</button>
+              <button type="button" class="ot-subnav-pill" data-sub="roster" onclick="handleCardNav('roster')">👥 5. Crew Roster</button>
             </div>
           </div>
 
@@ -2668,11 +2867,11 @@
               </div>
             </div>
             <div class="ot-subnav-pill-group">
-              <button type="button" class="ot-subnav-pill auth-only-nav" data-sub="logJob" onclick="handleCardNav('logJob')">➕ 1. Single Entry</button>
-              <button type="button" class="ot-subnav-pill auth-only-nav" data-sub="otStatement" onclick="handleCardNav('otStatement')">📋 2. OT Statement</button>
-              <button type="button" class="ot-subnav-pill auth-only-nav" data-sub="fdeStatement" onclick="handleCardNav('fdeStatement')">🏕️ 3. FDE Statement</button>
-              <button type="button" class="ot-subnav-pill auth-only-nav" data-sub="allJobs" onclick="handleCardNav('allJobs')">📑 4. All Jobs (<span class="badgeAllJobsCountText">59</span>)</button>
-              <button type="button" class="ot-subnav-pill auth-only-nav active" data-sub="roster" onclick="handleCardNav('roster')">👥 5. Crew Roster</button>
+              <button type="button" class="ot-subnav-pill" data-sub="logJob" onclick="handleCardNav('logJob')">➕ 1. Single Entry</button>
+              <button type="button" class="ot-subnav-pill" data-sub="otStatement" onclick="handleCardNav('otStatement')">📋 2. OT Statement</button>
+              <button type="button" class="ot-subnav-pill" data-sub="fdeStatement" onclick="handleCardNav('fdeStatement')">🏕️ 3. FDE Statement</button>
+              <button type="button" class="ot-subnav-pill" data-sub="allJobs" onclick="handleCardNav('allJobs')">📑 4. All Jobs (<span class="badgeAllJobsCountText">59</span>)</button>
+              <button type="button" class="ot-subnav-pill active" data-sub="roster" onclick="handleCardNav('roster')">👥 5. Crew Roster</button>
             </div>
           </div>
 
@@ -3823,13 +4022,39 @@
   </main><!-- /app-main-content -->
   </div><!-- /app-layout -->
 
+  <!-- Mobile Enterprise Quick-Dock (Optimized for One-Hand Touch on Phones) -->
+  <nav class="mobile-quick-dock" id="mobileQuickDock" aria-label="Mobile Navigation Dock">
+    <button type="button" class="dock-item active" onclick="returnToDashboard(event)" title="Home Command Dashboard">
+      <span class="dock-icon">🏠</span>
+      <span class="dock-label">Home</span>
+    </button>
+    <button type="button" class="dock-item" onclick="document.getElementById('homeStatutorySection')?.scrollIntoView({behavior: 'smooth'})" title="Vehicle Statutory Matrix">
+      <span class="dock-icon">📋</span>
+      <span class="dock-label">Vehicles</span>
+    </button>
+    <a href="well-sites.html" class="dock-item" title="Well Sites &amp; Clusters">
+      <span class="dock-icon">📍</span>
+      <span class="dock-label">Wells</span>
+    </a>
+    <a href="ot-charts.html" class="dock-item" title="OT &amp; FDE Analytics">
+      <span class="dock-icon">⏱️</span>
+      <span class="dock-label">OT / FDE</span>
+    </a>
+    <button type="button" class="dock-item dock-item-auth" onclick="if(window.appState&amp;&amp;window.appState.isAuthenticated){switchMainTab('settings')}else{openSignInModal()}" title="Sign In or Account">
+      <span class="dock-icon">🔑</span>
+      <span class="dock-label">Sign In</span>
+    </button>
+  </nav>
+
   <!-- Toast Notification Container -->
   <div class="toast-container" id="toastContainer"></div>
 
   <!-- Chart.js Library -->
   <script src="js/chart.umd.min.js"></script>
   <!-- Application Logic -->
-  <script src="js/app.js"></script>
+  <script src="js/app.js?v=20261013d"></script>
+  <!-- Visual Drag & Drop Layout Customizer -->
+  <script src="js/layoutCustomizer.js"></script>
 </body>
 </html>
 

@@ -95,6 +95,7 @@ test('API protects admin actions, restores operational changes, and exports the 
     assert.equal(ot.jobs.length, 0);
     await request('/api/auth/logout', 'POST', {}, renewed);
     assert.equal((await request('/api/data', 'GET', undefined, renewed)).status, 401);
+    assert.equal((await request('/api/maintenance', 'GET')).status, 200);
   } finally {
     await stop();
     assert(dataDir.startsWith(path.join(path.resolve('.'), '.ongc-test-')));

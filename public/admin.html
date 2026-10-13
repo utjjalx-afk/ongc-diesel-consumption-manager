@@ -331,6 +331,96 @@
       margin-top: 0.2rem;
     }
 
+    /* Database & Auto-Backup Management Styles */
+    .db-grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    @media (max-width: 900px) {
+      .db-grid-2col {
+        grid-template-columns: 1fr;
+      }
+    }
+    .toggle-switch-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.85rem 1rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      margin-bottom: 0.75rem;
+      transition: all 0.2s ease;
+    }
+    .toggle-switch-container:hover {
+      border-color: rgba(37, 99, 235, 0.4);
+    }
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 48px;
+      height: 26px;
+      flex-shrink: 0;
+    }
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background-color: rgba(255, 255, 255, 0.15);
+      transition: .25s ease;
+      border-radius: 26px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .25s ease;
+      border-radius: 50%;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+    }
+    input:checked + .toggle-slider {
+      background-color: #10b981;
+      border-color: #10b981;
+    }
+    input:checked + .toggle-slider:before {
+      transform: translateX(22px);
+    }
+    .db-table-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.45rem 0.85rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .db-table-pill:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+    }
+    .db-table-pill.active {
+      background: rgba(37, 99, 235, 0.2);
+      border-color: rgba(37, 99, 235, 0.6);
+      color: #93c5fd;
+    }
+
     /* KPI Stat Cards Grid */
     .kpi-grid {
       display: grid;
@@ -853,6 +943,16 @@
         <span class="nav-badge neutral" id="badgeUsersCount">0</span>
       </button>
 
+      <button class="nav-tab-btn" onclick="switchAdminTab('passwords')" id="tabBtnPasswords">
+        <span class="tab-label">🔑 Password Management</span>
+        <span class="nav-badge neutral" id="badgePasswordsCount">0</span>
+      </button>
+
+      <button class="nav-tab-btn" onclick="switchAdminTab('database')" id="tabBtnDatabase">
+        <span class="tab-label">🗄️ Database &amp; Auto-Backup</span>
+        <span class="nav-badge neutral" id="badgeDbStatus" style="background: rgba(16, 185, 129, 0.2); color: #10b981; font-size: 0.68rem;">Ready</span>
+      </button>
+
       <div class="sidebar-section-title" style="margin-top: 1rem;">GOVERNANCE & AUDIT</div>
 
       <button class="nav-tab-btn" onclick="switchAdminTab('audit')">
@@ -1095,6 +1195,52 @@
       </section>
 
       <!-- ======================================================== -->
+      <!-- TAB: USER PASSWORD MANAGEMENT (ADMIN)                    -->
+      <!-- ======================================================== -->
+      <section id="panel-passwords" class="tab-content">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">🔑 User Password Management</h1>
+            <p class="page-subtitle">View, reveal, and directly change or reset user passwords with DOB verification as Administrator.</p>
+          </div>
+          <div style="display: flex; gap: 0.5rem;">
+            <button class="btn btn-secondary btn-sm" onclick="loadPasswordsTable()">
+              🔄 Refresh Passwords
+            </button>
+          </div>
+        </div>
+
+        <div class="data-card">
+          <div class="data-card-header">
+            <div class="data-card-title">
+              Credentials &amp; Password Directory (<span id="passwordsTableCount">0</span> users)
+            </div>
+            <div class="data-card-tools">
+              <input type="text" class="search-input" id="searchPasswordsInput" placeholder="Search user ID, name, CPF..." oninput="filterPasswordsTable()">
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>User ID</th>
+                  <th>Official Name &amp; Role</th>
+                  <th>CPF No.</th>
+                  <th>Date of Birth (DOB)</th>
+                  <th>Password Credential</th>
+                  <th>Account Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="passwordsTableBody">
+                <tr><td colspan="7" style="text-align: center; color: var(--text-dim);">Loading password records...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
       <!-- TAB 5: SYSTEM AUDIT TRAIL -->
       <!-- ======================================================== -->
       <section id="panel-audit" class="tab-content">
@@ -1153,6 +1299,272 @@
             </table>
           </div>
         </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- TAB 6: DATABASE & AUTO-BACKUP MANAGEMENT -->
+      <!-- ======================================================== -->
+      <section id="panel-database" class="tab-content">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">🗄️ Database &amp; Auto-Backup Control</h1>
+            <p class="page-subtitle">Enterprise PostgreSQL architecture, live database table explorer, and automated daily &amp; weekly backup schedules.</p>
+          </div>
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <button class="btn btn-orange btn-sm" onclick="handleCreateInstantBackup()">
+              ⚡ Instant Backup Now
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="downloadPostgresSqlDump()" title="Download standard PostgreSQL .sql DDL and data insert script">
+              📥 Export PostgreSQL .sql Dump
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="loadDatabasePanelData()">
+              🔄 Refresh Status
+            </button>
+          </div>
+        </div>
+
+        <!-- TWO COLUMN TOP GRID: POSTGRESQL ENGINE & AUTO-BACKUP SWITCHES -->
+        <div class="db-grid-2col">
+
+          <!-- CARD 1: DATABASE ENGINE & POSTGRESQL STATUS -->
+          <div class="data-card" style="margin-bottom: 0;">
+            <div class="data-card-header">
+              <div class="data-card-title">
+                <span>🐘 PostgreSQL Database Engine</span>
+              </div>
+              <span class="badge" id="badgeEngineState" style="background: rgba(16, 185, 129, 0.2); color: #10b981; font-weight: 700;">
+                Connected &amp; Active
+              </span>
+            </div>
+            <div style="padding: 1.25rem;">
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1rem; line-height: 1.45;">
+                Critical ONGC operations data is mirrored across relational PostgreSQL schemas and local High-Availability persistent stores with automated schema validation.
+              </p>
+
+              <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 0.85rem; margin-bottom: 1rem; font-family: var(--font-mono); font-size: 0.78rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.35rem;">
+                  <span style="color: var(--text-dim);">Database Engine:</span>
+                  <span style="color: #93c5fd; font-weight: 700;" id="textDbEngineName">PostgreSQL / High-Availability Store</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.35rem;">
+                  <span style="color: var(--text-dim);">Host &amp; Port:</span>
+                  <span style="color: #fff;" id="textDbHostPort">localhost:5432</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.35rem;">
+                  <span style="color: var(--text-dim);">Database Name:</span>
+                  <span style="color: var(--ongc-gold);" id="textDbName">ongc_operations</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                  <span style="color: var(--text-dim);">Driver Status:</span>
+                  <span style="color: #34d399;" id="textDbDriver">node-postgres (pg 8.13.3) Ready</span>
+                </div>
+              </div>
+
+              <!-- Database Records Summary Grid -->
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; margin-bottom: 1rem; text-align: center;">
+                <div style="background: rgba(255,255,255,0.04); padding: 0.5rem; border-radius: 6px; border: 1px solid var(--border-subtle);">
+                  <div style="font-size: 1.15rem; font-weight: 800; color: #fff;" id="statDbUsers">0</div>
+                  <div style="font-size: 0.68rem; color: var(--text-dim); text-transform: uppercase;">Users</div>
+                </div>
+                <div style="background: rgba(255,255,255,0.04); padding: 0.5rem; border-radius: 6px; border: 1px solid var(--border-subtle);">
+                  <div style="font-size: 1.15rem; font-weight: 800; color: #38bdf8;" id="statDbJobs">0</div>
+                  <div style="font-size: 0.68rem; color: var(--text-dim); text-transform: uppercase;">OT/FDE Jobs</div>
+                </div>
+                <div style="background: rgba(255,255,255,0.04); padding: 0.5rem; border-radius: 6px; border: 1px solid var(--border-subtle);">
+                  <div style="font-size: 1.15rem; font-weight: 800; color: #fbbf24;" id="statDbRoster">0</div>
+                  <div style="font-size: 0.68rem; color: var(--text-dim); text-transform: uppercase;">Crew Roster</div>
+                </div>
+                <div style="background: rgba(255,255,255,0.04); padding: 0.5rem; border-radius: 6px; border: 1px solid var(--border-subtle);">
+                  <div style="font-size: 1.15rem; font-weight: 800; color: #c084fc;" id="statDbAudit">0</div>
+                  <div style="font-size: 0.68rem; color: var(--text-dim); text-transform: uppercase;">Audit Logs</div>
+                </div>
+                <div style="background: rgba(255,255,255,0.04); padding: 0.5rem; border-radius: 6px; border: 1px solid var(--border-subtle);">
+                  <div style="font-size: 1.15rem; font-weight: 800; color: #34d399;" id="statDbVehicles">0</div>
+                  <div style="font-size: 0.68rem; color: var(--text-dim); text-transform: uppercase;">Vehicles</div>
+                </div>
+                <div style="background: rgba(255,255,255,0.04); padding: 0.5rem; border-radius: 6px; border: 1px solid var(--border-subtle);">
+                  <div style="font-size: 1.15rem; font-weight: 800; color: #f43f5e;" id="statDbWells">0</div>
+                  <div style="font-size: 0.68rem; color: var(--text-dim); text-transform: uppercase;">Well Sites</div>
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 0.5rem;">
+                <button type="button" class="btn btn-secondary btn-sm" style="flex: 1;" onclick="openModal('modalTestPostgres')">
+                  ⚙️ Test / Connect PostgreSQL
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- CARD 2: AUTO-BACKUP SCHEDULES (DAILY & WEEKLY SWITCHES) -->
+          <div class="data-card" style="margin-bottom: 0;">
+            <div class="data-card-header">
+              <div class="data-card-title">
+                <span>🔄 Automated Backup Scheduler</span>
+              </div>
+              <span class="badge" style="background: rgba(59, 130, 246, 0.2); color: #93c5fd; font-weight: 700;">
+                Daemon Active
+              </span>
+            </div>
+            <div style="padding: 1.25rem;">
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1rem; line-height: 1.45;">
+                Configure automated background backups. Both PostgreSQL <code style="color:#93c5fd;">.sql</code> dumps and point-in-time JSON snapshots are generated automatically.
+              </p>
+
+              <!-- SWITCH 1: DAILY AUTO-BACKUP -->
+              <div class="toggle-switch-container">
+                <div style="flex: 1; padding-right: 1rem;">
+                  <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.2rem;">
+                    <span style="font-weight: 700; color: #fff; font-size: 0.9rem;">📅 Daily Auto-Backup</span>
+                    <span class="badge" id="badgeDailyState" style="background: rgba(16, 185, 129, 0.2); color: #10b981; font-size: 0.68rem;">Enabled</span>
+                  </div>
+                  <div style="font-size: 0.74rem; color: var(--text-dim);" id="descLastDailyRun">
+                    Runs every day automatically.
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem;">
+                    <label style="font-size: 0.75rem; color: var(--text-muted);">Backup Time:</label>
+                    <input type="time" id="inputDailyTime" value="02:00" class="form-input" style="width: 110px; padding: 0.25rem 0.5rem; font-size: 0.8rem;" onchange="handleSaveBackupSchedule()">
+                  </div>
+                </div>
+                <label class="toggle-switch" title="Toggle Daily Auto-Backup On/Off">
+                  <input type="checkbox" id="switchDailyBackup" checked onchange="handleSaveBackupSchedule()">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+
+              <!-- SWITCH 2: WEEKLY AUTO-BACKUP -->
+              <div class="toggle-switch-container">
+                <div style="flex: 1; padding-right: 1rem;">
+                  <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.2rem;">
+                    <span style="font-weight: 700; color: #fff; font-size: 0.9rem;">🗓️ Weekly Auto-Backup</span>
+                    <span class="badge" id="badgeWeeklyState" style="background: rgba(16, 185, 129, 0.2); color: #10b981; font-size: 0.68rem;">Enabled</span>
+                  </div>
+                  <div style="font-size: 0.74rem; color: var(--text-dim);" id="descLastWeeklyRun">
+                    Runs weekly archive snapshot.
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem; flex-wrap: wrap;">
+                    <label style="font-size: 0.75rem; color: var(--text-muted);">Every:</label>
+                    <select id="selectWeeklyDay" class="form-select" style="width: 115px; padding: 0.25rem 0.5rem; font-size: 0.8rem;" onchange="handleSaveBackupSchedule()">
+                      <option value="Sunday">Sunday</option>
+                      <option value="Monday">Monday</option>
+                      <option value="Tuesday">Tuesday</option>
+                      <option value="Wednesday">Wednesday</option>
+                      <option value="Thursday">Thursday</option>
+                      <option value="Friday">Friday</option>
+                      <option value="Saturday">Saturday</option>
+                    </select>
+                    <label style="font-size: 0.75rem; color: var(--text-muted);">at</label>
+                    <input type="time" id="inputWeeklyTime" value="03:00" class="form-input" style="width: 105px; padding: 0.25rem 0.5rem; font-size: 0.8rem;" onchange="handleSaveBackupSchedule()">
+                  </div>
+                </div>
+                <label class="toggle-switch" title="Toggle Weekly Auto-Backup On/Off">
+                  <input type="checkbox" id="switchWeeklyBackup" checked onchange="handleSaveBackupSchedule()">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.74rem; color: var(--text-dim); margin-top: 0.5rem;">
+                <span>🛡️ Retention Policy: 30 rolling snapshots</span>
+                <span id="saveStatusIndicator" style="color: #10b981; font-weight: 600; display: none;">✓ Schedule Saved</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- LIVE DATABASE TABLES DATA EXPLORER -->
+        <div class="data-card">
+          <div class="data-card-header" style="flex-wrap: wrap; gap: 0.8rem;">
+            <div>
+              <div class="data-card-title">
+                📊 Live Database Data Explorer
+              </div>
+              <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 0.2rem;">
+                Inspect active table records directly from the database engine.
+              </div>
+            </div>
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+              <input type="text" class="search-input" id="searchDbTableInput" placeholder="Filter rows in active table..." oninput="filterLiveDbTable()" style="min-width: 220px;">
+              <button class="btn btn-secondary btn-sm" onclick="loadLiveDbTable(currentActiveDbTable)">
+                🔄 Refresh
+              </button>
+            </div>
+          </div>
+
+          <!-- Table Selector Navigation Pills -->
+          <div style="padding: 0.75rem 1.25rem; background: rgba(0,0,0,0.15); border-bottom: 1px solid var(--border-subtle); display: flex; gap: 0.5rem; flex-wrap: wrap;" id="dbTablePills">
+            <button type="button" class="db-table-pill active" onclick="switchDbTable('users', this)">
+              👥 Users (ongc_users)
+            </button>
+            <button type="button" class="db-table-pill" onclick="switchDbTable('ot_fde_jobs', this)">
+              ⏱️ OT / FDE Claims (ongc_ot_fde_jobs)
+            </button>
+            <button type="button" class="db-table-pill" onclick="switchDbTable('roster', this)">
+              👥 Crew Roster (ongc_roster)
+            </button>
+            <button type="button" class="db-table-pill" onclick="switchDbTable('vehicles', this)">
+              🚛 Vehicles &amp; Compliance (ongc_vehicles)
+            </button>
+            <button type="button" class="db-table-pill" onclick="switchDbTable('well_sites', this)">
+              🛢️ Well Sites (ongc_wells)
+            </button>
+            <button type="button" class="db-table-pill" onclick="switchDbTable('audit_log', this)">
+              🔒 Audit Trail (ongc_audit_log)
+            </button>
+          </div>
+
+          <!-- Live Table Viewer -->
+          <div class="table-responsive" style="max-height: 480px; overflow-y: auto;">
+            <table id="liveDbTable">
+              <thead id="liveDbTableHead">
+                <tr><th>Loading schema...</th></tr>
+              </thead>
+              <tbody id="liveDbTableBody">
+                <tr><td style="text-align: center; color: var(--text-dim); padding: 2rem;">Loading database records...</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="padding: 0.65rem 1.25rem; background: var(--bg-card); border-top: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center; font-size: 0.76rem; color: var(--text-dim);">
+            <span id="liveDbTableFooterCount">Showing 0 records</span>
+            <span style="font-family: var(--font-mono); color: #93c5fd;">Read-Only Production View</span>
+          </div>
+        </div>
+
+        <!-- BACKUP ARCHIVES & DISASTER RECOVERY TABLE -->
+        <div class="data-card">
+          <div class="data-card-header">
+            <div>
+              <div class="data-card-title">
+                📦 Backup Snapshots &amp; Disaster Recovery History (<span id="backupsListCount">0</span> files)
+              </div>
+              <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 0.2rem;">
+                Instant restore and download point for PostgreSQL dumps (.sql) and JSON operational states.
+              </div>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="loadBackupsList()">
+              🔄 Refresh List
+            </button>
+          </div>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>Backup File Name</th>
+                  <th>Created Date &amp; Time</th>
+                  <th>Trigger Type</th>
+                  <th>Format</th>
+                  <th>Size</th>
+                  <th>Records Summary</th>
+                  <th style="text-align: right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="backupsTableBody">
+                <tr><td colspan="7" style="text-align: center; color: var(--text-dim);">Loading backup archives...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
       </section>
 
     </main>
@@ -1269,6 +1681,139 @@
           <button type="submit" class="btn btn-orange">Execute Promotion Now</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: ADMIN CHANGE USER PASSWORD -->
+  <!-- ======================================================== -->
+  <div class="modal-overlay" id="modalAdminChangePassword">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">🔑 Change User Password &amp; DOB</h3>
+        <button class="btn btn-secondary btn-sm" onclick="closeModal('modalAdminChangePassword')">✕</button>
+      </div>
+      <form id="formAdminChangePassword" onsubmit="handleAdminSavePassword(event)">
+        <div class="modal-body">
+          <div style="background: rgba(37, 99, 235, 0.1); border: 1px solid rgba(37, 99, 235, 0.3); border-radius: var(--radius-sm); padding: 0.85rem; margin-bottom: 1rem;">
+            <div style="font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; font-weight: 700;">Target User Account</div>
+            <div style="font-size: 1.05rem; font-weight: 700; color: #fff; margin-top: 0.2rem;" id="modalTargetUserName">UTJJAL CHETIA</div>
+            <div style="font-size: 0.8rem; color: var(--ongc-gold);" id="modalTargetUserMeta">CPF-140751 &bull; CPF: 140751</div>
+          </div>
+
+          <input type="hidden" id="modalTargetUserId">
+
+          <div class="form-group">
+            <label class="form-label">Official Date of Birth (DOB)</label>
+            <input type="date" id="modalTargetUserDob" class="form-input" style="color:#fff;">
+            <span style="font-size: 0.72rem; color: var(--text-dim);">Used by the crew member for self-service password reset.</span>
+          </div>
+
+          <div class="form-group">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+              <label class="form-label" style="margin: 0;">New Password * (min 6 characters)</label>
+              <button type="button" class="btn btn-secondary btn-sm" style="font-size: 0.72rem; padding: 0.2rem 0.5rem;" onclick="generateRandomAdminPassword()">
+                🎲 Generate Strong Password
+              </button>
+            </div>
+            <div style="display: flex; gap: 0.4rem;">
+              <input type="text" id="modalTargetNewPassword" class="form-input" placeholder="Enter new password" required minlength="6" style="font-family: var(--font-mono); font-weight: 600;">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modalAdminChangePassword')">Cancel</button>
+          <button type="submit" class="btn btn-orange">💾 Save &amp; Update Password</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: CONFIGURE POSTGRESQL CONNECTION -->
+  <!-- ======================================================== -->
+  <div class="modal-overlay" id="modalTestPostgres">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">🐘 PostgreSQL Engine Connection</h3>
+        <button class="btn btn-secondary btn-sm" onclick="closeModal('modalTestPostgres')">✕</button>
+      </div>
+      <form id="formTestPostgres" onsubmit="handleTestPgConnection(event)">
+        <div class="modal-body">
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem;">
+            Connect to an external or cloud PostgreSQL cluster (Neon, Supabase, AWS RDS, or local PostgreSQL service).
+          </p>
+
+          <div class="form-group">
+            <label class="form-label">Connection String (URL)</label>
+            <input type="text" id="pgConnString" class="form-input" placeholder="postgresql://user:password@localhost:5432/ongc_operations">
+            <span style="font-size: 0.72rem; color: var(--text-dim);">Takes precedence over individual host fields if specified.</span>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Host</label>
+              <input type="text" id="pgHost" class="form-input" value="localhost">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Port</label>
+              <input type="number" id="pgPort" class="form-input" value="5432">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Database Name</label>
+              <input type="text" id="pgDbName" class="form-input" value="ongc_operations">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Database User</label>
+              <input type="text" id="pgUser" class="form-input" value="postgres">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <input type="password" id="pgPassword" class="form-input" placeholder="Enter database password">
+          </div>
+
+          <div id="pgTestResultBox" style="display: none; padding: 0.75rem; border-radius: var(--radius-sm); font-size: 0.8rem; margin-top: 0.75rem;"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modalTestPostgres')">Close</button>
+          <button type="submit" class="btn btn-primary" id="btnSubmitPgTest">⚡ Test Connection</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL: CONFIRM RESTORE BACKUP -->
+  <!-- ======================================================== -->
+  <div class="modal-overlay" id="modalConfirmRestoreBackup">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title" style="color: #f87171;">⚠️ Confirm Database Restoration</h3>
+        <button class="btn btn-secondary btn-sm" onclick="closeModal('modalConfirmRestoreBackup')">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.85rem; color: #fff; margin-bottom: 0.75rem; font-weight: 600;">
+          Are you sure you want to restore data from this backup?
+        </p>
+        <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: var(--radius-sm); padding: 0.85rem; font-family: var(--font-mono); font-size: 0.8rem; color: #fca5a5; margin-bottom: 1rem;">
+          <div style="font-weight: 700;" id="restoreTargetFilename">backup_filename.json</div>
+          <div style="font-size: 0.74rem; color: var(--text-dim); margin-top: 0.3rem;">
+            ⚠️ This will restore users, claims, roster, and operational stores back to the exact snapshot recorded at that time.
+          </div>
+        </div>
+        <input type="hidden" id="restoreHiddenFilename">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('modalConfirmRestoreBackup')">Cancel</button>
+        <button type="button" class="btn btn-danger" id="btnExecuteRestore" onclick="executeRestoreBackup()">
+          ↺ Confirm &amp; Restore Data
+        </button>
+      </div>
     </div>
   </div>
 
@@ -1389,6 +1934,8 @@
       if (tabId === 'approvals') loadApprovalRequests();
       if (tabId === 'crew') loadCrewTable();
       if (tabId === 'users') loadUsersTable();
+      if (tabId === 'passwords') loadPasswordsTable();
+      if (tabId === 'database') loadDatabasePanelData();
       if (tabId === 'audit') loadAuditTable();
     }
 
@@ -1398,7 +1945,9 @@
         loadApprovalRequests(),
         loadCrewTable(),
         loadUsersTable(),
-        loadAuditTable()
+        loadPasswordsTable(),
+        loadAuditTable(),
+        loadDatabaseStatus()
       ]);
       updateDashboardKPIs();
     }
@@ -1421,6 +1970,8 @@
 
       document.getElementById('badgeCrewCount').textContent = Object.keys(crewRoster).length;
       document.getElementById('badgeUsersCount').textContent = usersList.length;
+      const passBadge = document.getElementById('badgePasswordsCount');
+      if (passBadge) passBadge.textContent = usersList.length;
 
       // Update overview pending preview
       const previewBox = document.getElementById('overviewPendingPreview');
@@ -1915,6 +2466,174 @@
     }
 
     // ========================================================
+    // PASSWORD MANAGEMENT MODULE (ADMIN)
+    // ========================================================
+    async function loadPasswordsTable() {
+      try {
+        const res = await fetch('/api/auth/users');
+        const data = await res.json();
+        if (data.success) {
+          usersList = data.users || [];
+          renderPasswordsTable(usersList);
+          const countEl = document.getElementById('passwordsTableCount');
+          if (countEl) countEl.textContent = usersList.length;
+          const badgeEl = document.getElementById('badgePasswordsCount');
+          if (badgeEl) badgeEl.textContent = usersList.length;
+        }
+      } catch (err) {
+        console.error('Failed to load password records:', err);
+      }
+    }
+
+    function renderPasswordsTable(list) {
+      const tbody = document.getElementById('passwordsTableBody');
+      if (!tbody) return;
+      if (!list || list.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--text-dim);">No user accounts found.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = list.map((u, idx) => {
+        const pass = u.savedPassword || '••••••••';
+        const dobDisplay = u.dob ? u.dob : '<span style="color: var(--ongc-gold); font-size: 0.76rem;">⚠️ Not Set (Click Edit)</span>';
+        const passElId = `passText_${idx}`;
+        const passBtnId = `passBtn_${idx}`;
+
+        return `
+          <tr>
+            <td>
+              <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <div class="admin-avatar" style="width: 26px; height: 26px; font-size: 0.7rem; background: linear-gradient(135deg, #1d4ed8, #0ea5e9);">
+                  ${u.initials || 'U'}
+                </div>
+                <strong style="color: #fff; font-family: var(--font-mono);">${u.userId}</strong>
+              </div>
+            </td>
+            <td>
+              <strong style="color: #fff;">${u.name}</strong>
+              <div style="font-size: 0.74rem; color: var(--text-muted);">${u.role || 'ONGC Logistics'}</div>
+            </td>
+            <td><span style="font-family: var(--font-mono); color: var(--ongc-gold); font-weight: 600;">${u.cpf || '—'}</span></td>
+            <td>
+              <span style="font-family: var(--font-mono); font-size: 0.85rem; color: #e2e8f0;">${dobDisplay}</span>
+            </td>
+            <td>
+              <div style="display: inline-flex; align-items: center; gap: 0.4rem; background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-subtle); padding: 0.3rem 0.6rem; border-radius: var(--radius-sm);">
+                <span id="${passElId}" data-real-pass="${encodeURIComponent(pass)}" style="font-family: var(--font-mono); font-weight: 600; color: #38bdf8; font-size: 0.85rem; letter-spacing: 0.05em;">
+                  ••••••••
+                </span>
+                <button type="button" id="${passBtnId}" onclick="togglePasswordReveal('${passBtnId}', '${passElId}')" class="btn btn-secondary btn-sm" style="padding: 0.15rem 0.4rem; font-size: 0.7rem;" title="Show / Hide Password">
+                  👁️
+                </button>
+                <button type="button" onclick="copyPasswordToClipboard(decodeURIComponent(document.getElementById('${passElId}').getAttribute('data-real-pass')))" class="btn btn-secondary btn-sm" style="padding: 0.15rem 0.4rem; font-size: 0.7rem;" title="Copy Password">
+                  📋
+                </button>
+              </div>
+            </td>
+            <td><span class="status-badge ${u.status || 'active'}">${u.status || 'active'}</span></td>
+            <td>
+              <button type="button" class="btn btn-orange btn-sm" onclick="openAdminChangePasswordModal('${u.userId}')" title="Change or Reset User Password">
+                ✏️ Change Password
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function filterPasswordsTable() {
+      const query = document.getElementById('searchPasswordsInput').value.trim().toLowerCase();
+      const filtered = usersList.filter(u =>
+        u.userId.toLowerCase().includes(query) ||
+        u.name.toLowerCase().includes(query) ||
+        (u.cpf && String(u.cpf).includes(query)) ||
+        (u.dob && u.dob.includes(query)) ||
+        (u.role && u.role.toLowerCase().includes(query))
+      );
+      renderPasswordsTable(filtered);
+    }
+
+    function togglePasswordReveal(btnId, textId) {
+      const textEl = document.getElementById(textId);
+      const btnEl = document.getElementById(btnId);
+      if (!textEl || !btnEl) return;
+      const realPass = decodeURIComponent(textEl.getAttribute('data-real-pass') || '');
+      const isMasked = textEl.textContent.trim() === '••••••••';
+      if (isMasked) {
+        textEl.textContent = realPass;
+        btnEl.textContent = '🔒';
+        btnEl.title = 'Hide Password';
+      } else {
+        textEl.textContent = '••••••••';
+        btnEl.textContent = '👁️';
+        btnEl.title = 'Show Password';
+      }
+    }
+
+    function copyPasswordToClipboard(text) {
+      if (!text || text === '••••••••') {
+        showToast('Password is currently protected / not cached.', 'info');
+        return;
+      }
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('📋 Password copied to clipboard!', 'success');
+      }).catch(() => {
+        prompt('Copy password:', text);
+      });
+    }
+
+    function openAdminChangePasswordModal(userId) {
+      const user = usersList.find(u => u.userId.toUpperCase() === userId.toUpperCase());
+      if (!user) return;
+      document.getElementById('modalTargetUserId').value = user.userId;
+      document.getElementById('modalTargetUserName').textContent = user.name;
+      document.getElementById('modalTargetUserMeta').textContent = `${user.userId} • CPF: ${user.cpf || '—'} • Role: ${user.role || 'ONGC Logistics'}`;
+      document.getElementById('modalTargetUserDob').value = user.dob || '';
+      document.getElementById('modalTargetNewPassword').value = '';
+      openModal('modalAdminChangePassword');
+    }
+
+    function generateRandomAdminPassword() {
+      const prefixes = ['Ongc', 'Assam', 'Sst', 'Rfs', 'Winch', 'Chetia'];
+      const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+      const num = Math.floor(1000 + Math.random() * 9000);
+      const pass = `${prefix}@${num}`;
+      document.getElementById('modalTargetNewPassword').value = pass;
+      showToast(`🎲 Generated password: ${pass}`, 'info');
+    }
+
+    async function handleAdminSavePassword(e) {
+      e.preventDefault();
+      const userId = document.getElementById('modalTargetUserId').value.trim();
+      const newPassword = document.getElementById('modalTargetNewPassword').value;
+      const dob = document.getElementById('modalTargetUserDob').value.trim();
+
+      if (!newPassword || newPassword.length < 6) {
+        showToast('New password must be at least 6 characters long.', 'error');
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/auth/users/${encodeURIComponent(userId)}/password`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ newPassword, dob })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(data.message, 'success');
+          closeModal('modalAdminChangePassword');
+          await loadPasswordsTable();
+          await loadUsersTable();
+        } else {
+          showToast('Error: ' + data.error, 'error');
+        }
+      } catch (err) {
+        showToast('Password update failed: ' + err.message, 'error');
+      }
+    }
+
+    // ========================================================
     // AUDIT LOG MODULE
     // ========================================================
     async function loadAuditTable() {
@@ -2006,6 +2725,420 @@
       setTimeout(() => {
         toast.className = '';
       }, 4000);
+    }
+
+    // ========================================================
+    // DATABASE & AUTO-BACKUP CLIENT CONTROLLER
+    // ========================================================
+    let currentActiveDbTable = 'users';
+    let currentDbTableRows = [];
+    let dbStatusData = null;
+
+    async function loadDatabasePanelData() {
+      await Promise.all([
+        loadDatabaseStatus(),
+        loadLiveDbTable(currentActiveDbTable),
+        loadBackupsList()
+      ]);
+    }
+
+    async function loadDatabaseStatus() {
+      try {
+        const res = await fetch('/api/admin/database/status');
+        if (!res.ok) throw new Error('Failed to fetch database status.');
+        const data = await res.json();
+        dbStatusData = data;
+
+        // 1. Engine & Connection Info
+        const isPg = data.postgres?.isPostgresConnected;
+        const engineBadge = document.getElementById('badgeEngineState');
+        const dbBadgeSidebar = document.getElementById('badgeDbStatus');
+        if (engineBadge) {
+          if (isPg) {
+            engineBadge.textContent = 'PostgreSQL Active';
+            engineBadge.style.background = 'rgba(16, 185, 129, 0.2)';
+            engineBadge.style.color = '#10b981';
+          } else {
+            engineBadge.textContent = 'Enterprise HA Mode (Postgres Ready)';
+            engineBadge.style.background = 'rgba(59, 130, 246, 0.2)';
+            engineBadge.style.color = '#93c5fd';
+          }
+        }
+        if (dbBadgeSidebar) {
+          dbBadgeSidebar.textContent = isPg ? 'PostgreSQL' : 'HA Ready';
+          dbBadgeSidebar.style.color = isPg ? '#10b981' : '#38bdf8';
+        }
+
+        const engineNameEl = document.getElementById('textDbEngineName');
+        if (engineNameEl) engineNameEl.textContent = data.postgres?.engine || 'PostgreSQL Engine';
+
+        const hostPortEl = document.getElementById('textDbHostPort');
+        if (hostPortEl) hostPortEl.textContent = `${data.postgres?.connectionDetails?.host || 'localhost'}:${data.postgres?.connectionDetails?.port || 5432}`;
+
+        const dbNameEl = document.getElementById('textDbName');
+        if (dbNameEl) dbNameEl.textContent = data.postgres?.connectionDetails?.database || 'ongc_operations';
+
+        // 2. Records Statistics
+        const s = data.stats || {};
+        const elUsers = document.getElementById('statDbUsers');
+        if (elUsers) elUsers.textContent = s.usersCount || 0;
+        const elJobs = document.getElementById('statDbJobs');
+        if (elJobs) elJobs.textContent = s.otFdeJobsCount || 0;
+        const elRoster = document.getElementById('statDbRoster');
+        if (elRoster) elRoster.textContent = s.rosterCount || 0;
+        const elAudit = document.getElementById('statDbAudit');
+        if (elAudit) elAudit.textContent = s.auditLogCount || 0;
+        const elVehicles = document.getElementById('statDbVehicles');
+        if (elVehicles) elVehicles.textContent = s.vehiclesCount || 0;
+        const elWells = document.getElementById('statDbWells');
+        if (elWells) elWells.textContent = s.wellsCount || 0;
+
+        // 3. Backup Schedule Switches & Form Inputs
+        const bcfg = data.backupConfig || {};
+        const dailySw = document.getElementById('switchDailyBackup');
+        if (dailySw) dailySw.checked = !!bcfg.dailyBackupEnabled;
+        const dailyTime = document.getElementById('inputDailyTime');
+        if (dailyTime && bcfg.dailyBackupTime) dailyTime.value = bcfg.dailyBackupTime;
+        const badgeDaily = document.getElementById('badgeDailyState');
+        if (badgeDaily) {
+          badgeDaily.textContent = bcfg.dailyBackupEnabled ? 'Enabled' : 'Disabled';
+          badgeDaily.style.background = bcfg.dailyBackupEnabled ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)';
+          badgeDaily.style.color = bcfg.dailyBackupEnabled ? '#10b981' : '#f87171';
+        }
+
+        const descDaily = document.getElementById('descLastDailyRun');
+        if (descDaily) {
+          descDaily.textContent = bcfg.lastDailyRun
+            ? `Last run: ${new Date(bcfg.lastDailyRun).toLocaleString('en-IN')}`
+            : 'Scheduled daily backup (runs automatically).';
+        }
+
+        const weeklySw = document.getElementById('switchWeeklyBackup');
+        if (weeklySw) weeklySw.checked = !!bcfg.weeklyBackupEnabled;
+        const weeklyDay = document.getElementById('selectWeeklyDay');
+        if (weeklyDay && bcfg.weeklyBackupDay) weeklyDay.value = bcfg.weeklyBackupDay;
+        const weeklyTime = document.getElementById('inputWeeklyTime');
+        if (weeklyTime && bcfg.weeklyBackupTime) weeklyTime.value = bcfg.weeklyBackupTime;
+        const badgeWeekly = document.getElementById('badgeWeeklyState');
+        if (badgeWeekly) {
+          badgeWeekly.textContent = bcfg.weeklyBackupEnabled ? 'Enabled' : 'Disabled';
+          badgeWeekly.style.background = bcfg.weeklyBackupEnabled ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)';
+          badgeWeekly.style.color = bcfg.weeklyBackupEnabled ? '#10b981' : '#f87171';
+        }
+
+        const descWeekly = document.getElementById('descLastWeeklyRun');
+        if (descWeekly) {
+          descWeekly.textContent = bcfg.lastWeeklyRun
+            ? `Last run: ${new Date(bcfg.lastWeeklyRun).toLocaleString('en-IN')}`
+            : 'Scheduled weekly full archive snapshot.';
+        }
+      } catch (err) {
+        console.error('Error loading database status:', err);
+      }
+    }
+
+    async function handleSaveBackupSchedule() {
+      const dailyBackupEnabled = document.getElementById('switchDailyBackup')?.checked;
+      const dailyBackupTime = document.getElementById('inputDailyTime')?.value || '02:00';
+      const weeklyBackupEnabled = document.getElementById('switchWeeklyBackup')?.checked;
+      const weeklyBackupDay = document.getElementById('selectWeeklyDay')?.value || 'Sunday';
+      const weeklyBackupTime = document.getElementById('inputWeeklyTime')?.value || '03:00';
+
+      try {
+        const res = await fetch('/api/admin/database/backups/config', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            dailyBackupEnabled,
+            dailyBackupTime,
+            weeklyBackupEnabled,
+            weeklyBackupDay,
+            weeklyBackupTime
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          const indicator = document.getElementById('saveStatusIndicator');
+          if (indicator) {
+            indicator.style.display = 'inline';
+            setTimeout(() => { indicator.style.display = 'none'; }, 3000);
+          }
+          showToast('Automated backup schedule saved successfully!', 'success');
+          loadDatabaseStatus();
+        } else {
+          showToast(data.error || 'Failed to save schedule.', 'error');
+        }
+      } catch (err) {
+        showToast('Error updating backup config: ' + err.message, 'error');
+      }
+    }
+
+    async function handleCreateInstantBackup() {
+      try {
+        showToast('Creating database snapshot & PostgreSQL dump...', 'info');
+        const res = await fetch('/api/admin/database/backups/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ label: 'INSTANT' })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('⚡ Instant backup snapshot created successfully!', 'success');
+          loadBackupsList();
+          loadDatabaseStatus();
+        } else {
+          showToast(data.error || 'Backup creation failed.', 'error');
+        }
+      } catch (err) {
+        showToast('Error: ' + err.message, 'error');
+      }
+    }
+
+    function downloadPostgresSqlDump() {
+      showToast('Generating PostgreSQL .sql database dump...', 'info');
+      window.location.href = '/api/admin/database/sql-dump';
+    }
+
+    // Live Database Table Explorer
+    function switchDbTable(tableName, btnElement) {
+      currentActiveDbTable = tableName;
+      document.querySelectorAll('#dbTablePills .db-table-pill').forEach(btn => btn.classList.remove('active'));
+      if (btnElement) btnElement.classList.add('active');
+      const searchBox = document.getElementById('searchDbTableInput');
+      if (searchBox) searchBox.value = '';
+      loadLiveDbTable(tableName);
+    }
+
+    async function loadLiveDbTable(tableName, search = '') {
+      const thead = document.getElementById('liveDbTableHead');
+      const tbody = document.getElementById('liveDbTableBody');
+      const footerCount = document.getElementById('liveDbTableFooterCount');
+
+      if (!thead || !tbody) return;
+      tbody.innerHTML = '<tr><td style="text-align: center; color: var(--text-dim); padding: 2rem;">Fetching database rows...</td></tr>';
+
+      try {
+        const url = `/api/admin/database/table/${tableName}?search=${encodeURIComponent(search)}&limit=100`;
+        const res = await fetch(url);
+        const data = await res.json();
+        if (!data.success) throw new Error(data.error || 'Failed to load table.');
+
+        currentDbTableRows = data.rows || [];
+
+        // Build Table Header
+        const cols = data.columns || [];
+        thead.innerHTML = `<tr>${cols.map(c => `<th>${escapeHtml(formatColName(c))}</th>`).join('')}</tr>`;
+
+        // Build Table Rows
+        if (currentDbTableRows.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="${cols.length || 1}" style="text-align: center; color: var(--text-dim); padding: 2rem;">No records found in table "${tableName}".</td></tr>`;
+          if (footerCount) footerCount.textContent = `Showing 0 of ${data.totalCount || 0} records`;
+          return;
+        }
+
+        tbody.innerHTML = currentDbTableRows.map(row => {
+          return `<tr>${cols.map(c => {
+            const val = row[c];
+            if (val === null || val === undefined) return '<td style="color: var(--text-dim);">-</td>';
+            if (typeof val === 'object') {
+              return `<td style="font-family: var(--font-mono); font-size: 0.72rem; color: #a5b4fc; max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${escapeHtml(JSON.stringify(val))}">${escapeHtml(JSON.stringify(val))}</td>`;
+            }
+            if (typeof val === 'boolean') {
+              return `<td><span class="badge ${val ? 'active' : 'inactive'}">${val ? 'TRUE' : 'FALSE'}</span></td>`;
+            }
+            return `<td>${escapeHtml(String(val))}</td>`;
+          }).join('')}</tr>`;
+        }).join('');
+
+        if (footerCount) {
+          footerCount.textContent = `Showing ${currentDbTableRows.length} of ${data.totalCount || 0} records in table "${tableName}"`;
+        }
+      } catch (err) {
+        tbody.innerHTML = `<tr><td style="color: var(--danger); text-align: center; padding: 2rem;">Failed to load table records: ${escapeHtml(err.message)}</td></tr>`;
+      }
+    }
+
+    function formatColName(name) {
+      return name.replace(/([A-Z])/g, ' $1').replace(/_/g, ' ').replace(/^./, str => str.toUpperCase());
+    }
+
+    let dbTableSearchTimer = null;
+    function filterLiveDbTable() {
+      clearTimeout(dbTableSearchTimer);
+      dbTableSearchTimer = setTimeout(() => {
+        const val = document.getElementById('searchDbTableInput')?.value.trim() || '';
+        loadLiveDbTable(currentActiveDbTable, val);
+      }, 300);
+    }
+
+    // Backups History List
+    async function loadBackupsList() {
+      const tbody = document.getElementById('backupsTableBody');
+      const countBadge = document.getElementById('backupsListCount');
+      if (!tbody) return;
+
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--text-dim);">Loading backup archives...</td></tr>';
+
+      try {
+        const res = await fetch('/api/admin/database/backups');
+        const data = await res.json();
+        if (!data.success) throw new Error(data.error || 'Failed to list backups.');
+
+        const list = data.backups || [];
+        if (countBadge) countBadge.textContent = list.length;
+
+        if (list.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--text-dim); padding: 2rem;">No backup files found. Click "Instant Backup Now" to create your first archive snapshot.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = list.map(b => {
+          const typeBadge = b.type === 'DAILY'
+            ? '<span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #10b981; font-weight:700;">DAILY AUTO</span>'
+            : (b.type === 'WEEKLY'
+              ? '<span class="badge" style="background: rgba(59, 130, 246, 0.2); color: #93c5fd; font-weight:700;">WEEKLY AUTO</span>'
+              : '<span class="badge" style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; font-weight:700;">MANUAL</span>');
+
+          const formatBadge = b.isSql
+            ? '<span style="font-family: var(--font-mono); font-size: 0.75rem; color: #38bdf8; font-weight: 700;">PostgreSQL .sql</span>'
+            : '<span style="font-family: var(--font-mono); font-size: 0.75rem; color: #a78bfa; font-weight: 700;">Snapshot .json</span>';
+
+          const summaryText = b.recordsSummary
+            ? `${b.recordsSummary.users || 0} users • ${b.recordsSummary.jobs || 0} jobs`
+            : '-';
+
+          const restoreDisabled = b.isSql ? 'disabled title="Restore is executed from companion .json snapshot"' : '';
+
+          return `
+            <tr>
+              <td>
+                <span style="font-family: var(--font-mono); font-weight: 600; color: #fff; font-size: 0.8rem;">${escapeHtml(b.filename)}</span>
+              </td>
+              <td>${new Date(b.timestamp).toLocaleString('en-IN')}</td>
+              <td>${typeBadge}</td>
+              <td>${formatBadge}</td>
+              <td style="font-family: var(--font-mono);">${b.sizeFormatted || '0 B'}</td>
+              <td style="font-size: 0.75rem; color: var(--text-muted);">${summaryText}</td>
+              <td style="text-align: right; white-space: nowrap;">
+                <button class="btn btn-secondary btn-sm" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="downloadBackupFile('${escapeHtml(b.filename)}')">
+                  📥 Download
+                </button>
+                <button class="btn btn-portal btn-sm" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="openRestoreBackupModal('${escapeHtml(b.filename)}')" ${restoreDisabled}>
+                  ↺ Restore
+                </button>
+                <button class="btn btn-danger btn-sm" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="handleDeleteBackup('${escapeHtml(b.filename)}')">
+                  🗑️
+                </button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="7" style="color: var(--danger); text-align: center;">Error loading backups: ${escapeHtml(err.message)}</td></tr>`;
+      }
+    }
+
+    function downloadBackupFile(filename) {
+      window.location.href = `/api/admin/database/backups/${encodeURIComponent(filename)}/download`;
+    }
+
+    function openRestoreBackupModal(filename) {
+      const cleanJson = filename.endsWith('.sql') ? filename.replace(/\.sql$/, '.json') : filename;
+      document.getElementById('restoreTargetFilename').textContent = cleanJson;
+      document.getElementById('restoreHiddenFilename').value = cleanJson;
+      openModal('modalConfirmRestoreBackup');
+    }
+
+    async function executeRestoreBackup() {
+      const filename = document.getElementById('restoreHiddenFilename').value;
+      if (!filename) return;
+      const btn = document.getElementById('btnExecuteRestore');
+      if (btn) { btn.disabled = true; btn.textContent = 'Restoring Data...'; }
+
+      try {
+        const res = await fetch(`/api/admin/database/backups/${encodeURIComponent(filename)}/restore`, {
+          method: 'POST'
+        });
+        const data = await res.json();
+        closeModal('modalConfirmRestoreBackup');
+        if (data.success) {
+          showToast(data.message || 'Database restored successfully!', 'success');
+          await refreshAllData();
+          await loadDatabasePanelData();
+        } else {
+          showToast(data.error || 'Restore failed.', 'error');
+        }
+      } catch (err) {
+        showToast('Restore error: ' + err.message, 'error');
+      } finally {
+        if (btn) { btn.disabled = false; btn.textContent = '↺ Confirm & Restore Data'; }
+      }
+    }
+
+    async function handleDeleteBackup(filename) {
+      if (!confirm(`Are you sure you want to permanently delete backup "${filename}"?`)) return;
+      try {
+        const res = await fetch(`/api/admin/database/backups/${encodeURIComponent(filename)}`, {
+          method: 'DELETE'
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('Backup deleted successfully.', 'success');
+          loadBackupsList();
+        } else {
+          showToast(data.error || 'Delete failed.', 'error');
+        }
+      } catch (err) {
+        showToast('Error: ' + err.message, 'error');
+      }
+    }
+
+    async function handleTestPgConnection(e) {
+      e.preventDefault();
+      const connectionString = document.getElementById('pgConnString')?.value.trim();
+      const host = document.getElementById('pgHost')?.value.trim();
+      const port = document.getElementById('pgPort')?.value.trim();
+      const database = document.getElementById('pgDbName')?.value.trim();
+      const user = document.getElementById('pgUser')?.value.trim();
+      const password = document.getElementById('pgPassword')?.value;
+      const resultBox = document.getElementById('pgTestResultBox');
+      const btn = document.getElementById('btnSubmitPgTest');
+
+      if (btn) { btn.disabled = true; btn.textContent = 'Testing connection...'; }
+      if (resultBox) resultBox.style.display = 'none';
+
+      try {
+        const res = await fetch('/api/admin/database/test-connection', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ connectionString, host, port, database, user, password })
+        });
+        const data = await res.json();
+        if (resultBox) {
+          resultBox.style.display = 'block';
+          if (data.success) {
+            resultBox.style.background = 'rgba(16, 185, 129, 0.15)';
+            resultBox.style.border = '1px solid rgba(16, 185, 129, 0.4)';
+            resultBox.style.color = '#34d399';
+            resultBox.innerHTML = `✅ <strong>PostgreSQL Connected Successfully!</strong><br><span style="font-size: 0.74rem; color: #a7f3d0;">Server: ${escapeHtml(data.version || 'PostgreSQL')}</span>`;
+          } else {
+            resultBox.style.background = 'rgba(239, 68, 68, 0.15)';
+            resultBox.style.border = '1px solid rgba(239, 68, 68, 0.4)';
+            resultBox.style.color = '#fca5a5';
+            resultBox.innerHTML = `❌ <strong>Connection Failed:</strong> ${escapeHtml(data.error || 'Could not connect to PostgreSQL instance.')}`;
+          }
+        }
+      } catch (err) {
+        if (resultBox) {
+          resultBox.style.display = 'block';
+          resultBox.style.background = 'rgba(239, 68, 68, 0.15)';
+          resultBox.style.border = '1px solid rgba(239, 68, 68, 0.4)';
+          resultBox.style.color = '#fca5a5';
+          resultBox.textContent = 'Request error: ' + err.message;
+        }
+      } finally {
+        if (btn) { btn.disabled = false; btn.textContent = '⚡ Test Connection'; }
+      }
     }
   </script>
 </body>

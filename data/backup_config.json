@@ -1,0 +1,44 @@
+{
+  "dailyBackupEnabled": false,
+  "dailyBackupTime": "01:30",
+  "weeklyBackupEnabled": false,
+  "weeklyBackupDay": "Sunday",
+  "weeklyBackupTime": "04:00",
+  "retentionDays": 30,
+  "lastDailyRun": "2026-10-13T03:43:12.759Z",
+  "lastWeeklyRun": null,
+  "history": [
+    {
+      "id": "bck_1791862992769",
+      "baseName": "ongc_backup_AUTO_DAILY_2026-10-13_03-43-12",
+      "jsonFile": "ongc_backup_AUTO_DAILY_2026-10-13_03-43-12.json",
+      "sqlFile": "ongc_backup_AUTO_DAILY_2026-10-13_03-43-12.sql",
+      "type": "DAILY",
+      "timestamp": "2026-10-13T03:43:12.759Z",
+      "sizeBytes": 747569,
+      "sizeFormatted": "730.05 KB",
+      "recordsSummary": {
+        "users": 2,
+        "jobs": 59,
+        "employees": 12,
+        "auditEntries": 45
+      }
+    },
+    {
+      "id": "bck_1791862946904",
+      "baseName": "ongc_backup_TEST_INSTANT_2026-10-13_03-42-26",
+      "jsonFile": "ongc_backup_TEST_INSTANT_2026-10-13_03-42-26.json",
+      "sqlFile": "ongc_backup_TEST_INSTANT_2026-10-13_03-42-26.sql",
+      "type": "MANUAL",
+      "timestamp": "2026-10-13T03:42:26.895Z",
+      "sizeBytes": 745680,
+      "sizeFormatted": "728.2 KB",
+      "recordsSummary": {
+        "users": 2,
+        "jobs": 59,
+        "employees": 12,
+        "auditEntries": 42
+      }
+    }
+  ]
+}

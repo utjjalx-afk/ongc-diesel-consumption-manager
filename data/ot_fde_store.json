@@ -83,7 +83,12 @@
       "basicPay": 29560,
       "da": 14662,
       "fdRate": 450,
-      "otRate": 425
+      "otRate": 425,
+      "status": "retired",
+      "retirementInfo": {
+        "date": "2026-10-12",
+        "remarks": "Superannuated from ONGC SST Section"
+      }
     },
     "RRK": {
       "code": "RRK",
@@ -3415,5 +3420,5 @@
       ]
     }
   ],
-  "lastUpdated": "2026-10-11T15:44:36.023Z"
+  "lastUpdated": "2026-10-13T03:42:12.752Z"
 }

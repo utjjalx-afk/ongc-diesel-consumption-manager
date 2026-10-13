@@ -10,3 +10,5 @@ uploads/*
 
 .ongc-test-*/
 .preview-data/
+data/backups/*
+!data/backups/.gitkeep

@@ -16,6 +16,8 @@ import { initOtFdeDatabase, saveOtFdeDatabase, DEFAULT_ROSTER } from './src/otFd
 import { calculateOtRate, calculateDutyAndOt, allocateJobToCrew, generateMonthlyStatements, generateYearlyStatements, FD_FIXED_RATE } from './src/otFdeCalculator.js';
 import { generateClaimPdf } from './src/otFdePdfExporter.js';
 import { generateClaimExcel, generateYearlyExcel } from './src/otFdeExcelExporter.js';
+import { initPostgresPool, getPostgresStatus, testPgConnection, generateSqlDump } from './src/postgresDb.js';
+import { createBackupManager } from './src/backupManager.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -59,6 +61,8 @@ const DEFAULT_USERS_DB = {
       role: 'Reservoir Winch Logistics Officer (Assam Asset)',
       initials: 'UC',
       cpf: '140751',
+      dob: '1988-06-15',
+      savedPassword: 'ongc@123',
       department: 'SST',
       location: 'JORHAT',
       isAdmin: true,
@@ -73,6 +77,8 @@ const DEFAULT_USERS_DB = {
       role: 'Logistics Operations Administrator',
       initials: 'OA',
       cpf: 'ADMIN',
+      dob: '1985-01-01',
+      savedPassword: 'ongc@123',
       department: 'IT',
       location: 'JORHAT',
       isAdmin: true,
@@ -163,7 +169,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api', (req, res, next) => {
-  if (['/auth/login', '/auth/register', '/auth/verify-cpf'].includes(req.path)) return next();
+  if (['/auth/login', '/auth/register', '/auth/verify-cpf', '/auth/reset-password-dob'].includes(req.path)) return next();
 
   // If a valid session cookie exists, attach user to req
   const currentUser = typeof sessions.identify === 'function' ? sessions.identify(req) : null;
@@ -171,10 +177,11 @@ app.use('/api', (req, res, next) => {
     req.user = currentUser;
   }
 
-  // Public read-only endpoints: Allow viewing Well Site and OT/FDE information without login
+  // Public read-only endpoints: Allow viewing Well Site, OT/FDE, and Vehicle Documents/Maintenance without login
   const isPublicRead = req.method === 'GET' && (
     req.path.startsWith('/well-site') ||
-    req.path.startsWith('/ot-fde')
+    req.path.startsWith('/ot-fde') ||
+    req.path.startsWith('/maintenance')
   );
   if (isPublicRead) {
     return next();
@@ -268,6 +275,52 @@ if (savedOperations) {
   wellSiteData = savedOperations.wellSiteData || wellSiteData;
   maintenanceData = savedOperations.maintenanceData || maintenanceData;
 }
+
+// Enterprise Backup Manager & Disaster Recovery
+const backupManager = createBackupManager({
+  dataDir: DATA_DIR,
+  getDataSnapshot: () => ({
+    users: loadUsersDb(),
+    otFde: otFdeData,
+    operations: { activeData, wellSiteData, maintenanceData },
+    adminRequests: loadAdminRequests()
+  }),
+  restoreDataSnapshot: (snapshot) => {
+    if (snapshot.users) {
+      usersDb = snapshot.users;
+      saveUsersDb(usersDb);
+    }
+    if (snapshot.otFde) {
+      otFdeData = snapshot.otFde;
+      saveOtFdeDatabase(otFdeData).catch(e => console.error('Failed to save restored OT/FDE:', e));
+    }
+    if (snapshot.operations) {
+      if (snapshot.operations.activeData) activeData = snapshot.operations.activeData;
+      if (snapshot.operations.wellSiteData) wellSiteData = snapshot.operations.wellSiteData;
+      if (snapshot.operations.maintenanceData) maintenanceData = snapshot.operations.maintenanceData;
+      try { writeOperationsStore(OPERATIONS_PATH, { activeData, wellSiteData, maintenanceData }); } catch (_) {}
+    }
+    if (snapshot.adminRequests) {
+      try { saveAdminRequests(snapshot.adminRequests); } catch (_) {}
+    }
+  },
+  logAudit: (action, userId, details) => {
+    try {
+      appendAuditLog(usersDb, action, userId, details);
+      saveUsersDb(usersDb);
+    } catch (_) {}
+  }
+});
+
+// Run automated backup scheduler every minute
+setInterval(() => {
+  try { backupManager.checkAndRunScheduledBackups(); } catch (e) { console.error('Backup scheduler error:', e); }
+}, 60000);
+
+// Initialize PostgreSQL connection pool (non-blocking)
+initPostgresPool().catch(err => {
+  console.log('[PostgreSQL] Standby mode (Local HA store active):', err.message);
+});
 app.use('/api', (req, res, next) => {
   if (['POST', 'PUT', 'DELETE'].includes(req.method) || req.path.endsWith('/load-default')) {
     const sendJson = res.json.bind(res);
@@ -474,11 +527,16 @@ app.get('/api/auth/verify-cpf', (req, res) => {
 // Register a new user account (Strictly Gated by ONGC Crew Roster CPF - One Time Only)
 app.post('/api/auth/register', (req, res) => {
   try {
-    const { userId, password, confirmPassword, name, role, cpf, department, location } = req.body;
+    const { userId, password, confirmPassword, name, role, cpf, department, location, dob } = req.body;
 
     const cleanCpf = String(cpf || '').trim();
     if (!cleanCpf) {
       return res.status(400).json({ success: false, error: 'Official ONGC CPF number is required for registration.' });
+    }
+
+    const cleanDob = String(dob || '').trim();
+    if (!cleanDob) {
+      return res.status(400).json({ success: false, error: 'Date of Birth (DOB) is required for registration & password reset security.' });
     }
 
     if (!userId || !password) {
@@ -536,6 +594,8 @@ app.post('/api/auth/register', (req, res) => {
     const newUser = {
       userId: cleanId,
       passwordHash: hashPassword(password),
+      savedPassword: password,
+      dob: cleanDob,
       name: finalName,
       role: finalRole,
       initials: initials.toUpperCase(),
@@ -576,6 +636,68 @@ app.post('/api/auth/register', (req, res) => {
   }
 });
 
+// Reset Password via Date of Birth (DOB)
+app.post('/api/auth/reset-password-dob', (req, res) => {
+  try {
+    const { userId, dob, newPassword, confirmPassword } = req.body;
+    if (!userId || !dob || !newPassword) {
+      return res.status(400).json({ success: false, error: 'User ID / CPF, Date of Birth, and New Password are required.' });
+    }
+    if (confirmPassword !== undefined && newPassword !== confirmPassword) {
+      return res.status(400).json({ success: false, error: 'Passwords do not match.' });
+    }
+    if (newPassword.length < 6) {
+      return res.status(400).json({ success: false, error: 'Password must be at least 6 characters long.' });
+    }
+
+    usersDb = loadUsersDb();
+    const cleanUser = String(userId).trim().toUpperCase();
+    const user = usersDb.users.find(u => {
+      const uUpper = String(u.userId).toUpperCase();
+      if (uUpper === cleanUser) return true;
+      if (u.cpf && String(u.cpf).toUpperCase() === cleanUser) return true;
+      if (uUpper === 'CPF-140751' && ['140751', 'CPF140751'].includes(cleanUser)) return true;
+      return false;
+    });
+
+    if (!user) {
+      return res.status(404).json({ success: false, error: `User ID or CPF "${userId}" not found in system.` });
+    }
+
+    // Normalizing dates for flexible matching (e.g. YYYY-MM-DD)
+    const normReqDob = String(dob).trim().split('T')[0];
+    const userDob = user.dob ? String(user.dob).trim().split('T')[0] : '';
+
+    if (!userDob) {
+      return res.status(400).json({
+        success: false,
+        error: 'Date of Birth is not registered for this account. Please contact Administrator to set your DOB or reset password.'
+      });
+    }
+
+    if (normReqDob !== userDob) {
+      appendAuditLog(usersDb, 'PASSWORD_RESET_FAILED', user.userId, { reason: 'Incorrect DOB', ip: req.ip });
+      saveUsersDb(usersDb);
+      return res.status(403).json({
+        success: false,
+        error: 'Date of Birth does not match the official record for this account.'
+      });
+    }
+
+    user.passwordHash = hashPassword(newPassword);
+    user.savedPassword = newPassword;
+    appendAuditLog(usersDb, 'PASSWORD_RESET_SUCCESS', user.userId, { method: 'DOB_VERIFICATION', ip: req.ip });
+    saveUsersDb(usersDb);
+
+    res.json({
+      success: true,
+      message: `Password reset successfully for ${user.name}! You can now sign in with your new password.`
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: 'Password reset failed: ' + err.message });
+  }
+});
+
 // Get all registered users (admin only)
 app.get('/api/auth/users', (req, res) => {
   try {
@@ -586,6 +708,8 @@ app.get('/api/auth/users', (req, res) => {
       role: u.role,
       initials: u.initials,
       cpf: u.cpf,
+      dob: u.dob || '',
+      savedPassword: u.savedPassword || (u.userId === 'admin' ? 'TestPass123' : (u.userId === 'CPF-140751' ? 'TestPass123' : '••••••••')),
       department: u.department,
       location: u.location,
       crewCode: u.crewCode || '',
@@ -596,6 +720,45 @@ app.get('/api/auth/users', (req, res) => {
       lastLogin: u.lastLogin
     }));
     res.json({ success: true, users: safeUsers, total: safeUsers.length });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// Update user password and/or DOB (Admin only)
+app.put('/api/auth/users/:userId/password', (req, res) => {
+  try {
+    const targetId = String(req.params.userId).toUpperCase();
+    const { newPassword, dob } = req.body;
+    if (!newPassword || newPassword.length < 6) {
+      return res.status(400).json({ success: false, error: 'New password must be at least 6 characters.' });
+    }
+
+    usersDb = loadUsersDb();
+    const user = usersDb.users.find(u => String(u.userId).toUpperCase() === targetId);
+    if (!user) {
+      return res.status(404).json({ success: false, error: 'User not found.' });
+    }
+
+    user.passwordHash = hashPassword(newPassword);
+    user.savedPassword = newPassword;
+    if (dob) {
+      user.dob = String(dob).trim();
+    }
+
+    appendAuditLog(usersDb, 'ADMIN_PASSWORD_CHANGED', targetId, {
+      changedBy: req.user?.userId || 'ADMIN',
+      hasDob: Boolean(user.dob),
+      ip: req.ip
+    });
+    saveUsersDb(usersDb);
+
+    res.json({
+      success: true,
+      message: `Password for ${user.name} (${user.userId}) updated successfully!`,
+      savedPassword: user.savedPassword,
+      dob: user.dob
+    });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }
@@ -639,6 +802,278 @@ app.delete('/api/auth/users/:userId', (req, res) => {
     appendAuditLog(usersDb, 'USER_DELETED', targetId, { name: deleted.name, cpf: deleted.cpf, ip: req.ip });
     saveUsersDb(usersDb);
     res.json({ success: true, message: `User ${deleted.name} (${targetId}) removed successfully.` });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// ============================================================
+// DATABASE & AUTO-BACKUP MANAGEMENT (ADMIN ONLY)
+// ============================================================
+
+// 1. Get Database Status & Statistics
+app.get('/api/admin/database/status', (req, res) => {
+  try {
+    const currentUsers = loadUsersDb();
+    const pgStatus = getPostgresStatus();
+    const backupCfg = backupManager.loadConfig();
+
+    const stats = {
+      usersCount: currentUsers.users?.length || 0,
+      auditLogCount: currentUsers.auditLog?.length || 0,
+      otFdeJobsCount: otFdeData.jobs?.length || 0,
+      rosterCount: Object.keys(otFdeData.roster || {}).length || 0,
+      vehiclesCount: (maintenanceData.vehicles?.length || 0) + (activeData.vehicles?.length || 0),
+      wellsCount: wellSiteData.wells?.length || 0,
+      clustersCount: wellSiteData.clusters?.length || 0,
+      maintenanceRecordsCount: maintenanceData.maintenanceRecords?.length || 0,
+      activeBatchesCount: (activeData.vehicles || []).reduce((acc, v) => acc + (v.batches?.length || 0), 0)
+    };
+
+    res.json({
+      success: true,
+      postgres: pgStatus,
+      stats,
+      backupConfig: backupCfg
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// 2. Live Database Table Records Viewer
+app.get('/api/admin/database/table/:tableName', (req, res) => {
+  try {
+    const { tableName } = req.params;
+    const search = String(req.query.search || '').trim().toLowerCase();
+    const limit = Math.min(parseInt(req.query.limit || '50', 10), 200);
+    const offset = Math.max(parseInt(req.query.offset || '0', 10), 0);
+
+    let rows = [];
+    let columns = [];
+
+    const currentUsers = loadUsersDb();
+
+    switch (tableName) {
+      case 'users':
+        columns = ['userId', 'name', 'role', 'cpf', 'dob', 'department', 'location', 'isAdmin', 'status', 'registeredAt', 'lastLogin'];
+        rows = (currentUsers.users || []).map(u => ({ ...u, passwordHash: '••••••••' }));
+        break;
+
+      case 'audit_log':
+        columns = ['id', 'timestamp', 'action', 'userId', 'details'];
+        rows = [...(currentUsers.auditLog || [])].reverse();
+        break;
+
+      case 'ot_fde_jobs':
+        columns = ['id', 'date', 'month', 'location', 'workType', 'startTime', 'endTime', 'dutyHours', 'otHours', 'fdShifts', 'otAmount', 'fdAmount', 'totalClaim'];
+        rows = otFdeData.jobs || [];
+        break;
+
+      case 'roster':
+        columns = ['code', 'name', 'designation', 'cpf', 'otRate', 'basicPay', 'da', 'status'];
+        rows = Object.values(otFdeData.roster || {});
+        break;
+
+      case 'vehicles':
+        columns = ['vehicleId', 'vehicleName', 'vehicleType', 'tax', 'insurance', 'pollution', 'permit'];
+        rows = maintenanceData.vehicles || [];
+        break;
+
+      case 'well_sites':
+        columns = ['wellName', 'clusterName', 'fieldName', 'zone', 'status', 'type'];
+        rows = wellSiteData.wells || [];
+        break;
+
+      default:
+        return res.status(400).json({ success: false, error: `Invalid table "${tableName}". Allowed: users, audit_log, ot_fde_jobs, roster, vehicles, well_sites.` });
+    }
+
+    if (search) {
+      rows = rows.filter(row => {
+        return Object.values(row).some(val => {
+          if (val === null || val === undefined) return false;
+          if (typeof val === 'object') return JSON.stringify(val).toLowerCase().includes(search);
+          return String(val).toLowerCase().includes(search);
+        });
+      });
+    }
+
+    const totalCount = rows.length;
+    const paginated = rows.slice(offset, offset + limit);
+
+    res.json({
+      success: true,
+      tableName,
+      columns,
+      totalCount,
+      limit,
+      offset,
+      rows: paginated
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// 3. Test PostgreSQL Connection
+app.post('/api/admin/database/test-connection', async (req, res) => {
+  try {
+    const { connectionString, host, port, database, user, password } = req.body;
+    let config;
+    if (connectionString) {
+      config = { connectionString };
+    } else {
+      config = {
+        host: host || 'localhost',
+        port: parseInt(port || '5432', 10),
+        database: database || 'ongc_operations',
+        user: user || 'postgres',
+        password: password || ''
+      };
+    }
+    const result = await testPgConnection(config);
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// 4. Download Full PostgreSQL .sql Dump
+app.get('/api/admin/database/sql-dump', (req, res) => {
+  try {
+    const snapshot = {
+      users: loadUsersDb(),
+      otFde: otFdeData,
+      operations: { activeData, wellSiteData, maintenanceData }
+    };
+    const sqlContent = generateSqlDump(snapshot);
+    const dateStr = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+    const filename = `ongc_postgres_dump_${dateStr}.sql`;
+
+    res.setHeader('Content-Type', 'application/sql');
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.send(sqlContent);
+  } catch (err) {
+    res.status(500).json({ success: false, error: 'SQL dump export failed: ' + err.message });
+  }
+});
+
+// 5. Get Backup Configuration (Daily & Weekly Switches)
+app.get('/api/admin/database/backups/config', (req, res) => {
+  try {
+    const config = backupManager.loadConfig();
+    res.json({ success: true, config });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// 6. Update Backup Configuration (Toggle Daily/Weekly Switches)
+app.post('/api/admin/database/backups/config', (req, res) => {
+  try {
+    const {
+      dailyBackupEnabled,
+      dailyBackupTime,
+      weeklyBackupEnabled,
+      weeklyBackupDay,
+      weeklyBackupTime,
+      retentionDays
+    } = req.body;
+
+    const current = backupManager.loadConfig();
+    const updated = {
+      ...current,
+      dailyBackupEnabled: dailyBackupEnabled !== undefined ? Boolean(dailyBackupEnabled) : current.dailyBackupEnabled,
+      dailyBackupTime: dailyBackupTime || current.dailyBackupTime,
+      weeklyBackupEnabled: weeklyBackupEnabled !== undefined ? Boolean(weeklyBackupEnabled) : current.weeklyBackupEnabled,
+      weeklyBackupDay: weeklyBackupDay || current.weeklyBackupDay,
+      weeklyBackupTime: weeklyBackupTime || current.weeklyBackupTime,
+      retentionDays: retentionDays !== undefined ? parseInt(retentionDays, 10) : current.retentionDays
+    };
+
+    backupManager.saveConfig(updated);
+    appendAuditLog(usersDb, 'BACKUP_CONFIG_UPDATED', req.user?.userId || 'ADMIN', {
+      dailyEnabled: updated.dailyBackupEnabled,
+      weeklyEnabled: updated.weeklyBackupEnabled
+    });
+    saveUsersDb(usersDb);
+
+    res.json({
+      success: true,
+      message: 'Auto-backup schedule settings saved successfully.',
+      config: updated
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// 7. Create Instant Backup
+app.post('/api/admin/database/backups/create', (req, res) => {
+  try {
+    const { label } = req.body || {};
+    const result = backupManager.createBackup({ type: 'MANUAL', label: label || 'INSTANT' });
+    if (!result.success) {
+      return res.status(500).json({ success: false, error: result.error });
+    }
+    res.json({
+      success: true,
+      message: 'Database backup snapshot created successfully!',
+      backup: result.backup
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// 8. List All Backup Files
+app.get('/api/admin/database/backups', (req, res) => {
+  try {
+    const backups = backupManager.listBackups();
+    res.json({ success: true, backups, total: backups.length });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// 9. Download a Backup File
+app.get('/api/admin/database/backups/:filename/download', (req, res) => {
+  try {
+    const { filename } = req.params;
+    const filePath = backupManager.getBackupFilePath(filename);
+    if (!filePath) {
+      return res.status(404).json({ success: false, error: 'Backup file not found.' });
+    }
+    res.download(filePath, filename);
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// 10. Restore from a Backup File
+app.post('/api/admin/database/backups/:filename/restore', (req, res) => {
+  try {
+    const { filename } = req.params;
+    const result = backupManager.restoreBackup(filename);
+    if (!result.success) {
+      return res.status(500).json({ success: false, error: result.error });
+    }
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// 11. Delete a Backup File
+app.delete('/api/admin/database/backups/:filename', (req, res) => {
+  try {
+    const { filename } = req.params;
+    const result = backupManager.deleteBackup(filename);
+    if (!result.success) {
+      return res.status(500).json({ success: false, error: result.error });
+    }
+    res.json({ success: true, message: `Backup "${filename}" deleted successfully.` });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }

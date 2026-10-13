@@ -563,8 +563,11 @@ window.updateExportButtonsAuth = updateExportButtonsAuth;
 function enterGuestMode(targetTab = null) {
   appState.isGuest = true;
   appState.isAuthenticated = false;
-  document.body.classList.remove('is-authenticated');
+  document.body.classList.remove('is-authenticated', 'is-admin');
   document.body.classList.add('is-guest');
+  if (typeof window.updateLayoutCustomizerAdminState === 'function') {
+    window.updateLayoutCustomizerAdminState();
+  }
   updateExportButtonsAuth(false);
   if (elements.loginScreen) elements.loginScreen.classList.add('hidden');
 
@@ -592,6 +595,9 @@ window.enterGuestMode = enterGuestMode;
 function openSignInModal() {
   if (elements.loginScreen) {
     elements.loginScreen.classList.remove('hidden');
+    elements.loginScreen.scrollTop = 0;
+    const modal = elements.loginScreen.querySelector('.login-modal-card');
+    if (modal) modal.scrollTop = 0;
     switchAuthTab('login');
   }
 }
@@ -606,22 +612,17 @@ function closeLoginModal() {
 window.closeLoginModal = closeLoginModal;
 
 function handleCardNav(tabName) {
+  if (['logJob', 'roster', 'otStatement', 'fdeStatement', 'allJobs'].includes(tabName)) {
+    navigateToOtSection(tabName);
+    return;
+  }
   if (appState.isAuthenticated) {
-    if (['logJob', 'roster', 'otStatement', 'fdeStatement', 'allJobs'].includes(tabName)) {
-      navigateToOtSection(tabName);
-    } else {
-      switchMainTab(tabName);
-    }
+    switchMainTab(tabName);
   } else {
     openSignInModal();
     const moduleName = tabName === 'vehicleLog' ? 'Vehicle HSD Logs' :
       tabName === 'maintenance' ? 'Fleet Maintenance' :
-      tabName === 'settings' ? 'Settings' :
-      tabName === 'logJob' ? 'Daily Single Entry' :
-      tabName === 'roster' ? 'Crew Editor & Pay Scales' :
-      tabName === 'otStatement' ? 'OT Statement' :
-      tabName === 'fdeStatement' ? 'FDE Statement' :
-      tabName === 'allJobs' ? 'All Field Jobs' : tabName;
+      tabName === 'settings' ? 'Settings' : tabName;
     showLoginAlert('Please sign in with CPF credentials to access ' + moduleName + '.');
   }
 }
@@ -651,8 +652,11 @@ async function checkAuthStatus() {
   sessionStorage.removeItem('ongc_auth_user');
   appState.isAuthenticated = false;
   appState.currentUser = null;
-  document.body.classList.remove('is-authenticated');
+  document.body.classList.remove('is-authenticated', 'is-admin');
   document.body.classList.add('is-guest');
+  if (typeof window.updateLayoutCustomizerAdminState === 'function') {
+    window.updateLayoutCustomizerAdminState();
+  }
   updateExportButtonsAuth(false);
   // Keep login screen hidden by default on home portal load - do not force direct login
   if (elements.loginScreen) elements.loginScreen.classList.add('hidden');
@@ -670,6 +674,11 @@ async function refreshPortalData() {
 function applyAuthenticatedUser(user) {
   document.body.classList.add('is-authenticated');
   document.body.classList.remove('is-guest');
+  const isAdmin = Boolean(user && user.isAdmin);
+  document.body.classList.toggle('is-admin', isAdmin);
+  if (typeof window.updateLayoutCustomizerAdminState === 'function') {
+    window.updateLayoutCustomizerAdminState();
+  }
   updateExportButtonsAuth(true);
   if (elements.shellUserAvatar) {
     elements.shellUserAvatar.style.display = 'inline-flex';
@@ -812,6 +821,10 @@ if (elements.btnSignOut) {
     sessionStorage.removeItem('ongc_auth_user');
     appState.isAuthenticated = false;
     appState.currentUser = null;
+    document.body.classList.remove('is-admin');
+    if (typeof window.updateLayoutCustomizerAdminState === 'function') {
+      window.updateLayoutCustomizerAdminState();
+    }
     clearLoginAlert();
     if (elements.loginUserId) elements.loginUserId.value = '';
     if (elements.loginPassword) elements.loginPassword.value = '';
@@ -2115,14 +2128,6 @@ function resetScrollToTop() {
     document.querySelectorAll('.tab-view, .ot-subpage-view, .ot-subview').forEach(el => {
       if (el) el.scrollTop = 0;
     });
-
-    const activeSubpage = document.querySelector('.ot-subpage-view.active');
-    if (activeSubpage) {
-      activeSubpage.scrollTop = 0;
-      try {
-        activeSubpage.scrollIntoView({ behavior: 'instant', block: 'start' });
-      } catch (_) {}
-    }
   };
 
   // Immediate synchronous pass
@@ -2247,16 +2252,6 @@ if (elements.brandText) {
 }
 
 function navigateToOtSection(subpageId) {
-  if (['logJob', 'roster', 'otStatement', 'fdeStatement', 'allJobs'].includes(subpageId) && !appState.isAuthenticated) {
-    openSignInModal();
-    const moduleName = subpageId === 'logJob' ? 'Daily Single Entry' :
-      subpageId === 'roster' ? 'Crew Editor & Pay Scales' :
-      subpageId === 'otStatement' ? 'OT Statement' :
-      subpageId === 'fdeStatement' ? 'FDE Statement' :
-      subpageId === 'allJobs' ? 'All Field Jobs' : 'Operations Module';
-    showLoginAlert('Please sign in with CPF credentials to access ' + moduleName + '.');
-    return;
-  }
   closeMobileSidebar();
   switchMainTab('otFde');
   if (subpageId && typeof openOtPage === 'function') {
@@ -4038,17 +4033,6 @@ function updateOtDashboardCounts() {
 }
 
 function openOtPage(pageId) {
-  if (['logJob', 'roster', 'otStatement', 'fdeStatement', 'allJobs'].includes(pageId) && !appState.isAuthenticated) {
-    openSignInModal();
-    const moduleName = pageId === 'logJob' ? 'Daily Single Entry' :
-      pageId === 'roster' ? 'Crew Editor & Pay Scales' :
-      pageId === 'otStatement' ? 'OT Statement' :
-      pageId === 'fdeStatement' ? 'FDE Statement' :
-      pageId === 'allJobs' ? 'All Field Jobs' : 'Operations Module';
-    showLoginAlert('Please sign in with CPF credentials to access ' + moduleName + '.');
-    return;
-  }
-
   // Pre-reset viewport
   resetScrollToTop();
 
@@ -4066,15 +4050,15 @@ function openOtPage(pageId) {
 
   appState.activeOtSubPage = pageId;
   if (hub) hub.style.display = 'none';
-  pages.forEach(p => p.classList.remove('active'));
+  pages.forEach(p => {
+    p.classList.remove('active');
+    p.scrollTop = 0;
+  });
 
   const targetPage = document.getElementById(`otPage-${pageId}`);
   if (targetPage) {
     targetPage.classList.add('active');
     targetPage.scrollTop = 0;
-    try {
-      targetPage.scrollIntoView({ behavior: 'instant', block: 'start' });
-    } catch (_) {}
   }
 
   // Update active status on subnav pill buttons across all subpage headers
@@ -5929,22 +5913,15 @@ function getDayName(dateStr) {
 function handleUrlHash() {
   const hash = window.location.hash.replace('#', '');
   if (!hash) return;
-  if (['logJob', 'roster', 'otStatement', 'fdeStatement', 'allJobs'].includes(hash) && !appState.isAuthenticated) {
-    openSignInModal();
-    const moduleName = hash === 'logJob' ? 'Daily Single Entry' :
-      hash === 'roster' ? 'Crew Editor & Pay Scales' :
-      hash === 'otStatement' ? 'OT Statement' :
-      hash === 'fdeStatement' ? 'FDE Statement' :
-      hash === 'allJobs' ? 'All Field Jobs' : 'Operations Module';
-    showLoginAlert('Please sign in with CPF credentials to access ' + moduleName + '.');
-    return;
-  }
   if (['logJob', 'roster', 'otStatement', 'fdeStatement', 'allJobs', 'hub'].includes(hash)) {
+    closeLoginModal();
     switchMainTab('otFde');
     openOtPage(hash);
   } else if (hash === 'otFde') {
+    closeLoginModal();
     switchMainTab('otFde');
   } else if (hash === 'wellSites') {
+    closeLoginModal();
     switchMainTab('wellSites');
   } else if (hash === 'vehicleLog') {
     handleCardNav('vehicleLog');
@@ -5953,13 +5930,18 @@ function handleUrlHash() {
   } else if (hash === 'settings') {
     handleCardNav('settings');
   }
+  resetScrollToTop();
 }
 window.addEventListener('hashchange', handleUrlHash);
 window.handleUrlHash = handleUrlHash;
 
 window.addEventListener('DOMContentLoaded', async () => {
   initTheme();
-  switchMainTab(null);
+  if (window.location.hash && window.location.hash !== '#') {
+    handleUrlHash();
+  } else {
+    switchMainTab(null);
+  }
   const isAuthed = await checkAuthStatus();
   if (isAuthed) {
     await refreshPortalData();
@@ -5967,7 +5949,10 @@ window.addEventListener('DOMContentLoaded', async () => {
     // Automatically load well sites, OT/FDE data, and maintenance data for immediate display
     await Promise.all([fetchWellSites(), fetchOtFdeData(), fetchMaintenanceData()]);
   }
-  handleUrlHash();
+  if (window.location.hash && window.location.hash !== '#') {
+    handleUrlHash();
+  }
+  resetScrollToTop();
   syncResponsiveNavigation();
   try {
     if (localStorage.getItem('ongc_duty_logic_minimized') === 'true') {
